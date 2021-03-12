@@ -22,10 +22,18 @@
             <el-checkbox v-model="task.Status"></el-checkbox>
             <a>{{ task.Content }}</a>
             <span
-              class="badge badge-secondary badge-pill"
               v-for="tag in task.Tags"
               :key="tag.ID"
-            >{{ tag.Content }}</span>
+              :style="{
+                'padding':'3px',
+                'border-radius':'60px',
+                'background-color':tag.Color,
+                'font-size':'10px',
+                'font-weight':'700',
+                'color':'#FFFFFF',
+                'text-align':'right'}">
+              {{ tag.Content }}
+            </span>
             <img
               src="../assets/del.png"
               @click="task_del(task.ID)"
@@ -288,7 +296,7 @@ export default {
     initData () {
       const url = 'http://localhost:8080/todo/all'
       axios
-        .post(url)
+        .get(url)
         .then(response => {
           let data = response.data.Result
           this.tags = data.tags
