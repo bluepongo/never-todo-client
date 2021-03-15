@@ -21,7 +21,7 @@
           <div v-show="!task.Status">
             <el-checkbox v-model="task.Status"></el-checkbox>
             <a>{{ task.Content }}</a>
-            <span
+            <a
               v-for="tag in task.Tags"
               :key="tag.ID"
               :style="{
@@ -33,7 +33,7 @@
                 'color':'#FFFFFF',
                 'text-align':'right'}">
               {{ tag.Content }}
-            </span>
+            </a>
             <img
               src="../assets/del.png"
               @click="task_del(task.ID)"
@@ -146,9 +146,17 @@
               type="checkbox"
               v-model="tag.Flag"
             />
-            <span class="badge badge-secondary badge-pill">{{
+             <a
+              :style="{
+                'padding':'3px',
+                'border-radius':'10px',
+                'background-color':tag.Color,
+                'font-size':'10px',
+                'font-weight':'700',
+                'color':'#FFFFFF',
+                'text-align':'right'}">{{
               tag.Content
-            }}</span>
+            }}</a>
           </div>
         </div>
       </div>
@@ -185,7 +193,7 @@
                 height="15px"
               />
             </div>
-            <span class="text-muted">{{ tag.Tasks.length }}</span>
+            <!-- <span class="text-muted">{{ tag.Tasks.length }}</span> -->
           </li>
         </ul>
 
@@ -272,6 +280,11 @@
 </template>
 
 <script>
+// import {getAllTasks, getTasksByContent, getTasksByTag, addTask, deleteTask， updateTask} from '@/api/todo'
+// import {getAllTags, addTag, deleteTag, updateTag} from '@/api/todo'
+import {
+  getAllTasks, addTask, deleteTask, updateTask,
+  getAllTags, addTag, deleteTag, updateTag} from '@/api/todo'
 import axios from 'axios'
 export default {
   name: 'Todo',
@@ -332,6 +345,8 @@ export default {
           // 请求失败处理
           console.log('fail', error)
         })
+      getAllTasks()
+      getAllTags()
     },
     task_add () {
       if (this.addContent !== '') {
@@ -343,11 +358,10 @@ export default {
           }
         }
 
-        axios
-          .post('http://localhost:8080/todo/task/add', {
-            TaskContent: TaskContent,
-            TagsID: TagsID
-          })
+        addTask({
+          TaskContent: TaskContent,
+          TagsID: TagsID
+        })
           .then(response => {
             console.log(response)
             if (response.data.status === 0) {
@@ -361,10 +375,9 @@ export default {
       }
     },
     task_del (TaskID) {
-      axios
-        .post('http://localhost:8080/todo/task/del', {
-          TaskID: TaskID
-        })
+      deleteTask({
+        TaskID: TaskID
+      })
         .then(response => {
           console.log(response)
           if (response.data.status === 0) {
@@ -382,12 +395,11 @@ export default {
           TagsID.push(tag.ID)
         }
       }
-      axios
-        .post('http://localhost:8080/todo/task/upd', {
-          TaskID: this.updateTaskID,
-          TaskContent: this.updateContent,
-          TagsID: TagsID
-        })
+      updateTask(TaskID, {
+        TaskID: this.updateTaskID,
+        TaskContent: this.updateContent,
+        TagsID: TagsID
+      })
         .then(response => {
           console.log(response)
           if (response.data.status === 0) {
@@ -404,11 +416,10 @@ export default {
         let TagContent = this.addTagName
         let TagDesc = this.addTagInfo
 
-        axios
-          .post('http://localhost:8080/todo/tag/add', {
-            TagContent: TagContent,
-            TagDesc: TagDesc
-          })
+        addTag({
+          TagContent: TagContent,
+          TagDesc: TagDesc
+        })
           .then(response => {
             console.log(response)
             if (response.data.status === 0) {
@@ -424,10 +435,7 @@ export default {
     },
     tag_del (TagID) {
       console.log(TagID)
-      axios
-        .post('http://localhost:8080/todo/tag/del', {
-          TagID: TagID
-        })
+      deleteTag(TagID)
         .then(response => {
           console.log(response)
           if (response.data.status === 0) {
@@ -439,12 +447,11 @@ export default {
         })
     },
     tag_upd (TagID) {
-      axios
-        .post('http://localhost:8080/todo/tag/upd', {
-          TagID: TagID,
-          TagContent: this.updateTagName,
-          TagDesc: this.updateTagInfo
-        })
+      updateTag(TagID, {
+        TagID: TagID,
+        TagContent: this.updateTagName,
+        TagDesc: this.updateTagInfo
+      })
         .then(response => {
           console.log(response)
           if (response.data.status === 0) {
