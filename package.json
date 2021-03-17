@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "element-ui": "^2.14.1",
     "vue": "^2.5.2",
+    "vue-color": "^2.8.1",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

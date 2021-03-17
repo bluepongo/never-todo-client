@@ -15,37 +15,34 @@
         <!-- 具体待办内容 -->
         <div
           class="custom-checkbox"
-          v-for="task in tasks"
-          :key="task.ID"
-        >
-          <div v-show="!task.Status">
-            <el-checkbox v-model="task.Status"></el-checkbox>
-            <a>{{ task.Content }}</a>
+          v-for="(fullTask, taskID) in fullTasks"
+          :key="taskID + 'todo'">
+          <div v-show="!fullTask.task.compeleted">
+            <el-checkbox @change="compeleteTask(taskID)" v-model="fullTask.task.compeleted"></el-checkbox>
+            <a>{{ fullTask.task.content }}</a>
             <a
-              v-for="tag in task.Tags"
-              :key="tag.ID"
+              v-for="tagID in fullTask.tagsID"
+              :key="tagID"
               :style="{
                 'padding':'3px',
                 'border-radius':'60px',
-                'background-color':tag.Color,
+                'background-color':tags[tagID].color,
                 'font-size':'10px',
                 'font-weight':'700',
                 'color':'#FFFFFF',
                 'text-align':'right'}">
-              {{ tag.Content }}
+              {{ tags[tagID].content }}
             </a>
             <img
               src="../assets/del.png"
-              @click="task_del(task.ID)"
+              @click="deleteOldTask(fullTask.task.id)"
               width="15px"
-              height="15px"
-            />
+              height="15px"/>
             <img
               src="../assets/update.png"
-              @click="displayTask(task.Content, task.ID)"
+              @click="handleOpenTaskDialog(fullTask.task.id)"
               width="15px"
-              height="15px"
-            />
+              height="15px"/>
           </div>
         </div>
 
@@ -57,62 +54,66 @@
         <!-- 具体已完成内容 -->
         <div
           class="custom-checkbox"
-          v-for="task in tasks"
-          :key="task.ID"
-        >
-          <div v-show="task.Status">
-            <el-checkbox v-model="task.Status"></el-checkbox>
-            <a>{{ task.Content }}</a>
-            <span
-              class="badge badge-secondary badge-pill"
-              v-for="tag in task.Tags"
-              :key="tag.ID"
-            >{{ tag.Content }}</span>
+          v-for="(fullTask, taskID) in fullTasks"
+          :key="taskID + 'done'">
+          <div v-show="fullTask.task.compeleted">
+            <el-checkbox @change="uncompeleteTask(taskID)" v-model="fullTask.task.compeleted"></el-checkbox>
+            <a>{{ fullTask.task.content }}</a>
+            <a
+              v-for="tagID in fullTask.tagsID"
+              :key="tagID"
+              :style="{
+                'padding':'3px',
+                'border-radius':'60px',
+                'background-color':tags[tagID].color,
+                'font-size':'10px',
+                'font-weight':'700',
+                'color':'#FFFFFF',
+                'text-align':'right'}">
+              {{ tags[tagID].content }}
+            </a>
             <img
               src="../assets/del.png"
-              @click="task_del(task.ID)"
+              @click="deleteOldTask(fullTask.task.id)"
               width="15px"
-              height="15px"
-            />
+              height="15px"/>
             <img
               src="../assets/update.png"
-              @click="displayTask(task.Content, task.ID)"
+              @click="handleOpenTaskDialog(fullTask.task.id)"
               width="15px"
-              height="15px"
-            />
+              height="15px"/>
           </div>
         </div>
 
         <!-- 修改待办列表内容 -->
         <el-dialog
           title="修改待办任务信息"
-          :visible.sync="updateTaskVisible"
+          :visible.sync="taskDialogVisible"
           width="30%"
-          :show-close="false"
-        >
+          :show-close="true"
+          @close='handleCloseFullTaskDialog'>
           <!-- 修改栏信息 -->
-          <el-input v-model="updateContent"></el-input>
+          <label for="el-input">代办内容:</label>
+          <el-input v-model="taskDialogFullTaskInfo.content"></el-input>
+          <br />
+          <label for="el-input">赋予标签:</label>
           <div
-            v-for="tag in tags"
-            :key="tag.ID"
-          >
+            v-for="(tag, tagID) in tags"
+            :key="tagID">
             <input
               type="checkbox"
-              v-model="tag.Flag"
-            />
-            <span class="badge badge-secondary badge-pill">{{
-              tag.Content
-            }}</span>
+              :checked="tag.flag"/>
+            <span class="badge badge-secondary badge-pill">
+              {{tag.content}}
+            </span>
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
-          >
-            <el-button @click="unDisplayTask()">取 消</el-button>
+            class="dialog-footer">
+            <!-- <el-button @click="handleCloseFullTaskDialog()">取 消</el-button> -->
             <el-button
               type="primary"
-              @click="task_upd(updateTagID)"
-            >确 定</el-button>
+              @click="updateOldTask(task.id)">确 定</el-button>
           </span>
         </el-dialog>
 
@@ -126,42 +127,37 @@
               type="text"
               class="form-control"
               id="cc-name"
-              v-model="addContent"
-            />
+              v-model="taskFormTaskInfo.content"/>
           </div>
           <br />
           <div class="col-md-3 mb-3">
             <button
               class="btn btn-primary btn-sm"
-              @click="task_add()"
-            >
+              @click="addNewTask()">
               添加
             </button>
           </div>
           <div
-            v-for="tag in tags"
-            :key="tag.ID"
-          >
+            v-for="(tag, tagID) in tags"
+            :key="tagID">
             <input
               type="checkbox"
-              v-model="tag.Flag"
-            />
-             <a
+              :checked="tag.flag"/>
+            <a
               :style="{
                 'padding':'3px',
                 'border-radius':'10px',
-                'background-color':tag.Color,
+                'background-color':tag.color,
                 'font-size':'10px',
                 'font-weight':'700',
                 'color':'#FFFFFF',
-                'text-align':'right'}">{{
-              tag.Content
-            }}</a>
+                'text-align':'right'}">
+                {{tag.content}}
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- 右侧栏 -->
       <div class="col-md-4 order-md-2 mb-4">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-muted">标签</span>
@@ -169,102 +165,62 @@
             tags.length
           }}</span>
         </h4>
+
         <!-- 标签列表 -->
         <ul class="list-group mb-3">
           <!-- 具体的标签 -->
           <li
             class="list-group-item d-flex justify-content-between lh-condensed"
-            v-for="tag in tags"
-            :key="tag"
-          >
+            v-for="(tag, tagID) in tags"
+            :key="tagID"
+            :style="{'background-color':tag.color}">
             <div>
-              <h6 class="my-0">{{ tag.Content }}</h6>
-              <small class="text-muted">{{ tag.Desc }}</small>
+              <h6 class="my-0">{{ tag.content }}</h6>
+              <small class="text-muted">{{ tag.desc }}</small>
               <img
                 src="../assets/del.png"
-                @click="tag_del(tag.ID)"
+                @click="deleteOldTag(tagID)"
                 width="15px"
-                height="15px"
-              />
+                height="15px"/>
               <img
                 src="../assets/update.png"
-                @click="displayTag(tag.Content, tag.Desc, tag.ID)"
+                @click="handleOpenTagDialog(tagID)"
                 width="15px"
-                height="15px"
-              />
+                height="15px"/>
             </div>
-            <!-- <span class="text-muted">{{ tag.Tasks.length }}</span> -->
           </li>
         </ul>
 
         <!-- 修改标签内容 -->
         <el-dialog
           title="修改标签信息"
-          :visible.sync="updateTagVisible"
+          :visible.sync="tagDialogVisible"
           width="30%"
-          :show-close="false"
-        >
+          :show-close="true"
+          @close='handleCloseTagDialog'>
           <!-- 修改栏信息 -->
-          <el-input v-model="updateTagName"></el-input>
+          <label for="el-input">标签内容：</label>
+          <el-input v-model="tagDialogTagInfo.content"></el-input>
+          <label for="el-input">标签描述：</label>
           <el-input
             type="textarea"
-            v-model="updateTagInfo"
+            v-model="tagDialogTagInfo.desc"
           ></el-input>
+          <label for="el-input">标签颜色：</label>
+          <el-color-picker v-model="tagDialogTagInfo.color"></el-color-picker>
           <span
             slot="footer"
             class="dialog-footer"
           >
-            <el-button @click="unDisplayTag()">取 消</el-button>
             <el-button
               type="primary"
-              @click="tag_upd(updateTagID)"
+              @click="updateTag(id)"
             >确 定</el-button>
           </span>
         </el-dialog>
 
-        <!-- 增加标签 -->
-        <div class="card p-2">
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="填写标签名字..."
-              v-model="addTagName"
-            />
-            <div class="input-group-append">
-              <button
-                type="submit"
-                class="btn btn-secondary"
-                @click="tag_add"
-              >
-                添加
-              </button>
-            </div>
-          </div>
-          <textarea
-            class="form-control form-info"
-            placeholder="标签的详细信息..."
-            v-model="addTagInfo"
-          ></textarea>
-        </div>
-
-        <!-- 搜索栏 -->
-        <div class="card p-2">
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="搜索..."
-            />
-            <div class="input-group-append">
-              <button
-                type="submit"
-                class="btn btn-secondary"
-              >搜索</button>
-            </div>
-          </div>
-        </div>
       </div>
+
     </div>
 
     <!-- 底部 -->
@@ -282,89 +238,58 @@
 <script>
 // import {getAllTasks, getTasksByContent, getTasksByTag, addTask, deleteTask， updateTask} from '@/api/todo'
 // import {getAllTags, addTag, deleteTag, updateTag} from '@/api/todo'
-import {
-  getAllTasks, addTask, deleteTask, updateTask,
-  getAllTags, addTag, deleteTag, updateTag} from '@/api/todo'
 import axios from 'axios'
+const path = require('path')
 export default {
   name: 'Todo',
   data () {
     return {
-      tags: null,
-      tasks: null,
-      relate: null,
-      addContent: '',
-      addTagName: '',
-      addTagInfo: '',
-      updateTaskVisible: false,
-      updateTagVisible: false,
-      updateContent: '',
-      updateTaskID: -1,
-      updateTagName: '',
-      updateTagInfo: '',
-      updateTagID: -1
+      fullTasks: {},
+      taskFormTaskInfo: {content: ''},
+      taskDialogVisible: false,
+      taskDialogFullTaskInfo: {content: '', desc: '', color: ''},
+
+      tags: {},
+      tagFormTagInfo: {},
+      tagDialogVisible: false,
+      tagDialogTagInfo: {}
     }
   },
   methods: {
     initData () {
-      const url = 'http://localhost:8080/todo/all'
-      axios
-        .get(url)
-        .then(response => {
-          let data = response.data.Result
-          this.tags = data.tags
-          this.tasks = data.tasks
-          this.relate = data.task_tag_pair
-          // 将标签添加进任务中
-          for (let task of this.tasks) {
-            task.Tags = []
-            for (let tag of this.tags) {
-              for (let r of this.relate) {
-                if (task.ID === r.TaskID && tag.ID === r.TagID) {
-                  task.Tags.push(tag)
-                }
-              }
-            }
+      axios.get('http://localhost:7986/api/v1/todo/all')
+        .then((response) => {
+          let data = response.data.result
+          this.fullTasks = {}
+          this.tags = {}
+          // 初始化待办/标签数据
+          for (const fullTask of data.fullTasks) {
+            this.$set(this.fullTasks, fullTask.task.id, fullTask)
           }
-          // 将任务添加至标签中
-          for (let tag of this.tags) {
-            // 添加选取标志
-            tag.Flag = false
-            tag.Tasks = []
-            for (let task of this.tasks) {
-              for (let r of this.relate) {
-                if (tag.ID === r.TagID && task.ID === r.TaskID) {
-                  tag.Tasks.push(task)
-                }
-              }
-            }
+          for (const tag of data.tags) {
+            tag.flag = false
+            this.$set(this.tags, tag.id, tag)
           }
-          console.log('success')
         })
         .catch(function (error) {
-          // 请求失败处理
-          console.log('fail', error)
+          console.log('initialize data failed', error)
         })
-      getAllTasks()
-      getAllTags()
     },
-    task_add () {
+    addNewTask () {
       if (this.addContent !== '') {
-        let TaskContent = this.addContent
-        let TagsID = []
+        let tagsID = []
         for (let tag of this.tags) {
-          if (tag.Flag) {
-            TagsID.push(tag.ID)
+          if (tag.flag) {
+            tagsID.push(tag.ID)
           }
         }
-
-        addTask({
-          TaskContent: TaskContent,
-          TagsID: TagsID
+        axios.post('http://localhost:7986/api/v1/todo/task', {
+          TaskContent: this.addContent,
+          TagsID: tagsID
         })
           .then(response => {
-            console.log(response)
             if (response.data.status === 0) {
+              // TODO: modify local
               this.initData()
             }
           })
@@ -374,13 +299,11 @@ export default {
         this.addContent = ''
       }
     },
-    task_del (TaskID) {
-      deleteTask({
-        TaskID: TaskID
-      })
+    deleteOldTask (id) {
+      axios.delete(path.join('http://localhost:7986/api/v1/todo/task', id))
         .then(response => {
-          console.log(response)
           if (response.data.status === 0) {
+            // TODO: modify local
             this.initData()
           }
         })
@@ -388,21 +311,21 @@ export default {
           console.log(error)
         })
     },
-    task_upd (TaskID) {
-      let TagsID = []
-      for (let tag of this.tags) {
+    updateOldTask (id) {
+      let tagsID = []
+      for (const tag of this.tags) {
         if (tag.Flag) {
-          TagsID.push(tag.ID)
+          tagsID.push(tag.ID)
         }
       }
-      updateTask(TaskID, {
-        TaskID: this.updateTaskID,
-        TaskContent: this.updateContent,
-        TagsID: TagsID
+      axios.put(path.join('http://localhost:7986/api/v1/todo/task/', id), {
+        taskContent: this.updateContent,
+        taskCompeleted: this.tasks[id].taskCompeleted,
+        tagsID: tagsID
       })
         .then(response => {
-          console.log(response)
           if (response.data.status === 0) {
+            // TODO: modify local
             this.initData()
           }
         })
@@ -411,34 +334,37 @@ export default {
         })
       this.updateTaskVisible = false
     },
-    tag_add () {
-      if (this.addTagName !== '') {
-        let TagContent = this.addTagName
-        let TagDesc = this.addTagInfo
-
-        addTag({
-          TagContent: TagContent,
-          TagDesc: TagDesc
+    compeleteTask (id) {
+      this.fullTasks[id].task.compeleted = true
+      console.log('commplete task:', id)
+    },
+    uncompeleteTask (id) {
+      this.fullTasks[id].task.compeleted = false
+      console.log('uncommplete task:', id)
+    },
+    addNewtag () {
+      if (this.tagFormTagInfo !== null) {
+        axios.post('http://localhost:7986/api/v1/todo/tag/', {
+          TagContent: this.addTagName,
+          TagDesc: this.addTagInfo
         })
           .then(response => {
-            console.log(response)
             if (response.data.status === 0) {
+              // TODO: modify local
               this.initData()
             }
           })
           .catch(function (error) {
             console.log(error)
           })
-        this.addTagName = ''
-        this.addTagInfo = ''
+        this.tagFormTagInfo = null
       }
     },
-    tag_del (TagID) {
-      console.log(TagID)
-      deleteTag(TagID)
+    deleteOldTag (id) {
+      axios.delete(path.join('http://localhost:7986/api/v1/todo/tag/', id))
         .then(response => {
-          console.log(response)
           if (response.data.status === 0) {
+            // TODO: modify local
             this.initData()
           }
         })
@@ -446,15 +372,15 @@ export default {
           console.log(error)
         })
     },
-    tag_upd (TagID) {
-      updateTag(TagID, {
-        TagID: TagID,
-        TagContent: this.updateTagName,
-        TagDesc: this.updateTagInfo
+    updateOldTag (id) {
+      axios.delete(path.join('http://localhost:7986/api/v1/todo/tag/', id), {
+        content: this.tagDialogTagInfo.content,
+        desc: this.tagDialogTagInfo.desc,
+        color: this.tagDialogTagInfo.color
       })
         .then(response => {
-          console.log(response)
           if (response.data.status === 0) {
+            // TODO: modify local
             this.initData()
           }
         })
@@ -463,26 +389,35 @@ export default {
         })
       this.updateTagVisible = false
     },
-    displayTask (TaskContent, TaskID) {
-      this.updateTaskVisible = true
-      this.updateContent = TaskContent
-      this.updateTaskID = TaskID
+    handleOpenTaskDialog (taskID) {
+      this.taskDialogVisible = true
+      this.taskDialogFullTaskInfo = this.fullTasks[taskID].task
+      for (var tagID in this.tags) {
+        this.tags[tagID].flag = false
+      }
+      for (const tagID of this.fullTasks[taskID].tagsID) {
+        this.tags[tagID].flag = true
+      }
     },
-    unDisplayTask () {
-      this.updateTaskVisible = false
+    handleCloseFullTaskDialog () {
+      for (var tagID in this.tags) {
+        this.tags[tagID].flag = false
+      }
     },
-    displayTag (TagName, TagInfo, TagID) {
-      this.updateTagVisible = true
-      this.updateTagName = TagName
-      this.updateTagInfo = TagInfo
-      this.updateTagID = TagID
+    handleOpenTagDialog (tagID) {
+      this.tagDialogVisible = true
+      this.tagDialogTagInfo = this.tags[tagID]
     },
-    unDisplayTag () {
-      this.updateTagVisible = false
+    handleCloseTagDialog () {
     }
   },
   mounted () {
+    // this.$nextTick(() => {
+    //   this.initData()
+    //   console.log(this.fullTasks, this.tags)
+    // })
     this.initData()
+    // console.log('new', this.fullTasks)
   }
 }
 </script>

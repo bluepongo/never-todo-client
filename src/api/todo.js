@@ -2,7 +2,8 @@ import axios from 'axios'
 
 const path = require('path')
 
-const baseUrl = 'http://localhost:8080/todo/'
+const baseUrl = 'http://localhost:7986/api/v1/todo/'
+const allUrl = '/all'
 const tasksUrl = '/task'
 const getTasksByContentUrl = '/content'
 const getTasksByTagUrl = '/tag'
@@ -12,6 +13,11 @@ export default{
   components: {
     axios
   }
+}
+
+export function getAll () {
+  return axios.get(
+    path.join(baseUrl, allUrl))
 }
 
 // Tasks
