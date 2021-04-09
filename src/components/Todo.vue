@@ -219,6 +219,42 @@
           </span>
         </el-dialog>
 
+        <!-- 增加标签 -->
+        <div class="card p-2">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="填写标签名字..."
+              v-model="addTagName"/>
+            <div class="input-group-append">
+              <button
+                type="submit"
+                class="btn btn-secondary"
+                @click="addTag()">添加</button>
+            </div>
+          </div>
+          <textarea
+            class="form-control form-info"
+            placeholder="标签的详细信息..."
+            v-model="addTagInfo"></textarea>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="card p-2">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="搜索..."/>
+            <div class="input-group-append">
+              <button
+                type="submit"
+                class="btn btn-secondary">搜索</button>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
