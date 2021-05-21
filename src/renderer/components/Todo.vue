@@ -4,7 +4,7 @@
     id="Task"
   >
     <el-row>
-      
+
       <el-col :span="18">
         <div><span class="text"><h5>任务</h5></span></div>
         <template slot="title">
@@ -39,10 +39,10 @@
           <span :style="{'background-color': '#000000'}"> &nbsp;&nbsp; </span>
           <span class="tag-icon-item-text text"> &nbsp;全部任务&nbsp;</span>
         </div>
-        <div 
-          class="tag-icon-item" 
-          v-for="tag in tags" 
-          :key="tag.id" 
+        <div
+          class="tag-icon-item"
+          v-for="tag in tags"
+          :key="tag.id"
           :style="{'opacity':0.3}"
           :class="{'active':tag.active}"
           @mouseover="hoverTag(tag)"
@@ -53,8 +53,6 @@
         </div>
       </el-col>
     </el-row>
-
-
 
   </div>
 </template>
@@ -292,15 +290,15 @@ export default {
 </script>
 
 <style>
-a:link { 
-text-decoration: none; 
-} 
-a:visited { 
-text-decoration: none; 
-} 
-a:hover { 
-text-decoration: none; 
-} 
+a:link {
+text-decoration: none;
+}
+a:visited {
+text-decoration: none;
+}
+a:hover {
+text-decoration: none;
+}
 
 .container {
   padding: 20px;
@@ -331,7 +329,7 @@ text-decoration: none;
 }
 
 .active{
-  background: rgb(206, 206, 206); 
+  background: rgb(206, 206, 206);
 }
 
 </style>

@@ -8,17 +8,16 @@
   </div>
 </template>
 
-
 <script>
-  export default {
-    data () {
-      return {
-        appName: 'Never Todo',
-        ignoreMouse: false
-      }
-    },
-    name: 'never-todo-frontend'
-  }
+export default {
+  data () {
+    return {
+      appName: 'Never Todo',
+      ignoreMouse: false
+    }
+  },
+  name: 'never-todo-frontend'
+}
 </script>
 
 <style lang="scss" scoped>
