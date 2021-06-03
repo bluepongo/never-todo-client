@@ -14,12 +14,18 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import Draggable from 'vuedraggable'
 
+import { Compact } from 'vue-color'
+
+// import vcolorpicker from 'vcolorpicker'
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.use(BootstrapVue)
 Vue.use(ElementUI)
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.component('draggable', Draggable)
+Vue.component('compact-picker', Compact)
+// Vue.use(vcolorpicker)
 
 /* eslint-disable no-new */
 new Vue({

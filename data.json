@@ -1,0 +1,111 @@
+{
+    "result": {
+        "tags": [
+            {
+                "id": 1,
+                "content": "吃饭",
+                "color": "#FF0000",
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": false
+            },
+            {
+                "id": 2,
+                "content": "健身",
+                "color": "#00FF00",
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": false
+            },
+            {
+                "id": 3,
+                "content": "生活",
+                "color": "#0000FF",
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": false
+            },
+            {
+                "id": 4,
+                "content": "不该出现的标签",
+                "color": "#FFFF00",
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": true
+            }
+        ],
+        "task_tags": [
+            {
+                "task_id": 1,
+                "tag_id": 1
+            },
+            {
+                "task_id": 1,
+                "tag_id": 3
+            },
+            {
+                "task_id": 2,
+                "tag_id": 2
+            },
+            {
+                "task_id": 3,
+                "tag_id": 1
+            },
+            {
+                "task_id": 3,
+                "tag_id": 2
+            },
+            {
+                "task_id": 3,
+                "tag_id": 3
+            },
+            {
+                "task_id": 3,
+                "tag_id": 4
+            }
+        ],
+        "tasks": [
+            {
+                "id": 1,
+                "content": "记得吃早饭",
+                "completed": false,
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": false
+            },
+            {
+                "id": 2,
+                "content": "记得做早操",
+                "completed": false,
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": false
+            },
+            {
+                "id": 3,
+                "content": "记得要边吃早饭边做早操",
+                "completed": false,
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": false
+            },
+            {
+                "id": 4,
+                "content": "明天记得吃晚饭",
+                "completed": true,
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": false
+            },
+            {
+                "id": 4,
+                "content": "不该出现的待办任务",
+                "completed": false,
+                "created_at": "2021-05-18T14:55:00+08:00",
+                "updated_at": "2021-05-18T14:55:00+08:00",
+                "deleted": true
+            }
+        ]
+    },
+    "status": 0
+}

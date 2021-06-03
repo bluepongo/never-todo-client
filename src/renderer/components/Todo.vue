@@ -4,19 +4,61 @@
     id="Task"
   >
     <el-row>
-
+      
       <el-col :span="18">
-        <div><span class="text"><h5>任务</h5></span></div>
+        <div>
+          <span class="text">
+            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="addTask()"></i></h5> 
+          </span>
+        </div>
         <template slot="title">
           进行中 <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
         </template>
         <draggable v-model="todoFullTasks">
           <transition-group>
-            <div v-for="fullTask in todoFullTasks" :key="fullTask.task.id">
-              <div>
-                <!-- <el-checkbox @change="compeleteTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
-                <span class="task-list-item text"> &middot; {{ fullTask.task.content }}</span>
-                <!-- <i class="el-icon-circle-plus"></i> -->
+            <div 
+              class="task-list-item"
+              v-for="fullTask in todoFullTasks" 
+              :key="fullTask.task.id"
+              :class="{'select':fullTask.task.selected}"
+              @click="showTaskOpt(fullTask.task)"
+              @dblclick="completeTask(fullTask.task)"
+            >
+              <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
+              <div v-if="!fullTask.task.deleted" class="first-row">
+                <span v-if="!fullTask.task.selected" class="text"> {{ fullTask.task.content }}</span>
+                <input
+                  ref="taskContent"
+                  v-else 
+                  v-model= "fullTask.task.content" 
+                  v-focus
+                  @input="autoTextarea($event)"
+                  @click.stop=""
+                  @keyup.enter="modifyTaskContent($event)"
+                  @blur="modifyTaskContent()">
+                <span v-if="!fullTask.task.selected">
+                  <span 
+                    v-for="tag in fullTask.tags"
+                    :key="tag.id" 
+                    :style="{'background-color': tag.color}">&nbsp;</span>
+                </span>
+                <div v-else>
+                  <span 
+                    v-for="tag in fullTask.tags"
+                    :key="tag.id" 
+                    :style="{'background-color': tag.color}">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                </div>
+                
+              </div>
+              
+              <div class="second-row" v-show="fullTask.task.selected">
+                <span class="text">
+                  <i class="el-icon-copy-document" @click.stop="copyTaskContent()"></i>&nbsp;&nbsp;
+                  <i class="el-icon-alarm-clock" @click.stop="setTaskAlarm()"></i>&nbsp;&nbsp;
+                  <i class="el-icon-price-tag" @click.stop="assignTag()"></i>&nbsp;&nbsp;
+                  <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                  <i class="el-icon-check" @click.stop="completeTask(fullTask.task)"></i>
+                </span>
               </div>
             </div>
           </transition-group>
@@ -26,43 +68,85 @@
           已完成 <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
         </template>
         <draggable v-model="doneFullTasks" group="todo" @start="drag=true" @end="drag=false">
-          <div v-for="fullTask in doneFullTasks" :key="fullTask.task.id">
-            <!-- <el-checkbox @change="compeleteTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
-            <span class="task-list-item"> &middot; <s :style="{'opacity': 0.2}">{{ fullTask.task.content }}</s></span>
-            <!-- <i class="el-icon-circle-plus"></i> -->
+          <div 
+            v-for="fullTask in doneFullTasks" 
+            :key="fullTask.task.id" 
+            class="task-list-item"
+            @click.stop="showTaskOpt(fullTask.task)"  
+          >
+            <span class="text"> <s :style="{'opacity': 0.5}">{{ fullTask.task.content }}</s></span>
           </div>
         </draggable>
+
+        
       </el-col>
       <el-col :span="6" class="tag-icon">
-        <div><span class="text"><h5>标签</h5></span></div>
-        <div class="tag-icon-item" :style="{'opacity':1}" :class="{'active':noTagActive}">
-          <span :style="{'background-color': '#000000'}"> &nbsp;&nbsp; </span>
-          <span class="tag-icon-item-text text"> &nbsp;全部任务&nbsp;</span>
-        </div>
-        <div
-          class="tag-icon-item"
-          v-for="tag in tags"
-          :key="tag.id"
-          :style="{'opacity':0.3}"
-          :class="{'active':tag.active}"
-          @mouseover="hoverTag(tag)"
-          @mouseleave="leaveTag(tag)"
+        <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="addTag()"></i></h5></span></div>
+        <div 
+          class="tag-icon-item" 
+          :class="{'select': noTagSelect }"
+          @mouseover="noTagActive = true"
+          @mouseleave="noTagActive = false"
+          @click="selectNoTag()"  
         >
-          <span :style="{'background-color': tag.color}"> &nbsp;&nbsp; </span>
-          <span class="tag-icon-item-text text"> &nbsp;{{ tag.content }}&nbsp;</span>
+          <span :style="{'background-color': '#FFFFFF'}">&nbsp;&nbsp;</span>
+          <span class="tag-icon-item-text text">全部</span>
+        </div>
+        <div 
+          class="tag-icon-item" 
+          v-for="tag in tags" 
+          :key="tag.id" 
+          :class="{'select':tag.selected}"
+          @click="selectTag(tag)"
+          @dblclick="$set(tag, 'edited', true)"
+        >
+          <div v-if="!tag.deleted">
+            
+            <!-- <colorPicker v-model="tag.color" /> -->
+            <span v-if="!tag.edited" :style="{'background-color': tag.color}">&nbsp;&nbsp;</span>
+            <span v-if="!tag.edited" class="tag-icon-item-text text">{{ tag.content }}</span>
+            <input
+              ref="tagContent"
+              v-else 
+              v-model= "tag.content" 
+              v-focus
+              @input="autoTextarea($event)"
+              @click.stop=""
+              @keyup.enter="modifyTaskContent($event)"
+              @blur="modifyTaskContent()">
+            <div>
+              <span v-if="tag.edited"  class="text">
+                <i class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
+                <i class="el-icon-delete" @click.stop="deleteTag(tag.id)"></i>&nbsp;&nbsp;
+              </span>
+            </div>
+          </div>
         </div>
       </el-col>
     </el-row>
+
+    <el-row>
+      <compact-picker 
+        v-if="colorPickerVisible"
+        @input="pickColor"
+        :value="currentTagColor"
+        :palette="availableTagColors"
+      ></compact-picker>
+
+    </el-row>
+
+    
 
   </div>
 </template>
 
 <script>
-import {getAll} from '@/api/todo'
+// import
+// import {getAll} from '@/api/todo'
 // import {getAllTasks, getTasksByContent, getTasksByTag, addTask, deleteTask， updateTask} from '@/api/todo'
 // import {getAllTags, addTag, deleteTag, updateTag} from '@/api/todo'
-import axios from 'axios'
-const path = require('path')
+import { readFile } from 'fs'
+// import { filter } from 'vue/types/umd'
 export default {
   name: 'todo',
   data () {
@@ -79,19 +163,42 @@ export default {
 
       taskTags: [],
 
-      noTagActive: true,
+      noTagActive: false,
+      noTagSelect: true,
 
       addTagName: '',
-      addTagInfo: ''
+      addTagInfo: '',
+
+      pickColorTagId: '',
+      availableTagColors: [
+        '#FF0000', '#FF8000', '#FFFF00',
+        '#804040', '#00FF80', '#404040',
+        '#00FFFF', '#0080FF', '#0000FF',
+        '#8000FF', '#FF00FF', '#AAAAAA'
+      ],
+      currentTagColor: '#000000',
+
+      colorPickerVisible: false
+    }
+  },
+  watch: {
+    taskContent () {
+      let textArea = this.$refs['taskContent']
+      if (textArea.scrollHeight < 100) {
+        textArea.style.height = textArea.scrollHeight + 'px'
+      } else {
+        textArea.style.height = 100 + 'px'
+      }
     }
   },
   computed: {
     fullTasks () {
       let fts = []
       for (let task of this.tasks) {
+        if (task.deleted) continue
         let ft = {'task': task, 'tags': []}
         for (let tag of this.tags) {
-          this.$set(tag, 'active', false)
+          if (tag.deleted) continue
           for (let taskTag of this.taskTags) {
             if (task.id === taskTag.task_id && tag.id === taskTag.tag_id) {
               ft.tags.push(tag)
@@ -102,45 +209,130 @@ export default {
       }
       return fts
     },
-    todoFullTasks () {
-      let fts = []
-      for (let fulltask of this.fullTasks) {
-        if (!fulltask.task.completed) {
-          fts.push(fulltask)
+    filteredFullTasks () {
+      if (this.noTagSelect) {
+        return this.fullTasks
+      }
+      let ffts = []
+      let selectedTagId = 0
+      for (let tag of this.tags) {
+        if (tag.selected) {
+          selectedTagId = tag.id
         }
       }
-      return fts
+      for (let taskTag of this.taskTags) {
+        if (taskTag.tag_id === selectedTagId) {
+          for (let fullTask of this.fullTasks) {
+            if (fullTask.task.id === taskTag.task_id) {
+              ffts.push(fullTask)
+            }
+          }
+        }
+      }
+      // console.log(ffts)
+      return ffts
+    },
+    todoFullTasks () {
+      let tfts = []
+      for (let fullTask of this.filteredFullTasks) {
+        if (!fullTask.task.completed) {
+          tfts.push(fullTask)
+        }
+      }
+      return tfts
     },
     doneFullTasks () {
-      let fts = []
-      for (let fulltask of this.fullTasks) {
-        if (fulltask.task.completed) {
-          fts.push(fulltask)
+      let dfts = []
+      for (let fullTask of this.filteredFullTasks) {
+        if (fullTask.task.completed) {
+          dfts.push(fullTask)
         }
       }
-      return fts
+      return dfts
+    }
+
+  },
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus()
+      }
     }
   },
   methods: {
     initData () {
-      getAll()
-        .then((response) => {
-          let data = response.data.result
-          // 初始化待办/标签数据
-          console.log(data)
-          this.tasks = data.tasks
-          this.tags = data.tags
-          this.taskTags = data.task_tags
-        })
-        .catch(function (error) {
-          console.log('initialize data failed', error)
-        })
+      // By Network
+      // getAll()
+      //   .then((response) => {
+      //     let data = response.data.result
+      //     // 初始化待办/标签数据
+      //     console.log(data)
+      //     this.tasks = data.tasks
+      //     this.tags = data.tags
+      //     this.taskTags = data.task_tags
+      //   })
+      //   .catch(function (error) {
+      //     console.log('initialize data failed', error)
+      //   })
+
+      // By Local File
+      // var fs = require('fs')
+      let file = 'data.json' // 文件路径
+      readFile(file, 'utf-8', function (err, data) {
+        if (err) {
+          console.log(err)// eslint-disable-line
+        } else {
+          let result = JSON.parse(data).result
+          this.tasks = result.tasks
+          this.tags = result.tags
+          this.taskTags = result.task_tags
+        }
+      }.bind(this))
     },
-    hoverTag (tag) {
-      this.$set(tag, 'active', true)
+    showTaskOpt (task) {
+      if (task.selected) {
+        this.$set(task, 'selected', false)
+        return
+      }
+      this.unselectAllTasks()
+      this.$set(task, 'selected', true)
+      this.cancelPickColor()
     },
-    leaveTag (tag) {
-      this.$set(tag, 'active', false)
+    unselectAllTasks () {
+      for (let task of this.tasks) { this.$set(task, 'selected', false) }
+    },
+    modifyTaskContent (event) {
+      if (event) {
+        event.target.blur()
+      }
+    },
+    selectNoTag () {
+      if (this.noTagSelect) { return }
+      this.unselectAllTasks()
+      this.unselectAllTags()
+      this.noTagSelect = true
+      this.cancelPickColor()
+    },
+    unselectAllTags () {
+      for (let tag of this.tags) {
+        this.$set(tag, 'selected', false)
+        this.$set(tag, 'edited', false)
+      }
+    },
+    selectTag (tag) {
+      if (tag.selected) {
+        if (tag.edited) {
+          this.$set(tag, 'edited', false)
+        } else {
+          this.$set(tag, 'edited', true)
+        }
+      } else {
+        this.unselectAllTasks()
+        this.unselectAllTags()
+        this.$set(tag, 'selected', true)
+        this.noTagSelect = false
+        this.cancelPickColor()
+      }
     },
     addNewTask () {
       if (this.addContent !== '') {
@@ -150,33 +342,16 @@ export default {
             tagsID.push(tag.ID)
           }
         }
-        axios.post('http://localhost:7986/api/v1/todo/task', {
-          TaskContent: this.addContent,
-          TagsID: tagsID
-        })
-          .then(response => {
-            if (response.data.status === 0) {
-              // TODO: modify local
-              this.initData()
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
         this.addContent = ''
       }
     },
-    deleteOldTask (id) {
-      axios.delete(path.join('http://localhost:7986/api/v1/todo/task', id))
-        .then(response => {
-          if (response.data.status === 0) {
-            // TODO: modify local
-            this.initData()
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    deleteTask (taskId) {
+      for (var i = 0; i < this.tasks.length; i++) {
+        if (this.tasks[i].id === taskId) {
+          this.tasks[i].deleted = true
+          break
+        }
+      }
     },
     updateOldTask (id) {
       let tagsID = []
@@ -185,97 +360,54 @@ export default {
           tagsID.push(tag.ID)
         }
       }
-      axios.put(path.join('http://localhost:7986/api/v1/todo/task/', id), {
-        taskContent: this.updateContent,
-        taskCompleted: this.tasks[id].taskCompleted,
-        tagsID: tagsID
-      })
-        .then(response => {
-          if (response.data.status === 0) {
-            // TODO: modify local
-            this.initData()
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
       this.updateTaskVisible = false
     },
-    compeleteTask (id) {
-      this.fullTasks[id].task.Completed = true
-      console.log('commplete task:', id)
+    completeTask (task) {
+      task.completed = true
     },
-    uncompeleteTask (id) {
+    uncompleteTask (id) {
       this.fullTasks[id].task.Completed = false
       console.log('uncommplete task:', id)
     },
     addNewtag () {
-      if (this.tagFormTagInfo !== null) {
-        axios.post('http://localhost:7986/api/v1/todo/tag/', {
-          TagContent: this.addTagName,
-          TagDesc: this.addTagInfo
-        })
-          .then(response => {
-            if (response.data.status === 0) {
-              // TODO: modify local
-              this.initData()
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-        this.tagFormTagInfo = null
-      }
     },
-    deleteOldTag (id) {
-      axios.delete(path.join('http://localhost:7986/api/v1/todo/tag/', id))
-        .then(response => {
-          if (response.data.status === 0) {
-            // TODO: modify local
-            this.initData()
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    deleteTag (tagId) {
+      for (var i = 0; i < this.tags.length; i++) {
+        if (this.tags[i].id === tagId) {
+          this.tags[i].deleted = true
+          break
+        }
+      }
     },
     updateOldTag (id) {
-      axios.delete(path.join('http://localhost:7986/api/v1/todo/tag/', id), {
-        content: this.tagDialogTagInfo.content,
-        desc: this.tagDialogTagInfo.desc,
-        color: this.tagDialogTagInfo.color
-      })
-        .then(response => {
-          if (response.data.status === 0) {
-            // TODO: modify local
-            this.initData()
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-      this.updateTagVisible = false
     },
-    handleOpenTaskDialog (taskID) {
-      this.taskDialogVisible = true
-      this.taskDialogFullTaskInfo = this.fullTasks[taskID].task
-      for (var tagID in this.tags) {
-        this.tags[tagID].flag = false
+
+    handlePickColor (tag) {
+      this.colorPickerVisible = true
+      this.currentTagColor = tag.color
+      this.pickColorTagId = tag.id
+    },
+
+    cancelPickColor () {
+      this.colorPickerVisible = false
+      this.currentTagColor = '#000000'
+      this.pickColorTagId = ''
+    },
+
+    pickColor (val) {
+      console.log(val)
+      for (var i = 0; i < this.tags.length; i++) {
+        if (this.tags[i].id === this.pickColorTagId) {
+          this.tags[i].color = val.hex
+          this.tags[i].edited = false
+          break
+        }
       }
-      for (const tagID of this.fullTasks[taskID].tagsID) {
-        this.tags[tagID].flag = true
-      }
+      this.cancelPickColor()
     },
-    handleCloseFullTaskDialog () {
-      for (var tagID in this.tags) {
-        this.tags[tagID].flag = false
-      }
-    },
-    handleOpenTagDialog (tagID) {
-      this.tagDialogVisible = true
-      this.tagDialogTagInfo = this.tags[tagID]
-    },
-    handleCloseTagDialog () {
+
+    autoTextarea (event) {
+      event.target.style.rows = '1'
     }
   },
   mounted () {
@@ -290,35 +422,53 @@ export default {
 </script>
 
 <style>
-a:link {
-text-decoration: none;
-}
-a:visited {
-text-decoration: none;
-}
-a:hover {
-text-decoration: none;
+a:link { text-decoration: none; } 
+a:visited { text-decoration: none; } 
+a:hover { text-decoration: none; }
+i { cursor: pointer; }
+span {  word-wrap : break-word}
+input {
+  background-color: rgba(255,255,255, 0.5);
+  width: 100%;
+  border: none;
+  outline: none;
+  color:#FFFFFF;
+  font-family: "Arial","Microsoft YaHei","黑体",sans-serif;
 }
 
+.el-icon-copy-document:hover{color:lightseagreen}
+.el-icon-check:hover{color:chartreuse}
+.el-icon-edit:hover {color: gold;}
+.el-icon-alarm-clock:hover {color:cyan}
+.el-icon-price-tag:hover {color:coral}
+.el-icon-delete:hover {color: crimson;}
+
 .container {
-  padding: 20px;
+  padding: 0px 20px;
 }
 
 .task-list-item {
+  margin: 2px;
   color: #ffffff;
   /* font-weight: bold; */
+  cursor: default; 
+  padding: 0px 6px;
 }
+
+.task-list-item:hover { background: rgba(100,100,100,0.8); }
 
 .tag-icon-item {
-  padding-left: 6px;
+  opacity: 1;
+  margin: 1px;
+  padding-left: 2px;
   margin-top: 2px;
   text-align:left;
+  cursor: default; 
 }
 
+.tag-icon-item:hover { background: rgba(100,100,100,0.8); }
+
 .tag-icon-item-text {
-  /* padding: 3px; */
-  /* font-size: 14px; */
-  /* font-weight: bold; */
   color:#FFFFFF;
   /* background-color: #000000; */
 }
@@ -326,10 +476,17 @@ text-decoration: none;
 .text {
   color:#FFFFFF;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+  cursor: default;
 }
 
 .active{
-  background: rgb(206, 206, 206);
+  background: rgba(100,100,100,0.8);
+}
+
+.select{
+  opacity: 1;
+  font-weight: bolder;
+  background: rgba(100,100,100,0.8);
 }
 
 </style>

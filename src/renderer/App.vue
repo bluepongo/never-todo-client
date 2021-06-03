@@ -1,14 +1,29 @@
 <template>
   <div id="app" :class="{ unfocused: ignoreMouse }">
-    <div class="drag-nav">
+    <div class="header">
       <b>{{ appName }}</b>
       <i>Powered by Zhy/Yc</i>
+    </div>   
+    <div class="tools">
+      <i class="el-icon-upload" key="export" @click="exportData"></i>
+      <i class="el-icon-view" key="hide" @click="hideWindow"></i>
+      <i
+        :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
+        key="lock"
+        @mouseenter="setIgnoreMouseEvents(false)"
+        @mouseleave="setIgnoreMouseEvents(ignoreMouse)"
+        @click="ignoreMouse = !ignoreMouse"
+      ></i>
     </div>
     <router-view></router-view>
   </div>
 </template>
 
+
+
 <script>
+import { ipcRenderer } from 'electron'
+
 export default {
   data () {
     return {
@@ -16,7 +31,17 @@ export default {
       ignoreMouse: false
     }
   },
-  name: 'never-todo-frontend'
+  methods: {
+    setIgnoreMouseEvents (ignore) {
+      ipcRenderer.invoke('setIgnoreMouseEvents', ignore)
+    }
+    // exportData () {
+    //   ipcRenderer.invoke('exportData')
+    // },
+    // hideWindow () {
+    //   ipcRenderer.invoke('hideWindow')
+    // }
+  }
 }
 </script>
 
@@ -26,70 +51,37 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgba($color: #000000, $alpha: 0.6);
+  background-color: rgba($color: #000000, $alpha: 1);
+  opacity: 0.5;
+
   border-radius: 5px;
-  .drag-nav {
-    -webkit-app-region: drag;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 20px;
-    padding: 0 20px;
-    box-sizing: border-box;
-    font-size: 12px;
-    b,
-    i {
-      color: rgba($color: #ffffff, $alpha: 0.3);
-    }
-  }
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    height: 26px;
-    padding: 0 20px;
-    color: #dddddd;
-    user-select: none;
-    .link {
-      a {
-        font-weight: bold;
-        color: #dddddd;
-        text-decoration: none;
-        &.router-link-exact-active {
-          font-size: 20px;
-          color: #ffffff;
-        }
-        &:hover {
-          color: rgba($color: #ffffff, $alpha: 0.6);
-        }
-      }
-    }
-    .tools {
-      display: flex;
-      i {
-        font-size: 20px;
-        line-height: 26px;
-        padding: 0 5px;
-        cursor: pointer;
-      }
-    }
-  }
-  .main {
-    flex: 1;
-    margin: 10px 0;
-    overflow-y: auto;
-    &:hover::-webkit-scrollbar-thumb {
-      display: block;
-    }
-  }
 }
-#app.unfocused {
-  opacity: 0.4;
-  .mask {
-    display: block;
-  }
-  .tools {
-    z-index: 1000;
-  }
+#app:hover {
+  opacity: 0.8;
 }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 20px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  font-size: 12px;
+  color: rgba($color: #ffffff, $alpha: 0.3);
+}
+
+.tools {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.tools i {
+  font-size: 18px;
+  padding: 2px 7px;
+  cursor: pointer;
+  color: #ffffff;
+} 
 </style>

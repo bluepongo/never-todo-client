@@ -56,19 +56,23 @@ app.on('activate', () => {
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    useContentSize: true,
-    // height: 300,
-    // width: 400,
-    // minHeight: 300,
-    // minWidth: 400,
+    // dev
+    // transparent: false,
+    // frame: true,
+    // resizable: true,
+
+    // pro
     transparent: true,
     frame: false,
-    resizable: true,
+    resizable: false,
+    height: 300,
+    width: 350,
+    minimizable: false,
+    maximizable: false,
+    alwaysOnTop: true,
 
-    // minimizable: false,
-    // maximizable: false,
     // skipTaskbar: true,
-    // alwaysOnTop: true,
+    useContentSize: true,
     webPreferences: {
       // devTools: false,
       nodeIntegration: true
