@@ -51,10 +51,17 @@
                     :style="{'background-color': tag.color}">&nbsp;</span>
                 </span>
                 <div v-else>
-                  <span 
-                    v-for="tag in fullTask.tags"
-                    :key="tag.id" 
-                    :style="{'background-color': tag.color}">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <span style="margin: 1px;" class="text-small" v-for="tag in fullTask.tags" :key="tag.id" >
+                    <span 
+                      :style="{
+                        'border': '2px solid ' + tag.color, 
+                        'border-radius': '4px',
+                        'padding': '1px'
+                      }"
+                    >
+                      {{ tag.content }}
+                    </span>
+                  </span>
                 </div>
                 
               </div>
@@ -506,6 +513,13 @@ input {
 .text {
   color:#FFFFFF;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+  cursor: default;
+}
+
+.text-small {
+  color: #FFFFFF;
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+  font-size: 10px;
   cursor: default;
 }
 
