@@ -68,9 +68,9 @@
               
               <div class="second-row" v-show="fullTask.task.selected">
                 <span class="text">
-                  <i class="el-icon-copy-document" @click.stop="copyTaskContent()"></i>&nbsp;&nbsp;
-                  <i class="el-icon-alarm-clock" @click.stop="setTaskAlarm()"></i>&nbsp;&nbsp;
-                  <i class="el-icon-price-tag" @click.stop="assignTag()"></i>&nbsp;&nbsp;
+                  <!-- <i class="el-icon-copy-document" @click.stop="copyTaskContent()"></i>&nbsp;&nbsp; -->
+                  <i class="el-icon-alarm-clock" @click.stop="setTaskAlarm(fullTask.task)"></i>&nbsp;&nbsp;
+                  <i class="el-icon-price-tag" @click.stop="assignTagsForTask(fullTask.task)"></i>&nbsp;&nbsp;
                   <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
                   <i class="el-icon-check" @click.stop="completeTask(fullTask.task)"></i>
                 </span>
@@ -135,7 +135,7 @@
           @dblclick="$set(tag, 'edited', true)"
         >
           <div v-if="!tag.deleted">
-            
+            <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span>
             <!-- <colorPicker v-model="tag.color" /> -->
             <span v-if="!tag.edited" :style="{'background-color': tag.color}">&nbsp;&nbsp;</span>
             <span v-if="!tag.edited" class="tag-icon-item-text text">{{ tag.content }}</span>
@@ -337,6 +337,9 @@ export default {
     },
     unselectAllTasks () {
       for (let task of this.tasks) { this.$set(task, 'selected', false) }
+    },
+    assignTagsForTask (task) {
+
     },
     modifyTaskContent (event) {
       if (event) {
