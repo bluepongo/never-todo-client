@@ -62,6 +62,10 @@
             {
                 "task_id": 3,
                 "tag_id": 4
+            },
+            {
+                "task_id": 4,
+                "tag_id": 1
             }
         ],
         "tasks": [
