@@ -13,7 +13,32 @@
         </div>
 
         <div class="task-list-item">
-
+          <input
+            ref="taskContent"
+            v-model= "" 
+            v-focus
+            @input="autoTextarea($event)"
+            @click.stop=""
+            @keyup.enter="modifyTaskContent($event)"
+            @blur="modifyTaskContent()">
+          <div>
+            <span class="text-small" v-for="tag in .tags" :key="tag.id" >
+              <span 
+                class="tag-icon"
+                :style="{'border-color': tag.color,}"
+                @click.stop="delTagForTask(.task.id, tag.id)"
+              >{{ tag.content.charAt(0) }}</span>
+            </span>
+            <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
+            <span class="text-small" v-for="tag in tags" :key="tag.id" >
+              <span 
+                v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
+                class="tag-icon"
+                :style="{'border-color': tag.color,}"
+                @click.stop="addTagForTask(fullTask.task.id, tag.id)"
+              >{{ tag.content.charAt(0) }}</span>
+            </span>
+          </div>
         </div>
 
         <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
@@ -356,6 +381,34 @@ export default {
         event.target.blur()
       }
     },
+    addNewTask () {
+      if (this.addContent !== '') {
+        let tagsID = []
+        for (let tag of this.tags) {
+          if (tag.flag) {
+            tagsID.push(tag.ID)
+          }
+        }
+        this.addContent = ''
+      }
+    },
+    deleteTask (taskId) {
+      for (var i = 0; i < this.tasks.length; i++) {
+        if (this.tasks[i].id === taskId) {
+          this.tasks[i].deleted = true
+          break
+        }
+      }
+    },
+    updateTask (id) {
+    },
+    completeTask (task) {
+      task.completed = true
+    },
+    uncompleteTask (task) {
+      task.completed = false
+    },
+
     selectNoTag () {
       if (this.noTagSelect) { return }
       this.unselectAllTasks()
@@ -384,33 +437,6 @@ export default {
       this.unselectAllTasks()
       this.cancelPickColor()
     },
-    addNewTask () {
-      if (this.addContent !== '') {
-        let tagsID = []
-        for (let tag of this.tags) {
-          if (tag.flag) {
-            tagsID.push(tag.ID)
-          }
-        }
-        this.addContent = ''
-      }
-    },
-    deleteTask (taskId) {
-      for (var i = 0; i < this.tasks.length; i++) {
-        if (this.tasks[i].id === taskId) {
-          this.tasks[i].deleted = true
-          break
-        }
-      }
-    },
-    updateTask (id) {
-    },
-    completeTask (task) {
-      task.completed = true
-    },
-    uncompleteTask (task) {
-      task.completed = false
-    },
     addNewtag () {
     },
     deleteTag (tagId) {
@@ -428,7 +454,6 @@ export default {
       this.taskTags.push({'task_id': taskId, 'tag_id': tagId})
       this.assignedTags.push(tagId)
     },
-
     delTagForTask (taskId, tagId) {
       for (var i = 0; i < this.taskTags.length; i++) {
         if (this.taskTags[i].task_id === taskId && this.taskTags[i].tag_id === tagId) {
@@ -444,13 +469,11 @@ export default {
       this.currentTagColor = tag.color
       this.pickColorTagId = tag.id
     },
-
     cancelPickColor () {
       this.colorPickerVisible = false
       this.currentTagColor = '#000000'
       this.pickColorTagId = ''
     },
-
     pickColor (val) {
       console.log(val)
       for (var i = 0; i < this.tags.length; i++) {
