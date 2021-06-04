@@ -11,17 +11,25 @@
             <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="addTask()"></i></h5> 
           </span>
         </div>
-        <template slot="title">
-          进行中 <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
-        </template>
+
+        <div class="task-list-item">
+
+        </div>
+
+        <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
+          <i v-if="todoTasksFolded" class="el-icon-arrow-right"></i>
+          <i v-else class="el-icon-arrow-down"></i>          
+          <span class="text">进行中 </span>
+          <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
+        </span>
         <draggable v-model="todoFullTasks">
-          <transition-group>
+          <transition-group v-if="!todoTasksFolded">
             <div 
               class="task-list-item"
               v-for="fullTask in todoFullTasks" 
               :key="fullTask.task.id"
               :class="{'select':fullTask.task.selected}"
-              @click="showTaskOpt(fullTask.task)"
+              @click="selectTask(fullTask.task)"
               @dblclick="completeTask(fullTask.task)"
             >
               <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
@@ -64,18 +72,37 @@
           </transition-group>
         </draggable>
 
-        <template slot="title">
-          已完成 <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
-        </template>
+        <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
+          <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
+          <i v-else class="el-icon-arrow-down"></i>          
+          <span class="text">已完成 </span>
+          <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
+        </span>
         <draggable v-model="doneFullTasks" group="todo" @start="drag=true" @end="drag=false">
-          <div 
-            v-for="fullTask in doneFullTasks" 
-            :key="fullTask.task.id" 
-            class="task-list-item"
-            @click.stop="showTaskOpt(fullTask.task)"  
-          >
-            <span class="text"> <s :style="{'opacity': 0.5}">{{ fullTask.task.content }}</s></span>
-          </div>
+          <transition-group v-if="!doneTasksFolded">
+            <div 
+              v-for="fullTask in doneFullTasks" 
+              :key="fullTask.task.id" 
+              class="task-list-item"
+              :class="{'select':fullTask.task.selected}"
+              @click="selectTask(fullTask.task)"
+              @dblclick="uncompleteTask(fullTask.task)"
+            >
+              <span class="text"> <s :style="{'opacity': 0.5}">{{ fullTask.task.content }}</s></span>
+              <!-- <span v-if="!fullTask.task.selected"> -->
+              <span>
+                <span 
+                  v-for="tag in fullTask.tags"
+                  :key="tag.id" 
+                  :style="{'background-color': tag.color}">&nbsp;</span>
+                <span v-if="fullTask.task.selected" class="text">
+                  &nbsp;
+                  <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                  <i class="el-icon-refresh-left" @click.stop="completeTask(fullTask.task)"></i>
+                </span>
+              </span>
+            </div>
+          </transition-group>
         </draggable>
 
         
@@ -168,6 +195,9 @@ export default {
 
       addTagName: '',
       addTagInfo: '',
+
+      doneTasksFolded: true,
+      todoTasksFolded: false,
 
       pickColorTagId: '',
       availableTagColors: [
@@ -289,7 +319,7 @@ export default {
         }
       }.bind(this))
     },
-    showTaskOpt (task) {
+    selectTask (task) {
       if (task.selected) {
         this.$set(task, 'selected', false)
         return
@@ -327,12 +357,12 @@ export default {
           this.$set(tag, 'edited', true)
         }
       } else {
-        this.unselectAllTasks()
         this.unselectAllTags()
         this.$set(tag, 'selected', true)
         this.noTagSelect = false
-        this.cancelPickColor()
       }
+      this.unselectAllTasks()
+      this.cancelPickColor()
     },
     addNewTask () {
       if (this.addContent !== '') {
@@ -365,9 +395,8 @@ export default {
     completeTask (task) {
       task.completed = true
     },
-    uncompleteTask (id) {
-      this.fullTasks[id].task.Completed = false
-      console.log('uncommplete task:', id)
+    uncompleteTask (task) {
+      task.completed = false
     },
     addNewtag () {
     },
@@ -432,16 +461,17 @@ input {
   width: 100%;
   border: none;
   outline: none;
-  color:#FFFFFF;
+  color:#000000;
   font-family: "Arial","Microsoft YaHei","黑体",sans-serif;
 }
 
-.el-icon-copy-document:hover{color:lightseagreen}
-.el-icon-check:hover{color:chartreuse}
+.el-icon-copy-document:hover{color:lightseagreen;}
+.el-icon-check:hover{color:chartreuse;}
 .el-icon-edit:hover {color: gold;}
-.el-icon-alarm-clock:hover {color:cyan}
-.el-icon-price-tag:hover {color:coral}
+.el-icon-alarm-clock:hover {color:cyan;}
+.el-icon-price-tag:hover {color:coral;}
 .el-icon-delete:hover {color: crimson;}
+.el-icon-refresh-left:hover {color: chartreuse;}
 
 .container {
   padding: 0px 20px;
