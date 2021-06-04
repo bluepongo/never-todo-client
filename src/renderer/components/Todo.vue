@@ -45,24 +45,34 @@
                   @keyup.enter="modifyTaskContent($event)"
                   @blur="modifyTaskContent()">
                 <span v-if="!fullTask.task.selected">
-                  <span 
-                    v-for="tag in fullTask.tags"
-                    :key="tag.id" 
-                    :style="{'background-color': tag.color}">&nbsp;</span>
+                <span 
+                  v-for="tag in fullTask.tags"
+                  :key="tag.id" 
+                  :style="{'background-color': tag.color}">&nbsp;</span>
                 </span>
                 <div v-else>
                   <span style="margin: 1px;" class="text-small" v-for="tag in fullTask.tags" :key="tag.id" >
                     <span 
-                      :style="{
-                        'border': '2px solid ' + tag.color, 
-                        'border-radius': '4px',
-                        'padding': '1px'
-                      }"
+                      class="tag-icon"
+                      :style="{'border-color': tag.color,}"
+                      @click.stop="delTagForTask(fullTask.task.id, tag.id)"
                     >
-                      {{ tag.content }}
+                      {{ tag.content.charAt(0) }}
+                    </span>
+                  </span>
+                  <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
+                  <span style="margin: 1px;" class="text-small" v-for="tag in tags" :key="tag.id" >
+                    <span 
+                      v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
+                      class="tag-icon"
+                      :style="{'border-color': tag.color,}"
+                      @click.stop="addTagForTask(fullTask.task.id, tag.id)"
+                    >
+                      {{ tag.content.charAt(0) }}
                     </span>
                   </span>
                 </div>
+                
                 
               </div>
               
@@ -105,7 +115,7 @@
                 <span v-if="fullTask.task.selected" class="text">
                   &nbsp;
                   <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                  <i class="el-icon-refresh-left" @click.stop="completeTask(fullTask.task)"></i>
+                  <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
                 </span>
               </span>
             </div>
@@ -114,20 +124,20 @@
 
         
       </el-col>
-      <el-col :span="6" class="tag-icon">
+      <el-col :span="6" class="tag-list">
         <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="addTag()"></i></h5></span></div>
         <div 
-          class="tag-icon-item" 
+          class="tag-item" 
           :class="{'select': noTagSelect }"
           @mouseover="noTagActive = true"
           @mouseleave="noTagActive = false"
           @click="selectNoTag()"  
         >
           <span :style="{'background-color': '#FFFFFF'}">&nbsp;&nbsp;</span>
-          <span class="tag-icon-item-text text">全部</span>
+          <span class="tag-item-text text">全部</span>
         </div>
         <div 
-          class="tag-icon-item" 
+          class="tag-item" 
           v-for="tag in tags" 
           :key="tag.id" 
           :class="{'select':tag.selected}"
@@ -138,7 +148,7 @@
             <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span>
             <!-- <colorPicker v-model="tag.color" /> -->
             <span v-if="!tag.edited" :style="{'background-color': tag.color}">&nbsp;&nbsp;</span>
-            <span v-if="!tag.edited" class="tag-icon-item-text text">{{ tag.content }}</span>
+            <span v-if="!tag.edited" class="tag-item-text text">{{ tag.content }}</span>
             <input
               ref="tagContent"
               v-else 
@@ -205,6 +215,8 @@ export default {
 
       doneTasksFolded: true,
       todoTasksFolded: false,
+
+      assignedTags: [],
 
       pickColorTagId: '',
       availableTagColors: [
@@ -333,6 +345,12 @@ export default {
       }
       this.unselectAllTasks()
       this.$set(task, 'selected', true)
+      this.assignedTags = []
+      for (let taskTag of this.taskTags) {
+        if (taskTag.task_id === task.id) {
+          this.assignedTags.push(taskTag.tag_id)
+        }
+      }
       this.cancelPickColor()
     },
     unselectAllTasks () {
@@ -393,14 +411,7 @@ export default {
         }
       }
     },
-    updateOldTask (id) {
-      let tagsID = []
-      for (const tag of this.tags) {
-        if (tag.Flag) {
-          tagsID.push(tag.ID)
-        }
-      }
-      this.updateTaskVisible = false
+    updateTask (id) {
     },
     completeTask (task) {
       task.completed = true
@@ -419,6 +430,21 @@ export default {
       }
     },
     updateOldTag (id) {
+    },
+
+    addTagForTask (taskId, tagId) {
+      this.taskTags.push({'task_id': taskId, 'tag_id': tagId})
+      this.assignedTags.push(tagId)
+    },
+
+    delTagForTask (taskId, tagId) {
+      for (var i = 0; i < this.taskTags.length; i++) {
+        if (this.taskTags[i].task_id === taskId && this.taskTags[i].tag_id === tagId) {
+          this.taskTags.splice(i, 1)
+          this.assignedTags.splice(this.assignedTags.indexOf(tagId), 1)
+          break
+        }
+      }
     },
 
     handlePickColor (tag) {
@@ -497,7 +523,13 @@ input {
 
 .task-list-item:hover { background: rgba(100,100,100,0.8); }
 
-.tag-icon-item {
+.tag-icon {
+  border: 2px solid;
+  border-radius: 4px;
+  padding: 1px;
+}
+
+.tag-item {
   opacity: 1;
   margin: 1px;
   padding-left: 2px;
@@ -506,9 +538,9 @@ input {
   cursor: default; 
 }
 
-.tag-icon-item:hover { background: rgba(100,100,100,0.8); }
+.tag-item:hover { background: rgba(100,100,100,0.8); }
 
-.tag-icon-item-text {
+.tag-item-text {
   color:#FFFFFF;
   /* background-color: #000000; */
 }
