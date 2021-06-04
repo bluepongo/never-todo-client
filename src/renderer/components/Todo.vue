@@ -51,25 +51,21 @@
                   :style="{'background-color': tag.color}">&nbsp;</span>
                 </span>
                 <div v-else>
-                  <span style="margin: 1px;" class="text-small" v-for="tag in fullTask.tags" :key="tag.id" >
+                  <span class="text-small" v-for="tag in fullTask.tags" :key="tag.id" >
                     <span 
                       class="tag-icon"
                       :style="{'border-color': tag.color,}"
                       @click.stop="delTagForTask(fullTask.task.id, tag.id)"
-                    >
-                      {{ tag.content.charAt(0) }}
-                    </span>
+                    >{{ tag.content.charAt(0) }}</span>
                   </span>
                   <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
-                  <span style="margin: 1px;" class="text-small" v-for="tag in tags" :key="tag.id" >
+                  <span class="text-small" v-for="tag in tags" :key="tag.id" >
                     <span 
                       v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
                       class="tag-icon"
                       :style="{'border-color': tag.color,}"
                       @click.stop="addTagForTask(fullTask.task.id, tag.id)"
-                    >
-                      {{ tag.content.charAt(0) }}
-                    </span>
+                    >{{ tag.content.charAt(0) }}</span>
                   </span>
                 </div>
                 
@@ -80,7 +76,6 @@
                 <span class="text">
                   <!-- <i class="el-icon-copy-document" @click.stop="copyTaskContent()"></i>&nbsp;&nbsp; -->
                   <i class="el-icon-alarm-clock" @click.stop="setTaskAlarm(fullTask.task)"></i>&nbsp;&nbsp;
-                  <i class="el-icon-price-tag" @click.stop="assignTagsForTask(fullTask.task)"></i>&nbsp;&nbsp;
                   <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
                   <i class="el-icon-check" @click.stop="completeTask(fullTask.task)"></i>
                 </span>
@@ -356,9 +351,6 @@ export default {
     unselectAllTasks () {
       for (let task of this.tasks) { this.$set(task, 'selected', false) }
     },
-    assignTagsForTask (task) {
-
-    },
     modifyTaskContent (event) {
       if (event) {
         event.target.blur()
@@ -524,9 +516,13 @@ input {
 .task-list-item:hover { background: rgba(100,100,100,0.8); }
 
 .tag-icon {
+  background-color: rgba(0,0,0,0.8);;
   border: 2px solid;
   border-radius: 4px;
   padding: 1px;
+  margin: 1px;
+  align-content: center;
+  vertical-align:middle;
 }
 
 .tag-item {
