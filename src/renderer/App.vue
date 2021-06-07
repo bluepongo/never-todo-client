@@ -72,15 +72,19 @@ export default {
 }
 
 .tools {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 4px;
+  margin-bottom: 4px;
 }
 
 .tools i {
   font-size: 18px;
-  padding: 2px 7px;
+  padding: 2px 5px;
   cursor: pointer;
   color: #ffffff;
 } 

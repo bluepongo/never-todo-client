@@ -8,144 +8,140 @@
       <el-col :span="18">
         <div>
           <span class="text">
-            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="addTask()"></i></h5> 
+            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTask()"></i></h5> 
+            
           </span>
         </div>
 
-        <div class="task-list-item">
+        <div class="task-list">
           <input
+            class="text"
+            placeholder="请输入新任务内容"
             ref="taskContent"
-            v-model= "" 
+            v-if="newFullTaskVisible"
+            v-model= "newFullTaskInfo.content" 
             v-focus
             @input="autoTextarea($event)"
             @click.stop=""
-            @keyup.enter="modifyTaskContent($event)"
-            @blur="modifyTaskContent()">
-          <div>
-            <span class="text-small" v-for="tag in .tags" :key="tag.id" >
-              <span 
-                class="tag-icon"
-                :style="{'border-color': tag.color,}"
-                @click.stop="delTagForTask(.task.id, tag.id)"
-              >{{ tag.content.charAt(0) }}</span>
-            </span>
-            <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
-            <span class="text-small" v-for="tag in tags" :key="tag.id" >
-              <span 
-                v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
-                class="tag-icon"
-                :style="{'border-color': tag.color,}"
-                @click.stop="addTagForTask(fullTask.task.id, tag.id)"
-              >{{ tag.content.charAt(0) }}</span>
-            </span>
-          </div>
-        </div>
-
-        <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
+            @keyup.enter="addTask($event)"
+            @blur="addTask()">
+          <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
           <i v-if="todoTasksFolded" class="el-icon-arrow-right"></i>
           <i v-else class="el-icon-arrow-down"></i>          
           <span class="text">进行中 </span>
           <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
-        </span>
-        <draggable v-model="todoFullTasks">
-          <transition-group v-if="!todoTasksFolded">
-            <div 
-              class="task-list-item"
-              v-for="fullTask in todoFullTasks" 
-              :key="fullTask.task.id"
-              :class="{'select':fullTask.task.selected}"
-              @click="selectTask(fullTask.task)"
-              @dblclick="completeTask(fullTask.task)"
-            >
-              <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
-              <div v-if="!fullTask.task.deleted" class="first-row">
-                <span v-if="!fullTask.task.selected" class="text"> {{ fullTask.task.content }}</span>
-                <input
-                  ref="taskContent"
-                  v-else 
-                  v-model= "fullTask.task.content" 
-                  v-focus
-                  @input="autoTextarea($event)"
-                  @click.stop=""
-                  @keyup.enter="modifyTaskContent($event)"
-                  @blur="modifyTaskContent()">
-                <span v-if="!fullTask.task.selected">
-                <span 
-                  v-for="tag in fullTask.tags"
-                  :key="tag.id" 
-                  :style="{'background-color': tag.color}">&nbsp;</span>
-                </span>
-                <div v-else>
-                  <span class="text-small" v-for="tag in fullTask.tags" :key="tag.id" >
-                    <span 
-                      class="tag-icon"
-                      :style="{'border-color': tag.color,}"
-                      @click.stop="delTagForTask(fullTask.task.id, tag.id)"
-                    >{{ tag.content.charAt(0) }}</span>
+          </span>
+          <draggable v-model="todoFullTasks">
+            <transition-group v-if="!todoTasksFolded">
+              <div 
+                class="task-list-item"
+                v-for="fullTask in todoFullTasks" 
+                :key="fullTask.task.id"
+                :class="{'select':fullTask.task.selected}"
+                @click="selectTask(fullTask.task)"
+                @dblclick="completeTask(fullTask.task)"
+              >
+                <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
+                <div v-if="!fullTask.task.deleted" class="first-row">
+                  <span v-if="!fullTask.task.selected" class="text"> {{ fullTask.task.content }}</span>
+                  <input
+                    class="text"
+                    ref="taskContent"
+                    v-else 
+                    v-model= "fullTask.task.content" 
+                    v-focus
+                    @input="autoTextarea($event)"
+                    @click.stop=""
+                    @keyup.enter="modifyTaskContent($event)"
+                    @blur="modifyTaskContent()">
+                  <span v-if="!fullTask.task.selected">
+                  <span 
+                    v-for="tag in fullTask.tags"
+                    :key="tag.id" 
+                    :style="{'background-color': tag.color}">&nbsp;</span>
                   </span>
-                  <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
-                  <span class="text-small" v-for="tag in tags" :key="tag.id" >
-                    <span 
-                      v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
-                      class="tag-icon"
-                      :style="{'border-color': tag.color,}"
-                      @click.stop="addTagForTask(fullTask.task.id, tag.id)"
-                    >{{ tag.content.charAt(0) }}</span>
-                  </span>
+                  <div v-else>
+                    <span class="text-small" v-for="tag in fullTask.tags" :key="tag.id" >
+                      <span 
+                        class="tag-icon"
+                        :style="{'border-color': tag.color,}"
+                        @click.stop="delTagForTask(fullTask.task.id, tag.id)"
+                      >{{ tag.content.charAt(0) }}</span>
+                    </span>
+                    <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
+                    <span class="text-small" v-for="tag in tags" :key="tag.id" >
+                      <span 
+                        v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
+                        class="tag-icon"
+                        :style="{'border-color': tag.color,}"
+                        @click.stop="addTagForTask(fullTask.task.id, tag.id)"
+                      >{{ tag.content.charAt(0) }}</span>
+                    </span>
+                  </div>
+                  
+                  
                 </div>
                 
-                
+                <div class="second-row" v-show="fullTask.task.selected">
+                  <span class="text">
+                    <!-- <i class="el-icon-copy-document" @click.stop="copyTaskContent()"></i>&nbsp;&nbsp; -->
+                    <i class="el-icon-alarm-clock" @click.stop="setTaskAlarm(fullTask.task)"></i>&nbsp;&nbsp;
+                    <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                    <i class="el-icon-check" @click.stop="completeTask(fullTask.task)"></i>
+                  </span>
+                </div>
               </div>
-              
-              <div class="second-row" v-show="fullTask.task.selected">
-                <span class="text">
-                  <!-- <i class="el-icon-copy-document" @click.stop="copyTaskContent()"></i>&nbsp;&nbsp; -->
-                  <i class="el-icon-alarm-clock" @click.stop="setTaskAlarm(fullTask.task)"></i>&nbsp;&nbsp;
-                  <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                  <i class="el-icon-check" @click.stop="completeTask(fullTask.task)"></i>
+            </transition-group>
+          </draggable>
+
+          <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
+            <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
+            <i v-else class="el-icon-arrow-down"></i>          
+            <span class="text">已完成 </span>
+            <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
+          </span>
+          <draggable v-model="doneFullTasks" group="todo" @start="drag=true" @end="drag=false">
+            <transition-group v-if="!doneTasksFolded">
+              <div 
+                v-for="fullTask in doneFullTasks" 
+                :key="fullTask.task.id" 
+                class="task-list-item"
+                :class="{'select':fullTask.task.selected}"
+                @click="selectTask(fullTask.task)"
+                @dblclick="uncompleteTask(fullTask.task)"
+              >
+                <span class="text"> <s :style="{'opacity': 0.5}">{{ fullTask.task.content }}</s></span>
+                <!-- <span v-if="!fullTask.task.selected"> -->
+                <span>
+                  <span 
+                    v-for="tag in fullTask.tags"
+                    :key="tag.id" 
+                    :style="{'background-color': tag.color}">&nbsp;</span>
+                  <span v-if="fullTask.task.selected" class="text">
+                    &nbsp;
+                    <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                    <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
+                  </span>
                 </span>
               </div>
-            </div>
-          </transition-group>
-        </draggable>
+            </transition-group>
+          </draggable>
+        </div>
 
-        <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
-          <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
-          <i v-else class="el-icon-arrow-down"></i>          
-          <span class="text">已完成 </span>
-          <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
-        </span>
-        <draggable v-model="doneFullTasks" group="todo" @start="drag=true" @end="drag=false">
-          <transition-group v-if="!doneTasksFolded">
-            <div 
-              v-for="fullTask in doneFullTasks" 
-              :key="fullTask.task.id" 
-              class="task-list-item"
-              :class="{'select':fullTask.task.selected}"
-              @click="selectTask(fullTask.task)"
-              @dblclick="uncompleteTask(fullTask.task)"
-            >
-              <span class="text"> <s :style="{'opacity': 0.5}">{{ fullTask.task.content }}</s></span>
-              <!-- <span v-if="!fullTask.task.selected"> -->
-              <span>
-                <span 
-                  v-for="tag in fullTask.tags"
-                  :key="tag.id" 
-                  :style="{'background-color': tag.color}">&nbsp;</span>
-                <span v-if="fullTask.task.selected" class="text">
-                  &nbsp;
-                  <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                  <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
-                </span>
-              </span>
-            </div>
-          </transition-group>
-        </draggable>
-
-        
       </el-col>
       <el-col :span="6" class="tag-list">
-        <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="addTag()"></i></h5></span></div>
+        <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
+        <input
+          class="text"
+          placeholder="新标签内容"
+          ref="tagContent"
+          v-if="newTagVisible"
+          v-model= "newTagInfo.content" 
+          v-focus
+          @input="autoTextarea($event)"
+          @click.stop=""
+          @keyup.enter="addTag($event)"
+          @blur="addTag()">
         <div 
           class="tag-item" 
           :class="{'select': noTagSelect }"
@@ -170,6 +166,7 @@
             <span v-if="!tag.edited" :style="{'background-color': tag.color}">&nbsp;&nbsp;</span>
             <span v-if="!tag.edited" class="tag-item-text text">{{ tag.content }}</span>
             <input
+              class="text"
               ref="tagContent"
               v-else 
               v-model= "tag.content" 
@@ -189,15 +186,14 @@
       </el-col>
     </el-row>
 
-    <el-row>
-      <compact-picker 
-        v-if="colorPickerVisible"
-        @input="pickColor"
-        :value="currentTagColor"
-        :palette="availableTagColors"
-      ></compact-picker>
+    <compact-picker 
+      v-if="colorPickerVisible"
+      @input="pickColor"
+      :value="currentTagColor"
+      :palette="availableTagColors"
+    ></compact-picker>
 
-    </el-row>
+    
 
     
 
@@ -216,26 +212,23 @@ export default {
   data () {
     return {
       tasks: [],
-      taskFormTaskInfo: {content: ''},
-      taskDialogVisible: false,
-      taskDialogFullTaskInfo: {content: '', desc: '', color: ''},
-
-      tags: [],
-      tagFormTagInfo: {},
-      tagDialogVisible: false,
-      tagDialogTagInfo: {},
-
-      taskTags: [],
-
-      noTagActive: false,
-      noTagSelect: true,
-
-      addTagName: '',
-      addTagInfo: '',
-
+      taskAutoIncVal: -1,
+      newFullTaskVisible: false,
+      newFullTaskInfo: {
+        task: { id: 0, content: '', completed: false, deleted: false },
+        tags: []
+      },
       doneTasksFolded: true,
       todoTasksFolded: false,
 
+      tags: [],
+      tagAutoIncVal: -1,
+      newTagVisible: false,
+      newTagInfo: { id: 0, content: '', color: '', deleted: false },
+      noTagActive: false,
+      noTagSelect: true,
+
+      taskTags: [],
       assignedTags: [],
 
       pickColorTagId: '',
@@ -381,15 +374,19 @@ export default {
         event.target.blur()
       }
     },
-    addNewTask () {
-      if (this.addContent !== '') {
-        let tagsID = []
-        for (let tag of this.tags) {
-          if (tag.flag) {
-            tagsID.push(tag.ID)
-          }
-        }
-        this.addContent = ''
+    handleAddTask () {
+      this.newFullTaskVisible = true
+      this.unselectAllTasks()
+    },
+    cancelAddTask () {
+      this.newFullTaskVisible = false
+    },
+    addTask (event) {
+      if (event) {
+        event.target.blur()
+      }
+      if (this.newFullTaskInfo.content !== '') {
+        // TODO: addTask
       }
     },
     deleteTask (taskId) {
@@ -437,7 +434,20 @@ export default {
       this.unselectAllTasks()
       this.cancelPickColor()
     },
-    addNewtag () {
+    handleAddTag () {
+      this.newTagVisible = true
+      this.unselectAllTags()
+    },
+    cancelAddTag () {
+      this.newTagVisible = false
+    },
+    addTag (event) {
+      if (event) {
+        event.target.blur()
+      }
+      if (this.newTagInfo.content !== '') {
+        // TODO: addTag
+      }
     },
     deleteTag (tagId) {
       for (var i = 0; i < this.tags.length; i++) {
@@ -447,8 +457,7 @@ export default {
         }
       }
     },
-    updateOldTag (id) {
-    },
+    updateOldTag (id) {},
 
     addTagForTask (taskId, tagId) {
       this.taskTags.push({'task_id': taskId, 'tag_id': tagId})
@@ -502,18 +511,44 @@ export default {
 </script>
 
 <style>
+::-webkit-scrollbar-track-piece{
+    background-color:#000000;
+    border-radius:0;
+}
+::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#222;
+    border-radius:4px;
+    outline:2px solid #fff;
+    outline-offset:-2px;
+    /* border: 2px solid #fff; */
+}
+::-webkit-scrollbar-thumb:hover{
+    height:50px;
+    background-color:#444;
+    border-radius:4px;
+}
+
 a:link { text-decoration: none; } 
 a:visited { text-decoration: none; } 
 a:hover { text-decoration: none; }
 i { cursor: pointer; }
 span {  word-wrap : break-word}
 input {
-  background-color: rgba(255,255,255, 0.5);
+  background-color: rgba(255,255,255, 0.2);
   width: 100%;
   border: none;
   outline: none;
-  color:#000000;
-  font-family: "Arial","Microsoft YaHei","黑体",sans-serif;
+  color: #FFFFFF;
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+}
+input::-webkit-input-placeholder {
+  color: #FFFFFF;
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
 }
 
 .el-icon-copy-document:hover{color:lightseagreen;}
@@ -526,6 +561,16 @@ input {
 
 .container {
   padding: 0px 20px;
+  position: absolute;
+  top: 20px;
+  height: 10px;
+}
+
+.task-list { 
+  height: 220px;
+  overflow:auto;
+  overflow-x:hidden;
+
 }
 
 .task-list-item {
@@ -585,6 +630,11 @@ input {
   opacity: 1;
   font-weight: bolder;
   background: rgba(100,100,100,0.8);
+}
+
+compact-picker {
+  position: absolute;
+  bottom: 0px;
 }
 
 </style>
