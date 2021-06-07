@@ -18,8 +18,8 @@
             class="text"
             placeholder="请输入新任务内容"
             ref="taskContent"
-            v-if="newFullTaskVisible"
-            v-model= "newFullTaskInfo.content" 
+            v-if="newTaskVisible"
+            v-model= "newTaskInfo.content" 
             v-focus
             @input="autoTextarea($event)"
             @click.stop=""
@@ -213,11 +213,8 @@ export default {
     return {
       tasks: [],
       taskAutoIncVal: -1,
-      newFullTaskVisible: false,
-      newFullTaskInfo: {
-        task: { id: 0, content: '', completed: false, deleted: false },
-        tags: []
-      },
+      newTaskVisible: false,
+      newTaskInfo: { id: 0, content: '', completed: false, deleted: false },
       doneTasksFolded: true,
       todoTasksFolded: false,
 
@@ -351,6 +348,14 @@ export default {
         }
       }.bind(this))
     },
+
+    resetStateOfTask () {
+
+    },
+    resetStateOfTag () {
+
+    },
+
     selectTask (task) {
       if (task.selected) {
         this.$set(task, 'selected', false)
@@ -372,21 +377,26 @@ export default {
     modifyTaskContent (event) {
       if (event) {
         event.target.blur()
+      } else {
+
       }
     },
     handleAddTask () {
-      this.newFullTaskVisible = true
+      this.newTaskVisible = true
       this.unselectAllTasks()
+      this.cancelAddTag()
     },
     cancelAddTask () {
-      this.newFullTaskVisible = false
+      this.newTaskVisible = false
     },
     addTask (event) {
       if (event) {
         event.target.blur()
-      }
-      if (this.newFullTaskInfo.content !== '') {
-        // TODO: addTask
+      } else {
+        if (this.newTaskInfo.content !== '') {
+          this.tasks.push(this.newTaskInfo)
+        }
+        this.cancelAddTask()
       }
     },
     deleteTask (taskId) {
@@ -418,6 +428,7 @@ export default {
         this.$set(tag, 'selected', false)
         this.$set(tag, 'edited', false)
       }
+      this.noTagSelect = true
     },
     selectTag (tag) {
       if (tag.selected) {
@@ -437,6 +448,7 @@ export default {
     handleAddTag () {
       this.newTagVisible = true
       this.unselectAllTags()
+      this.cancelAddTask()
     },
     cancelAddTag () {
       this.newTagVisible = false
@@ -444,9 +456,11 @@ export default {
     addTag (event) {
       if (event) {
         event.target.blur()
-      }
-      if (this.newTagInfo.content !== '') {
-        // TODO: addTag
+      } else {
+        if (this.newTagInfo.content !== '') {
+          this.tags.push(this.newTagInfo)
+        }
+        this.cancelAddTag()
       }
     },
     deleteTag (tagId) {
