@@ -1,6 +1,7 @@
 'use strict'
 
-import { app, BrowserWindow, screen } from 'electron'
+import { app, BrowserWindow, screen, ipcMain } from 'electron'
+import { createTray } from '../utils/tray'
 // import { autoUpdater } from 'electron-updater'
 import '../renderer/store'
 
@@ -32,7 +33,7 @@ if (isSecondInstance) {
 
 // 创建 myWindow, 加载应用的其余部分, etc...
 app.on('ready', () => {
-  createWindow()
+  init()
 })
 
 app.on('window-all-closed', () => {
@@ -42,7 +43,7 @@ app.on('window-all-closed', () => {
 })
 app.on('activate', () => {
   if (mainWindow === null) {
-    createWindow()
+    init()
   }
 })
 
@@ -53,6 +54,11 @@ app.on('activate', () => {
 // autoUpdater.on('update-downloaded', () => {
 //   autoUpdater.quitAndInstall()
 // })
+
+function init () {
+  createWindow()
+  createTray(showWindow)
+}
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -70,8 +76,8 @@ function createWindow () {
     minimizable: false,
     maximizable: false,
     alwaysOnTop: true,
+    skipTaskbar: true,
 
-    // skipTaskbar: true,
     useContentSize: true,
     webPreferences: {
       // devTools: false,
@@ -94,3 +100,16 @@ function setDefaultPos () {
   const winSize = mainWindow.getSize()
   mainWindow.setPosition(scrSize.width - winSize[0] - 30, 30)
 }
+
+function showWindow () {
+  if (!mainWindow.isVisible()) mainWindow.show()
+}
+
+// ipcMain.on('setIgnoreMouseEvents', (event, ignore) => {
+//   if (ignore) mainWindow.setIgnoreMouseEvents(true, { forward: true })
+//   else mainWindow.setIgnoreMouseEvents(false)
+// })
+
+ipcMain.on('hideWindow', event => {
+  mainWindow.hide()
+})
