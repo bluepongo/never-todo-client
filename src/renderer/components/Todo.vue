@@ -80,8 +80,6 @@
                       >{{ tag.content.charAt(0) }}</span>
                     </span>
                   </div>
-                  
-                  
                 </div>
                 
                 <div class="second-row" v-show="fullTask.task.selected">
@@ -198,10 +196,6 @@
       :palette="availableTagColors"
     ></compact-picker>
 
-    
-
-    
-
   </div>
 </template>
 
@@ -314,7 +308,6 @@ export default {
       }
       return dfts
     }
-
   },
   directives: {
     focus: {
@@ -354,12 +347,8 @@ export default {
       }.bind(this))
     },
 
-    resetStateOfTask () {
-
-    },
-    resetStateOfTag () {
-
-    },
+    resetStateOfTask () {},
+    resetStateOfTag () {},
 
     selectTask (task) {
       if (task.selected) {
@@ -552,7 +541,7 @@ export default {
     border-radius:4px;
 } */
 
-i { cursor: default; }
+i { cursor: pointer; }
 span {  word-wrap : break-word}
 input {
   background-color: rgba(255,255,255, 0.2);

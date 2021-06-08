@@ -3,15 +3,14 @@
     <div class="header">
       <b>{{ appName }}</b>
       <i>Powered by Zhy/Yc</i>
-    </div>   
+    </div>
     <div class="tools">
-      <i class="el-icon-upload" key="export" @click="exportData"></i>
-      <i class="el-icon-view" key="hide" @click="hideWindow"></i>
+      <!-- <i class="el-icon-upload" key="export" @click="exportData"></i> -->
+      <i class="el-icon-view" @click="hideWindow"></i>
       <i
         :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
-        key="lock"
-        @mouseenter="setIgnoreMouseEvents(false)"
-        @mouseleave="setIgnoreMouseEvents(ignoreMouse)"
+        @mouseenter="mouseenter"
+        @mouseleave="mouseleave"
         @click="ignoreMouse = !ignoreMouse"
       ></i>
     </div>
@@ -32,15 +31,21 @@ export default {
     }
   },
   methods: {
-    setIgnoreMouseEvents (ignore) {
-      ipcRenderer.invoke('setIgnoreMouseEvents', ignore)
-    }
     // exportData () {
     //   ipcRenderer.invoke('exportData')
     // },
-    // hideWindow () {
-    //   ipcRenderer.invoke('hideWindow')
-    // }
+    hideWindow () {
+      ipcRenderer.send('hideWindow')
+    },
+
+    mouseenter () {
+      console.log('enter')
+      ipcRenderer.send('set-ignore-mouse-events', false)
+    },
+    mouseleave () {
+      console.log('leave')
+      ipcRenderer.send('set-ignore-mouse-events', this.ignoreMouse, { forward: true })
+    }
   }
 }
 </script>
@@ -52,13 +57,14 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba($color: #000000, $alpha: 1);
-  opacity: 0.5;
+  opacity: 0.8;
 
   border-radius: 5px;
 }
-#app:hover {
-  opacity: 0.8;
+#app.unfocused {
+  opacity: 0.4;
 }
+
 .header {
   display: flex;
   align-items: center;

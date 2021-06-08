@@ -66,17 +66,20 @@ function createWindow () {
     // transparent: false,
     // frame: true,
     // resizable: true,
+    // alwaysOnTop: true,
 
     // pro
     transparent: true,
     frame: false,
     resizable: false,
-    height: 300,
-    width: 350,
+
     minimizable: false,
     maximizable: false,
-    alwaysOnTop: true,
     skipTaskbar: true,
+    alwaysOnTop: true,
+
+    height: 300,
+    width: 350,
 
     useContentSize: true,
     webPreferences: {
@@ -109,6 +112,10 @@ function showWindow () {
 //   if (ignore) mainWindow.setIgnoreMouseEvents(true, { forward: true })
 //   else mainWindow.setIgnoreMouseEvents(false)
 // })
+
+ipcMain.on('set-ignore-mouse-events', (event, ...args) => {
+  BrowserWindow.fromWebContents(event.sender).setIgnoreMouseEvents(...args)
+})
 
 ipcMain.on('hideWindow', event => {
   mainWindow.hide()
