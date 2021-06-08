@@ -4,7 +4,6 @@
     id="Task"
   >
     <el-row>
-      
       <el-col :span="18">
         <div>
           <span class="text">
@@ -43,6 +42,7 @@
               >
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
+                  <div v-if="!fullTask.task.selected" class="task-dot"></div>
                   <span v-if="!fullTask.task.selected" class="text"> {{ fullTask.task.content }}</span>
                   <input
                     class="text"
@@ -55,13 +55,15 @@
                     @keyup.enter="modifyTaskContent($event)"
                     @blur="modifyTaskContent()">
                   <span v-if="!fullTask.task.selected">
-                  <span 
+                  <div
+                    class="tag-dot"
                     v-for="tag in fullTask.tags"
                     :key="tag.id" 
-                    :style="{'background-color': tag.color}">&nbsp;</span>
+                    :style="{'background-color': tag.color}"></div>
                   </span>
+                  
                   <div v-else>
-                    <span class="text-small" v-for="tag in fullTask.tags" :key="tag.id" >
+                    <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
                       <span 
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
@@ -69,7 +71,7 @@
                       >{{ tag.content.charAt(0) }}</span>
                     </span>
                     <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
-                    <span class="text-small" v-for="tag in tags" :key="tag.id" >
+                    <span class="text-small" v-for="tag in tags" :key="'right'+tag.id" >
                       <span 
                         v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
                         class="tag-icon"
@@ -103,20 +105,23 @@
           <draggable v-model="doneFullTasks" group="todo" @start="drag=true" @end="drag=false">
             <transition-group v-if="!doneTasksFolded">
               <div 
+                class="task-list-item"
                 v-for="fullTask in doneFullTasks" 
                 :key="fullTask.task.id" 
-                class="task-list-item"
+                :style="{'opacity': 0.5}"
                 :class="{'select':fullTask.task.selected}"
                 @click="selectTask(fullTask.task)"
                 @dblclick="uncompleteTask(fullTask.task)"
               >
-                <span class="text"> <s :style="{'opacity': 0.5}">{{ fullTask.task.content }}</s></span>
+                <div v-if="!fullTask.task.selected" class="task-dot"></div>
+                <span class="text"> <s>{{ fullTask.task.content }}</s></span>
                 <!-- <span v-if="!fullTask.task.selected"> -->
                 <span>
-                  <span 
+                  <div
+                    class="tag-dot"
                     v-for="tag in fullTask.tags"
                     :key="tag.id" 
-                    :style="{'background-color': tag.color}">&nbsp;</span>
+                    :style="{'background-color': tag.color}"></div>
                   <span v-if="fullTask.task.selected" class="text">
                     &nbsp;
                     <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
@@ -541,16 +546,13 @@ export default {
     outline-offset:-2px;
     /* border: 2px solid #fff; */
 }
-::-webkit-scrollbar-thumb:hover{
+/* ::-webkit-scrollbar-thumb:hover{
     height:50px;
     background-color:#444;
     border-radius:4px;
-}
+} */
 
-a:link { text-decoration: none; } 
-a:visited { text-decoration: none; } 
-a:hover { text-decoration: none; }
-i { cursor: pointer; }
+i { cursor: default; }
 span {  word-wrap : break-word}
 input {
   background-color: rgba(255,255,255, 0.2);
@@ -565,13 +567,21 @@ input::-webkit-input-placeholder {
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
 }
 
-.el-icon-copy-document:hover{color:lightseagreen;}
+/* .el-icon-copy-document:hover{color:lightseagreen;}
 .el-icon-check:hover{color:chartreuse;}
 .el-icon-edit:hover {color: gold;}
 .el-icon-alarm-clock:hover {color:cyan;}
 .el-icon-price-tag:hover {color:coral;}
 .el-icon-delete:hover {color: crimson;}
-.el-icon-refresh-left:hover {color: chartreuse;}
+.el-icon-refresh-left:hover {color: chartreuse;} */
+
+.el-icon-copy-document{color:lightseagreen;}
+.el-icon-check{color:chartreuse;}
+.el-icon-edit {color: gold;}
+.el-icon-alarm-clock {color:cyan;}
+.el-icon-price-tag {color:coral;}
+.el-icon-delete {color: crimson;}
+.el-icon-refresh-left {color: chartreuse;}
 
 .container {
   padding: 0px 20px;
@@ -584,18 +594,35 @@ input::-webkit-input-placeholder {
   height: 220px;
   overflow:auto;
   overflow-x:hidden;
-
 }
 
 .task-list-item {
-  margin: 2px;
+  margin: 4px 2px;
   color: #ffffff;
   /* font-weight: bold; */
   cursor: default; 
-  padding: 0px 6px;
+  padding: 0px 4px;
+  line-height: 17px;
 }
 
-.task-list-item:hover { background: rgba(100,100,100,0.8); }
+.task-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 1px;
+  background-color: #FFFFFF;
+}
+
+.tag-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 1px;
+}
+
+/* .task-list-item:hover { background: rgba(100,100,100,0.8); } */
 
 .tag-icon {
   background-color: rgba(0,0,0,0.8);;
@@ -616,7 +643,7 @@ input::-webkit-input-placeholder {
   cursor: default; 
 }
 
-.tag-item:hover { background: rgba(100,100,100,0.8); }
+/* .tag-item:hover { background: rgba(100,100,100,0.8); } */
 
 .tag-item-text {
   color:#FFFFFF;
@@ -641,9 +668,9 @@ input::-webkit-input-placeholder {
 }
 
 .select{
-  opacity: 1;
+  /* opacity: 1; */
   font-weight: bolder;
-  background: rgba(100,100,100,0.8);
+  background: rgba(100,100,100,0.6);
 }
 
 compact-picker {
