@@ -31,7 +31,7 @@
           <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
           </span>
           <draggable v-model="todoFullTasks">
-            <transition-group v-if="!todoTasksFolded">
+            <div v-if="!todoTasksFolded">
               <div 
                 class="task-list-item"
                 v-for="fullTask in todoFullTasks" 
@@ -91,7 +91,7 @@
                   </span>
                 </div>
               </div>
-            </transition-group>
+            </div>
           </draggable>
 
           <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
@@ -101,7 +101,7 @@
             <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
           </span>
           <draggable v-model="doneFullTasks" group="todo" @start="drag=true" @end="drag=false">
-            <transition-group v-if="!doneTasksFolded">
+            <div v-if="!doneTasksFolded">
               <div 
                 class="task-list-item"
                 v-for="fullTask in doneFullTasks" 
@@ -127,7 +127,7 @@
                   </span>
                 </span>
               </div>
-            </transition-group>
+            </div>
           </draggable>
         </div>
 
@@ -221,7 +221,7 @@ export default {
       tags: [],
       tagAutoIncVal: -1,
       newTagVisible: false,
-      newTagInfo: { id: 0, content: '', color: '', deleted: false },
+      newTagInfo: { id: 0, content: '', color: '#AAAAAA', deleted: false },
       noTagActive: false,
       noTagSelect: true,
 
@@ -456,7 +456,7 @@ export default {
       }
     },
     handleAddTag () {
-      this.newTagInfo = { id: 0, content: '', color: '', deleted: false }
+      this.newTagInfo = { id: 0, content: '', color: '#AAAAAA', deleted: false }
       this.newTagVisible = true
       this.unselectAllTags()
       this.cancelAddTask()
@@ -469,7 +469,7 @@ export default {
         event.target.blur()
       } else {
         if (this.newTagInfo.content !== '') {
-          this.newTaskInfo.id = this.tagAutoIncVal
+          this.newTagInfo.id = this.tagAutoIncVal
           this.tagAutoIncVal--
           this.tags.push(this.newTagInfo)
           this.updateTag()
