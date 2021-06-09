@@ -52,8 +52,8 @@
                     v-focus
                     @input="autoTextarea($event)"
                     @click.stop=""
-                    @keyup.enter="modifyTaskContent($event)"
-                    @blur="modifyTaskContent()">
+                    @keyup.enter="modifyTaskContent(task, $event)"
+                    @blur="modifyTaskContent(task)">
                   <span v-if="!fullTask.task.selected">
                   <div
                     class="tag-dot"
@@ -176,8 +176,8 @@
               v-focus
               @input="autoTextarea($event)"
               @click.stop=""
-              @keyup.enter="modifyTaskContent($event)"
-              @blur="modifyTaskContent()">
+              @keyup.enter="modifyTagContent(tag, $event)"
+              @blur="modifyTagContent(tag)">
             <div>
               <span v-if="tag.edited"  class="text">
                 <i class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
@@ -202,7 +202,7 @@
 <script>
 // import
 // import {getAll} from '@/api/todo'
-// import {getAllTasks, getTasksByContent, getTasksByTag, addTask, deleteTask， updateTask} from '@/api/todo'
+// import {getAllTasks, getTasksByContent, getTasksByTag, addTask, deleteTask， modifyTask} from '@/api/todo'
 // import {getAllTags, addTag, deleteTag, updateTag} from '@/api/todo'
 // import { readFile } from 'fs'
 import db from '@/utils/db'
@@ -288,7 +288,6 @@ export default {
           }
         }
       }
-      // console.log(ffts)
       return ffts
     },
     todoFullTasks () {
@@ -319,39 +318,16 @@ export default {
   },
   methods: {
     initData () {
-      // By Network
-      // getAll()
-      //   .then((response) => {
-      //     let data = response.data.result
-      //     // 初始化待办/标签数据
-      //     console.log(data)
-      //     this.tasks = data.tasks
-      //     this.tags = data.tags
-      //     this.taskTags = data.task_tags
-      //   })
-      //   .catch(function (error) {
-      //     console.log('initialize data failed', error)
-      //   })
-
-      // By Local File
-      // let file = 'data.json' // 文件路径
-      // readFile(file, 'utf-8', function (err, data) {
-      //   if (err) {
-      //     console.log(err)// eslint-disable-line
-      //   } else {
-      //     let result = JSON.parse(data).result
-      //     this.tasks = result.tasks
-      //     this.tags = result.tags
-      //     this.taskTags = result.task_tags
-      //   }
-      // }.bind(this))
       // By Lowdb database
-      console.log('vue init data')
       let data = db.read().get('data').value()
       // 初始化待办/标签数据
       this.tasks = data.tasks
       this.tags = data.tags
       this.taskTags = data.task_tags
+      this.taskAutoIncVal = data.taskAutoIncVal
+      this.tagAutoIncVal = data.tagAutoIncVal
+      this.unselectAllTasks()
+      this.unselectAllTags()
     },
 
     resetStateOfTask () {},
@@ -375,11 +351,17 @@ export default {
     unselectAllTasks () {
       for (let task of this.tasks) { this.$set(task, 'selected', false) }
     },
-    modifyTaskContent (event) {
+    modifyTaskContent (task, event) {
       if (event) {
         event.target.blur()
       } else {
-
+        this.updateTask()
+        this.recordLog({
+          target: 'tasks',
+          type: 'update',
+          data: task,
+          flag: ''
+        })
       }
     },
     handleAddTask () {
@@ -396,21 +378,39 @@ export default {
         event.target.blur()
       } else {
         if (this.newTaskInfo.content !== '') {
+          this.newTaskInfo.id = this.taskAutoIncVal
+          this.taskAutoIncVal--
           this.tasks.push(this.newTaskInfo)
+          this.updateTask()
+          this.recordLog({
+            target: 'tasks',
+            type: 'create',
+            data: this.newTaskInfo,
+            flag: ''
+          })
         }
         this.cancelAddTask()
       }
     },
     deleteTask (task) {
       task.deleted = true
-    },
-    updateTask (id) {
+      this.updateTask()
+      this.recordLog({
+        target: 'tasks',
+        type: 'delete',
+        data: task,
+        flag: ''
+      })
     },
     completeTask (task) {
       task.completed = true
     },
     uncompleteTask (task) {
       task.completed = false
+    },
+    updateTask () {
+      db.read().get('data').set('tasks', this.tasks).write()
+      db.read().get('data').set('taskAutoIncVal', this.taskAutoIncVal).write()
     },
 
     selectNoTag () {
@@ -442,6 +442,19 @@ export default {
       this.unselectAllTasks()
       this.cancelPickColor()
     },
+    modifyTagContent (tag, event) {
+      if (event) {
+        event.target.blur()
+      } else {
+        this.updateTag()
+        this.recordLog({
+          target: 'tags',
+          type: 'update',
+          data: tag,
+          flag: ''
+        })
+      }
+    },
     handleAddTag () {
       this.newTagInfo = { id: 0, content: '', color: '', deleted: false }
       this.newTagVisible = true
@@ -456,28 +469,68 @@ export default {
         event.target.blur()
       } else {
         if (this.newTagInfo.content !== '') {
+          this.newTaskInfo.id = this.tagAutoIncVal
+          this.tagAutoIncVal--
           this.tags.push(this.newTagInfo)
+          this.updateTag()
+          this.recordLog({
+            target: 'tags',
+            type: 'create',
+            data: this.newTagInfo,
+            flag: ''
+          })
         }
         this.cancelAddTag()
       }
     },
     deleteTag (tag) {
       tag.deleted = true
+      this.updateTag()
+      this.recordLog({
+        target: 'tags',
+        type: 'delete',
+        data: this.newTagInfo,
+        flag: ''
+      })
     },
-    updateOldTag (id) {},
+    updateTag () {
+      db.read().get('data').set('tags', this.tags).write()
+      db.read().get('data').set('tagAutoIncVal', this.tagAutoIncVal).write()
+    },
 
     addTagForTask (taskId, tagId) {
       this.taskTags.push({'task_id': taskId, 'tag_id': tagId})
       this.assignedTags.push(tagId)
+      this.updateTaskTag()
+      this.recordLog({
+        target: 'task_tags',
+        type: 'create',
+        data: {task_id: taskId, tag_id: tagId},
+        flag: ''
+      })
     },
     delTagForTask (taskId, tagId) {
       for (var i = 0; i < this.taskTags.length; i++) {
         if (this.taskTags[i].task_id === taskId && this.taskTags[i].tag_id === tagId) {
           this.taskTags.splice(i, 1)
           this.assignedTags.splice(this.assignedTags.indexOf(tagId), 1)
+          this.updateTaskTag()
+          this.recordLog({
+            target: 'task_tags',
+            type: 'delete',
+            data: {task_id: taskId, tag_id: tagId},
+            flag: ''
+          })
           break
         }
       }
+    },
+    updateTaskTag () {
+      db.read().get('data').set('task_tags', this.taskTags).write()
+    },
+
+    recordLog (log) {
+      db.read().get('data').get('log').push(log).write()
     },
 
     handlePickColor (tag) {
@@ -491,11 +544,17 @@ export default {
       this.pickColorTagId = ''
     },
     pickColor (val) {
-      console.log(val)
       for (var i = 0; i < this.tags.length; i++) {
         if (this.tags[i].id === this.pickColorTagId) {
           this.tags[i].color = val.hex
           this.tags[i].edited = false
+          this.updateTag()
+          this.recordLog({
+            target: 'tags',
+            type: 'update',
+            data: this.tags[i],
+            flag: ''
+          })
           break
         }
       }

@@ -115,7 +115,8 @@ if (!db.has('initRun').value()) {
         completed: false,
         deleted: true
       }
-    ]
+    ],
+    log: []
   }).write()
   db.set('initRun', true).write()
 }
