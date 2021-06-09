@@ -181,7 +181,7 @@
             <div>
               <span v-if="tag.edited"  class="text">
                 <i class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
-                <i class="el-icon-delete" @click.stop="deleteTag(tag.id)"></i>&nbsp;&nbsp;
+                <i class="el-icon-delete" @click.stop="deleteTag(tag)"></i>&nbsp;&nbsp;
               </span>
             </div>
           </div>
@@ -376,6 +376,7 @@ export default {
       }
     },
     handleAddTask () {
+      this.newTaskInfo = { id: 0, content: '', completed: false, deleted: false }
       this.newTaskVisible = true
       this.unselectAllTasks()
       this.cancelAddTag()
@@ -393,13 +394,8 @@ export default {
         this.cancelAddTask()
       }
     },
-    deleteTask (taskId) {
-      for (var i = 0; i < this.tasks.length; i++) {
-        if (this.tasks[i].id === taskId) {
-          this.tasks[i].deleted = true
-          break
-        }
-      }
+    deleteTask (task) {
+      task.deleted = true
     },
     updateTask (id) {
     },
@@ -440,6 +436,7 @@ export default {
       this.cancelPickColor()
     },
     handleAddTag () {
+      this.newTagInfo = { id: 0, content: '', color: '', deleted: false }
       this.newTagVisible = true
       this.unselectAllTags()
       this.cancelAddTask()
@@ -457,13 +454,8 @@ export default {
         this.cancelAddTag()
       }
     },
-    deleteTag (tagId) {
-      for (var i = 0; i < this.tags.length; i++) {
-        if (this.tags[i].id === tagId) {
-          this.tags[i].deleted = true
-          break
-        }
-      }
+    deleteTag (tag) {
+      tag.deleted = true
     },
     updateOldTag (id) {},
 
@@ -556,7 +548,7 @@ input::-webkit-input-placeholder {
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
 }
 
-/* .el-icon-copy-document:hover{color:lightseagreen;}
+/* .el-icon-brush:hover{color:lightseagreen;}
 .el-icon-check:hover{color:chartreuse;}
 .el-icon-edit:hover {color: gold;}
 .el-icon-alarm-clock:hover {color:cyan;}
@@ -564,7 +556,7 @@ input::-webkit-input-placeholder {
 .el-icon-delete:hover {color: crimson;}
 .el-icon-refresh-left:hover {color: chartreuse;} */
 
-.el-icon-copy-document{color:lightseagreen;}
+.el-icon-brush{color:lightseagreen;}
 .el-icon-check{color:chartreuse;}
 .el-icon-edit {color: gold;}
 .el-icon-alarm-clock {color:cyan;}

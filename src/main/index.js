@@ -2,7 +2,9 @@
 
 import { app, BrowserWindow, screen, ipcMain } from 'electron'
 import { createTray } from '../utils/tray'
+import { initDB } from '../utils/db'
 // import { autoUpdater } from 'electron-updater'
+
 import '../renderer/store'
 
 /**
@@ -56,8 +58,9 @@ app.on('activate', () => {
 // })
 
 function init () {
-  createWindow()
   createTray(showWindow)
+  initDB()
+  createWindow()
 }
 
 function createWindow () {
