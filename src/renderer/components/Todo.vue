@@ -2,12 +2,13 @@
   <div
     class="container"
     id="Task"
+    @click="resetAllState"
   >
     <el-row>
       <el-col :span="18">
         <div>
           <span class="text">
-            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTask()"></i></h5> 
+            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5> 
             
           </span>
         </div>
@@ -21,7 +22,6 @@
             v-model= "newTaskInfo.content" 
             v-focus
             @input="autoTextarea($event)"
-            @click.stop=""
             @keyup.enter="addTask($event)"
             @blur="addTask()">
           <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
@@ -30,20 +30,20 @@
           <span class="text">进行中 </span>
           <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
           </span>
-          <draggable v-model="todoFullTasks">
+          <div>
             <div v-if="!todoTasksFolded">
               <div 
                 class="task-list-item"
                 v-for="fullTask in todoFullTasks" 
                 :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected}"
-                @click="selectTask(fullTask.task)"
+                @click.stop="selectTask(fullTask.task)"
                 @dblclick="completeTask(fullTask.task)"
               >
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
                   <div v-if="!fullTask.task.selected" class="task-dot"></div>
-                  <span v-if="!fullTask.task.selected" class="text"> {{ fullTask.task.content }}</span>
+                  <span v-if="!fullTask.task.selected" :class="fullTask.task.important?'important-text':'text'"> {{ fullTask.task.content }}</span>
                   <input
                     class="text"
                     ref="taskContent"
@@ -51,7 +51,6 @@
                     v-model= "fullTask.task.content" 
                     v-focus
                     @input="autoTextarea($event)"
-                    @click.stop=""
                     @keyup.enter="modifyTaskContent(task, $event)"
                     @blur="modifyTaskContent(task)">
                   <span v-if="!fullTask.task.selected">
@@ -84,15 +83,14 @@
                 
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
-                    <!-- <i class="el-icon-copy-document" @click.stop="copyTaskContent()"></i>&nbsp;&nbsp; -->
-                    <i class="el-icon-alarm-clock" @click.stop="setTaskAlarm(fullTask.task)"></i>&nbsp;&nbsp;
+                    <i :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'" @click.stop="switchImportance(fullTask.task)"></i>&nbsp;&nbsp;
                     <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                    <i class="el-icon-check" @click.stop="completeTask(fullTask.task)"></i>
+                    <i class="el-icon-s-claim" @click.stop="completeTask(fullTask.task)"></i>
                   </span>
                 </div>
               </div>
             </div>
-          </draggable>
+          </div>
 
           <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
             <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
@@ -100,7 +98,7 @@
             <span class="text">已完成 </span>
             <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
           </span>
-          <draggable v-model="doneFullTasks" group="todo" @start="drag=true" @end="drag=false">
+          <div>
             <div v-if="!doneTasksFolded">
               <div 
                 class="task-list-item"
@@ -128,61 +126,62 @@
                 </span>
               </div>
             </div>
-          </draggable>
+          </div>
         </div>
 
       </el-col>
-      <el-col :span="6" class="tag-list">
+      <el-col :span="6">
         <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
-        <input
-          class="text"
-          placeholder="新标签内容"
-          ref="tagContent"
-          v-if="newTagVisible"
-          v-model= "newTagInfo.content" 
-          v-focus
-          @input="autoTextarea($event)"
-          @click.stop=""
-          @keyup.enter="addTag($event)"
-          @blur="addTag()">
-        <div 
-          class="tag-item" 
-          :class="{'select': noTagSelect }"
-          @mouseover="noTagActive = true"
-          @mouseleave="noTagActive = false"
-          @click="selectNoTag()"  
-        >
-          <span :style="{'background-color': '#FFFFFF'}">&nbsp;&nbsp;</span>
-          <span class="tag-item-text text">全部</span>
-        </div>
-        <div 
-          class="tag-item" 
-          v-for="tag in tags" 
-          :key="tag.id" 
-          :class="{'select':tag.selected}"
-          @click="selectTag(tag)"
-          @dblclick="$set(tag, 'edited', true)"
-        >
-          <div v-if="!tag.deleted">
-            <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span>
-            <!-- <colorPicker v-model="tag.color" /> -->
-            <span v-if="!tag.edited" :style="{'background-color': tag.color}">&nbsp;&nbsp;</span>
-            <span v-if="!tag.edited" class="tag-item-text text">{{ tag.content }}</span>
-            <input
-              class="text"
-              ref="tagContent"
-              v-else 
-              v-model= "tag.content" 
-              v-focus
-              @input="autoTextarea($event)"
-              @click.stop=""
-              @keyup.enter="modifyTagContent(tag, $event)"
-              @blur="modifyTagContent(tag)">
-            <div>
-              <span v-if="tag.edited"  class="text">
-                <i class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
-                <i class="el-icon-delete" @click.stop="deleteTag(tag)"></i>&nbsp;&nbsp;
-              </span>
+        <div class="tag-list">
+          <input
+            class="text"
+            placeholder="新标签内容"
+            ref="tagContent"
+            v-if="newTagVisible"
+            v-model= "newTagInfo.content" 
+            v-focus
+            @input="autoTextarea($event)"
+            @click.stop=""
+            @keyup.enter="addTag($event)"
+            @blur="addTag()">
+          <div 
+            class="tag-item" 
+            :class="{'select': noTagSelect }"
+            @mouseover="noTagActive = true"
+            @mouseleave="noTagActive = false"
+            @click="selectNoTag()"  
+          >
+            <span :style="{'background-color': '#FFFFFF'}">&nbsp;&nbsp;</span>
+            <span class="tag-item-text text">全部</span>
+          </div>
+          <div 
+            class="tag-item" 
+            v-for="tag in tags" 
+            :key="tag.id" 
+            :class="{'select':tag.selected}"
+            @click.stop="selectTag(tag)"
+            @dblclick="$set(tag, 'edited', true)"
+          >
+            <div v-if="!tag.deleted">
+              <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span>
+              <!-- <colorPicker v-model="tag.color" /> -->
+              <span v-if="!tag.edited" :style="{'background-color': tag.color}">&nbsp;&nbsp;</span>
+              <span v-if="!tag.edited" class="tag-item-text text">{{ tag.content }}</span>
+              <input
+                class="text"
+                ref="tagContent"
+                v-else 
+                v-model= "tag.content" 
+                v-focus
+                @input="autoTextarea($event)"
+                @keyup.enter="modifyTagContent(tag, $event)"
+                @blur="modifyTagContent(tag)">
+              <div>
+                <span v-if="tag.edited"  class="text">
+                  <i class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
+                  <i class="el-icon-delete" @click.stop="deleteTag(tag)"></i>&nbsp;&nbsp;
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -214,7 +213,7 @@ export default {
       tasks: [],
       taskAutoIncVal: -1,
       newTaskVisible: false,
-      newTaskInfo: { id: 0, content: '', completed: false, deleted: false },
+      newTaskInfo: { id: 0, content: '', completed: false, deleted: false, important: false },
       doneTasksFolded: true,
       todoTasksFolded: false,
 
@@ -330,8 +329,19 @@ export default {
       this.unselectAllTags()
     },
 
-    resetStateOfTask () {},
-    resetStateOfTag () {},
+    resetAllState () {
+      console.log('cancel')
+      this.resetStateOfTask()
+      this.resetStateOfTag()
+    },
+
+    resetStateOfTask () {
+      this.unselectAllTasks()
+    },
+    resetStateOfTag () {
+      this.unselectAllTags()
+      this.cancelPickColor()
+    },
 
     selectTask (task) {
       if (task.selected) {
@@ -365,7 +375,7 @@ export default {
       }
     },
     handleAddTask () {
-      this.newTaskInfo = { id: 0, content: '', completed: false, deleted: false }
+      this.newTaskInfo = { id: 0, content: '', completed: false, deleted: false, important: false }
       this.newTaskVisible = true
       this.unselectAllTasks()
       this.cancelAddTag()
@@ -404,9 +414,41 @@ export default {
     },
     completeTask (task) {
       task.completed = true
+      this.updateTask()
+      this.recordLog({
+        target: 'tasks',
+        type: 'complete',
+        data: task,
+        flag: ''
+      })
+      this.unselectAllTasks()
+      this.cancelPickColor()
     },
     uncompleteTask (task) {
       task.completed = false
+      this.updateTask()
+      this.recordLog({
+        target: 'tasks',
+        type: 'uncomplete',
+        data: task,
+        flag: ''
+      })
+      this.unselectAllTasks()
+      this.cancelPickColor()
+    },
+    switchImportance (task) {
+      if (task.important) {
+        task.important = false
+      } else {
+        task.important = true
+      }
+      this.updateTask()
+      this.recordLog({
+        target: 'tasks',
+        type: 'important',
+        data: task,
+        flag: ''
+      })
     },
     updateTask () {
       db.read().get('data').set('tasks', this.tasks).write()
@@ -618,9 +660,10 @@ input::-webkit-input-placeholder {
 .el-icon-refresh-left:hover {color: chartreuse;} */
 
 .el-icon-brush{color:lightseagreen;}
-.el-icon-check{color:chartreuse;}
-.el-icon-edit {color: gold;}
-.el-icon-alarm-clock {color:cyan;}
+.el-icon-s-claim{color:chartreuse;}
+.el-icon-edit {color: cyan;}
+.el-icon-star-on {color:gold;}
+.el-icon-star-off {color:gold;}
 .el-icon-price-tag {color:coral;}
 .el-icon-delete {color: crimson;}
 .el-icon-refresh-left {color: chartreuse;}
@@ -676,6 +719,12 @@ input::-webkit-input-placeholder {
   vertical-align:middle;
 }
 
+.tag-list {
+  height: 220px;
+  overflow:auto;
+  overflow-x:hidden;
+}
+
 .tag-item {
   opacity: 1;
   margin: 1px;
@@ -694,6 +743,12 @@ input::-webkit-input-placeholder {
 
 .text {
   color:#FFFFFF;
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+  cursor: default;
+}
+
+.important-text {
+  color:#FF8000;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   cursor: default;
 }

@@ -78,35 +78,40 @@ if (!db.has('initRun').value()) {
         'content': '单击查看任务详情',
         'completed': false,
         'deleted': false,
-        'selected': false
+        'selected': false,
+        'important': false
       },
       {
         'id': -2,
         'content': '双击快捷完成任务',
         'completed': false,
         'deleted': false,
-        'selected': false
+        'selected': false,
+        'important': false
       },
       {
         'id': -3,
         'content': '点击加号新增对应项目',
         'completed': false,
         'deleted': false,
-        'selected': false
+        'selected': false,
+        'important': false
       },
       {
         'id': -4,
         'content': '可以随意调整待办对应标签',
         'completed': false,
         'deleted': false,
-        'selected': false
+        'selected': false,
+        'important': false
       },
       {
         'id': -5,
         'content': '同样，双击已完成会撤销',
         'completed': true,
         'deleted': false,
-        'selected': true
+        'selected': true,
+        'important': false
       }
     ],
     'taskAutoIncVal': -6,
