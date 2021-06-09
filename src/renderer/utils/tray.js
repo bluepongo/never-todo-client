@@ -6,7 +6,7 @@ import {
 // import DB from './db'
 import path from 'path'
 
-import {setOpenAtLogin, getOpenAtLogin} from './startup'
+import {setOpenAtLogin, getOpenAtLogin} from './tools'
 // import pkg from '../../package.json'
 
 let tray

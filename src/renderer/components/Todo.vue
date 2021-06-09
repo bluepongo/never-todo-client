@@ -204,7 +204,8 @@
 // import {getAll} from '@/api/todo'
 // import {getAllTasks, getTasksByContent, getTasksByTag, addTask, deleteTask， updateTask} from '@/api/todo'
 // import {getAllTags, addTag, deleteTag, updateTag} from '@/api/todo'
-import { readFile } from 'fs'
+// import { readFile } from 'fs'
+import db from '@/utils/db'
 // import { filter } from 'vue/types/umd'
 export default {
   name: 'todo',
@@ -333,18 +334,24 @@ export default {
       //   })
 
       // By Local File
-      // var fs = require('fs')
-      let file = 'data.json' // 文件路径
-      readFile(file, 'utf-8', function (err, data) {
-        if (err) {
-          console.log(err)// eslint-disable-line
-        } else {
-          let result = JSON.parse(data).result
-          this.tasks = result.tasks
-          this.tags = result.tags
-          this.taskTags = result.task_tags
-        }
-      }.bind(this))
+      // let file = 'data.json' // 文件路径
+      // readFile(file, 'utf-8', function (err, data) {
+      //   if (err) {
+      //     console.log(err)// eslint-disable-line
+      //   } else {
+      //     let result = JSON.parse(data).result
+      //     this.tasks = result.tasks
+      //     this.tags = result.tags
+      //     this.taskTags = result.task_tags
+      //   }
+      // }.bind(this))
+      // By Lowdb database
+      console.log('vue init data')
+      let data = db.read().get('data').value()
+      // 初始化待办/标签数据
+      this.tasks = data.tasks
+      this.tags = data.tags
+      this.taskTags = data.task_tags
     },
 
     resetStateOfTask () {},
@@ -500,12 +507,7 @@ export default {
     }
   },
   mounted () {
-    // this.$nextTick(() => {
-    //   this.initData()
-    //   console.log(this.fullTasks, this.tags)
-    // })
     this.initData()
-    // console.log('new', this.fullTasks)
   }
 }
 </script>

@@ -1,6 +1,11 @@
 import {app} from 'electron'
 import path from 'path'
 
+export function getDataPath () {
+  console.log(app.getPath('userData'))
+  return app.getPath('userData')
+}
+
 export function setOpenAtLogin (openAtLogin) {
   if (app.isPackaged) {
     app.setLoginItemSettings({
