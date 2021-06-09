@@ -104,7 +104,7 @@ if (!db.has('initRun').value()) {
       {
         'id': -5,
         'content': '同样，双击已完成会撤销',
-        'completed': false,
+        'completed': true,
         'deleted': false,
         'selected': true
       }
