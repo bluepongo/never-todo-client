@@ -38,7 +38,7 @@
                 :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected}"
                 @click.stop="selectTask(fullTask.task)"
-                @dblclick="completeTask(fullTask.task)"
+                @dblclick.stop="completeTask(fullTask.task)"
               >
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
@@ -50,6 +50,7 @@
                     v-else 
                     v-model= "fullTask.task.content" 
                     v-focus
+                    @click.stop=""
                     @input="autoTextarea($event)"
                     @keyup.enter="modifyTaskContent(task, $event)"
                     @blur="modifyTaskContent(task)">
@@ -83,7 +84,11 @@
                 
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
-                    <i :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'" @click.stop="switchImportance(fullTask.task)"></i>&nbsp;&nbsp;
+                    <i 
+                      :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'" 
+                      @click.stop="switchImportance(fullTask.task)"
+                      @dblclick.stop=""
+                    ></i>&nbsp;&nbsp;
                     <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
                     <i class="el-icon-s-claim" @click.stop="completeTask(fullTask.task)"></i>
                   </span>
@@ -104,10 +109,10 @@
                 class="task-list-item"
                 v-for="fullTask in doneFullTasks" 
                 :key="fullTask.task.id" 
-                :style="{'opacity': 0.5}"
+                style="opacity: 0.5"
                 :class="{'select':fullTask.task.selected}"
-                @click="selectTask(fullTask.task)"
-                @dblclick="uncompleteTask(fullTask.task)"
+                @click.stop="selectTask(fullTask.task)"
+                @dblclick.stop="uncompleteTask(fullTask.task)"
               >
                 <div v-if="!fullTask.task.selected" class="task-dot"></div>
                 <span class="text"> <s>{{ fullTask.task.content }}</s></span>
@@ -345,11 +350,11 @@ export default {
 
     selectTask (task) {
       if (task.selected) {
-        this.$set(task, 'selected', false)
+        task.selected = false
         return
       }
       this.unselectAllTasks()
-      this.$set(task, 'selected', true)
+      task.selected = true
       this.assignedTags = []
       for (let taskTag of this.taskTags) {
         if (taskTag.task_id === task.id) {
@@ -746,7 +751,7 @@ input::-webkit-input-placeholder {
 }
 
 .text {
-  color:#FFFFFF;
+  color:#eee;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   cursor: default;
 }
@@ -758,7 +763,7 @@ input::-webkit-input-placeholder {
 }
 
 .text-small {
-  color: #FFFFFF;
+  color: #eee;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   font-size: 10px;
   cursor: default;
