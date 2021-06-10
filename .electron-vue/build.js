@@ -8,6 +8,7 @@ const del = require('del')
 const { spawn } = require('child_process')
 const webpack = require('webpack')
 const Listr = require('listr')
+// const Multispinner = require('multispinner')
 
 
 const mainConfig = require('./webpack.main.config')
@@ -35,14 +36,14 @@ async function build () {
   del.sync(['dist/electron/*', '!.gitkeep'])
 
   const tasks = ['main', 'renderer']
-  const m = new Multispinner(tasks, {
-    preText: 'building',
-    postText: 'process'
-  })
+  // const m = new Multispinner(tasks, {
+  //   preText: 'building',
+  //   postText: 'process'
+  // })
 
   let results = ''
 
-  const tasks = new Listr(
+  const newTasks = new Listr(
     [
       {
         title: 'building master process',
@@ -74,7 +75,7 @@ async function build () {
     { concurrent: 2 }
   )
 
-  await tasks
+  await newTasks
     .run()
     .then(() => {
       process.stdout.write('\x1B[2J\x1B[0f')

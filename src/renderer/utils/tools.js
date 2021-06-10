@@ -1,6 +1,10 @@
 import {app} from 'electron'
 import path from 'path'
 
+const appFolder = path.dirname(process.execPath)
+const updateExe = path.resolve(appFolder, '..', 'Update.exe')
+const exeName = path.basename(process.execPath)
+
 export function getDataPath () {
   console.log(app.getPath('userData'))
   return app.getPath('userData')
@@ -15,8 +19,11 @@ export function setOpenAtLogin (openAtLogin) {
     app.setLoginItemSettings({
       openAtLogin: openAtLogin,
       openAsHidden: false,
-      path: process.execPath,
-      args: [path.resolve(process.argv[1])]
+      path: updateExe,
+      args: [
+        '--processStart', `"${exeName}"`,
+        '--process-start-args', `"--hidden"`
+      ]
     })
   }
 }
@@ -27,8 +34,11 @@ export function getOpenAtLogin () {
     return openAtLogin
   } else {
     const { openAtLogin } = app.getLoginItemSettings({
-      path: process.execPath,
-      args: [path.resolve(process.argv[1])]
+      path: updateExe,
+      args: [
+        '--processStart', `"${exeName}"`,
+        '--process-start-args', `"--hidden"`
+      ]
     })
     return openAtLogin
   }

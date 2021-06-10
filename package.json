@@ -22,14 +22,15 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "never-todo-frontend",
-    "appId": "top.spicychicken.never-todo",
+    "productName": "never-todo",
+    "appId": "top.spicychicken.never-todo-0.0.1",
     "directories": {
       "output": "build"
     },
     "files": [
       "dist/electron/**/*"
     ],
+    "extends": null,
     "dmg": {
       "contents": [
         {
@@ -66,6 +67,7 @@
     "lodash": "^4.17.21",
     "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
+    "multispinner": "^0.2.1",
     "vcolorpicker": "^1.1.0",
     "vue": "^2.5.16",
     "vue-color": "^2.8.1",

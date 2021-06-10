@@ -64,7 +64,7 @@ function startRenderer () {
       {
         contentBase: path.join(__dirname, '../'),
         quiet: true,
-        hot: true,
+        // hot: true,
         proxy: {
           '/api/v1/todo/' : {
             target: 'http://127.0.0.1:7986',
