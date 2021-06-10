@@ -66,6 +66,7 @@ export default {
 }
 
 .header {
+  -webkit-app-region: drag;
   display: flex;
   align-items: center;
   justify-content: space-between;
