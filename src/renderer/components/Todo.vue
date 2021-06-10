@@ -461,6 +461,7 @@ export default {
     selectNoTag () {
       if (this.noTagSelect) { return }
       this.resetAllState()
+      this.unselectAllTags()
       this.noTagSelect = true
     },
     unselectAllTags () {
