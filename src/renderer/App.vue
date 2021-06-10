@@ -56,7 +56,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgba($color: #000000, $alpha: 1);
+  background-color: rgba($color: #111, $alpha: 1);
   opacity: 0.8;
 
   border-radius: 5px;

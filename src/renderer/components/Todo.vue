@@ -178,6 +178,7 @@
                 v-else 
                 v-model= "tag.content" 
                 v-focus
+                @click.stop=""
                 @input="autoTextarea($event)"
                 @keyup.enter="modifyTagContent(tag, $event)"
                 @blur="modifyTagContent(tag)">
@@ -335,7 +336,6 @@ export default {
     },
 
     resetAllState () {
-      console.log('cancel')
       this.resetStateOfTask()
       this.resetStateOfTag()
     },
@@ -344,7 +344,7 @@ export default {
       this.unselectAllTasks()
     },
     resetStateOfTag () {
-      this.unselectAllTags()
+      this.uneditAllTags()
       this.cancelPickColor()
     },
 
@@ -361,7 +361,7 @@ export default {
           this.assignedTags.push(taskTag.tag_id)
         }
       }
-      this.cancelPickColor()
+      this.resetStateOfTag()
     },
     unselectAllTasks () {
       for (let task of this.tasks) { this.$set(task, 'selected', false) }
@@ -460,10 +460,8 @@ export default {
 
     selectNoTag () {
       if (this.noTagSelect) { return }
-      this.unselectAllTasks()
-      this.unselectAllTags()
+      this.resetAllState()
       this.noTagSelect = true
-      this.cancelPickColor()
     },
     unselectAllTags () {
       for (let tag of this.tags) {
@@ -471,6 +469,11 @@ export default {
         this.$set(tag, 'edited', false)
       }
       this.noTagSelect = true
+    },
+    uneditAllTags () {
+      for (let tag of this.tags) {
+        this.$set(tag, 'edited', false)
+      }
     },
     selectTag (tag) {
       if (tag.selected) {
@@ -629,7 +632,7 @@ export default {
     height:50px;
     background-color:#222;
     border-radius:4px;
-    outline:2px solid #fff;
+    outline:2px solid #ddd;
     outline-offset:-2px;
     /* border: 2px solid #fff; */
 }
@@ -692,7 +695,7 @@ input::-webkit-input-placeholder {
 
 .task-list-item {
   margin: 4px 2px;
-  color: #ffffff;
+  color: #ddd;
   /* font-weight: bold; */
   cursor: default; 
   padding: 0px 4px;
@@ -705,12 +708,12 @@ input::-webkit-input-placeholder {
   border-radius: 50%;
   display: inline-block;
   margin: 1px;
-  background-color: #FFFFFF;
+  background-color: #ddd;
 }
 
 .tag-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   display: inline-block;
   margin: 1px;
@@ -746,12 +749,12 @@ input::-webkit-input-placeholder {
 /* .tag-item:hover { background: rgba(100,100,100,0.8); } */
 
 .tag-item-text {
-  color:#FFFFFF;
+  color:#ddd;
   /* background-color: #000000; */
 }
 
 .text {
-  color:#eee;
+  color:#ddd;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   cursor: default;
 }
@@ -763,7 +766,7 @@ input::-webkit-input-placeholder {
 }
 
 .text-small {
-  color: #eee;
+  color: #ddd;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   font-size: 10px;
   cursor: default;

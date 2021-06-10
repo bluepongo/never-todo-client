@@ -64,23 +64,23 @@ function init () {
 function createWindow () {
   mainWindow = new BrowserWindow({
     // dev
-    transparent: false,
-    frame: true,
-    resizable: true,
-    alwaysOnTop: true,
-
-    // pro
-    // transparent: true,
-    // frame: false,
-    // resizable: false,
-
-    // minimizable: false,
-    // maximizable: false,
-    // skipTaskbar: true,
+    // transparent: false,
+    // frame: true,
+    // resizable: true,
     // alwaysOnTop: true,
 
-    // height: 300,
-    // width: 350,
+    // pro
+    transparent: true,
+    frame: false,
+    resizable: false,
+
+    minimizable: false,
+    maximizable: false,
+    skipTaskbar: true,
+    alwaysOnTop: true,
+
+    height: 300,
+    width: 350,
 
     useContentSize: true,
     webPreferences: {
