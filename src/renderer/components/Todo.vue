@@ -760,7 +760,7 @@ input::-webkit-input-placeholder {
 }
 
 .important-text {
-  color:#FF8000;
+  color: rgb(252, 202, 156);
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   cursor: default;
 }

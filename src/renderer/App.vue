@@ -62,7 +62,7 @@ export default {
   border-radius: 5px;
 }
 #app.unfocused {
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 .header {
