@@ -636,6 +636,12 @@ export default {
     border-radius:4px;
 } */
 
+*{ 
+ -webkit-touch-callout:none; /*系统默认菜单被禁用*/
+ -webkit-user-select:none; /*webkit浏览器*/
+ user-select:none; 
+} 
+
 i { cursor: pointer; }
 span {  word-wrap : break-word}
 input {
