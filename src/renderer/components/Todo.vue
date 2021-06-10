@@ -437,11 +437,9 @@ export default {
       this.cancelPickColor()
     },
     switchImportance (task) {
-      if (task.important) {
-        task.important = false
-      } else {
-        task.important = true
-      }
+      this.$nextTick(() => {
+        task.important = !task.important
+      })
       this.updateTask()
       this.recordLog({
         target: 'tasks',
