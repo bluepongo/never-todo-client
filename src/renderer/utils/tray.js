@@ -12,7 +12,7 @@ import {setOpenAtLogin, getOpenAtLogin} from './tools'
 let tray
 
 export function createTray (showWindow) {
-  tray = new Tray(path.join(__static, './electron.png'))
+  tray = new Tray(path.join(__static, './logo-16.png'))
 
   const contextMenu = Menu.buildFromTemplate([
     {
