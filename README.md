@@ -8,7 +8,7 @@
 * [后端数据库（开发中）](https://github.com/SpicyChickenFLY/never-todo-backend) - 使用Golang进行开发
 * [前端Web页面（开发中）]() - 使用Vue进行开发，可能会用dart写Vue
 * [PC端（Win/Linux/Mac）（发布v0.0.1）](https://github.com/bluepongo/never-todo-client)- 使用Electron-Vue框架搭建
-* [移动端（Android/IOS）（开发中）]() - 使用Dart/Flutter搭建
+* [移动端（Android/IOS）（开发中）](https://github.com/SpicyChickenFLY/never-todo-mobile) - 使用Dart/Flutter搭建
 
 PC端的设计思路和逻辑编写的大量灵感来自于[xhznl-todo-list](https://github.com/xiajingren/xhznl-todo-list)这个仓库，这个APP做的特别棒，但是因为没有标签功能所以我们重新设计了一个
 
