@@ -6,7 +6,7 @@ import {
 // import DB from './db'
 import path from 'path'
 
-import {setOpenAtLogin, getOpenAtLogin} from './tools'
+// import {setOpenAtLogin, getOpenAtLogin} from './tools'
 // import pkg from '../../package.json'
 
 let tray
@@ -15,15 +15,15 @@ export function createTray (showWindow) {
   tray = new Tray(path.join(__static, './logo-16.png'))
 
   const contextMenu = Menu.buildFromTemplate([
-    {
-      label: '开机启动',
-      type: 'checkbox',
-      checked: getOpenAtLogin(),
-      click () {
-        const openAtLogin = getOpenAtLogin()
-        setOpenAtLogin(!openAtLogin)
-      }
-    },
+    // {
+    //   label: '开机启动',
+    //   type: 'checkbox',
+    //   checked: getOpenAtLogin(),
+    //   click () {
+    //     const openAtLogin = getOpenAtLogin()
+    //     setOpenAtLogin(!openAtLogin)
+    //   }
+    // },
     {
       label: '项目地址',
       click: () => {
