@@ -156,7 +156,7 @@
             @mouseleave="noTagActive = false"
             @click="selectNoTag()"  
           >
-            <span :style="{'background-color': '#FFFFFF'}">&nbsp;&nbsp;</span>
+            <span class="tag-flag" :style="{'background-color': '#FFFFFF'}"></span>
             <span class="tag-item-text text">全部</span>
           </div>
           <div 
@@ -170,7 +170,7 @@
             <div v-if="!tag.deleted">
               <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span>
               <!-- <colorPicker v-model="tag.color" /> -->
-              <span v-if="!tag.edited" :style="{'background-color': tag.color}">&nbsp;&nbsp;</span>
+              <div v-if="!tag.edited" class="tag-flag" :style="{'background-color': tag.color}"></div>
               <span v-if="!tag.edited" class="tag-item-text text">{{ tag.content }}</span>
               <input
                 class="text"
@@ -745,6 +745,14 @@ input::-webkit-input-placeholder {
   margin-top: 2px;
   text-align:left;
   cursor: default; 
+}
+
+.tag-flag {
+  width: 8px;
+  height: 21px;
+  margin: 2px 3px 0px 1px;
+  float:left;
+  vertical-align:middle;
 }
 
 /* .tag-item:hover { background: rgba(100,100,100,0.8); } */
