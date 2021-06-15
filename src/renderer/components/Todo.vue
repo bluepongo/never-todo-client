@@ -724,6 +724,9 @@ input::-webkit-input-placeholder {
 
 .tag-icon {
   background-color: rgba(0,0,0,0.8);;
+  min-width: 10px;
+  height: 19px;
+  display: inline-block;
   border: 2px solid;
   border-radius: 4px;
   padding: 1px;
