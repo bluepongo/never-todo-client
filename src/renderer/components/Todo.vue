@@ -458,7 +458,17 @@ export default {
       })
     },
     updateTask () {
-      db.read().get('data').set('tasks', this.tasks).write()
+      db.read().get('data').set('tasks', []).write()
+      for (let task of this.tasks) {
+        let temp = {
+          id: task.id,
+          content: task.content,
+          completed: task.completed,
+          deleted: task.deleted,
+          important: task.important
+        }
+        db.read().get('data').get('tasks').push(temp).write()
+      }
       db.read().get('data').set('taskAutoIncVal', this.taskAutoIncVal).write()
     },
 
@@ -547,7 +557,11 @@ export default {
       })
     },
     updateTag () {
-      db.read().get('data').set('tags', this.tags).write()
+      db.read().get('data').set('tags', []).write()
+      for (let tag of this.tags) {
+        let temp = { id: tag.id, content: tag.content, color: tag.color, deleted: tag.deleted }
+        db.read().get('data').get('tags').push(temp).write()
+      }
       db.read().get('data').set('tagAutoIncVal', this.tagAutoIncVal).write()
     },
 
