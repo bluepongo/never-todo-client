@@ -117,9 +117,9 @@ if (!db.has('initRun').value()) {
       }
     ],
     'taskAutoIncVal': -6,
-    'tagAutoIncVal': -3,
-    'log': []
+    'tagAutoIncVal': -3
   }).write()
+  db.set('log', []).write()
   db.set('initRun', true).write()
 }
 
