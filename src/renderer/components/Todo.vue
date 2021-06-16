@@ -752,10 +752,10 @@ input::-webkit-input-placeholder {
 
 .tag-flag {
   width: 8px;
-  height: 21px;
-  margin: 2px 3px 0px 1px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 9px 3px 0px 1px;
   float:left;
-  vertical-align:middle;
 }
 
 /* .tag-item:hover { background: rgba(100,100,100,0.8); } */
