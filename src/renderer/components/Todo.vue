@@ -36,7 +36,7 @@
                 class="task-list-item"
                 v-for="fullTask in todoFullTasks" 
                 :key="fullTask.task.id"
-                :class="{'select':fullTask.task.selected}"
+                :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
                 @click.stop="selectTask(fullTask.task)"
                 @dblclick.stop="completeTask(fullTask.task)"
               >
@@ -110,7 +110,7 @@
                 v-for="fullTask in doneFullTasks" 
                 :key="fullTask.task.id" 
                 style="opacity: 0.5"
-                :class="{'select':fullTask.task.selected}"
+                :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
                 @click.stop="selectTask(fullTask.task)"
                 @dblclick.stop="uncompleteTask(fullTask.task)"
               >
@@ -132,7 +132,7 @@
               </div>
             </div>
           </div>
-          <span> {{ filePath }} </span>
+          <!-- <span> {{ filePath }} </span> -->
         </div>
 
       </el-col>
@@ -152,7 +152,7 @@
             @blur="addTag()">
           <div 
             class="tag-item" 
-            :class="{'select': noTagSelect }"
+            :class="{'select': noTagSelect, 'focus': noTagFocus}"
             @mouseover="noTagActive = true"
             @mouseleave="noTagActive = false"
             @click="selectNoTag()"  
@@ -164,7 +164,7 @@
             class="tag-item" 
             v-for="tag in tags" 
             :key="tag.id" 
-            :class="{'select':tag.selected}"
+            :class="{'select':tag.selected, 'focus': tag.focused}"
             @click.stop="selectTag(tag)"
             @dblclick="$set(tag, 'edited', true)"
           >
@@ -346,9 +346,11 @@ export default {
 
     resetStateOfTask () {
       this.unselectAllTasks()
+      this.unfocusAllTasks()
     },
     resetStateOfTag () {
       this.uneditAllTags()
+      this.unfocusAllTags()
       this.cancelPickColor()
     },
 
@@ -370,6 +372,10 @@ export default {
     unselectAllTasks () {
       for (let task of this.tasks) { this.$set(task, 'selected', false) }
     },
+    unfocusAllTasks () {
+      for (let task of this.tasks) { this.$set(task, 'focused', false) }
+    },
+
     modifyTaskContent (task, event) {
       if (event) {
         event.target.blur()
@@ -485,6 +491,11 @@ export default {
       }
       this.noTagSelect = true
     },
+    unfocusAllTags () {
+      for (let tag of this.tags) {
+        this.$set(tag, 'focused', false)
+      }
+    },
     uneditAllTags () {
       for (let tag of this.tags) {
         this.$set(tag, 'edited', false)
@@ -594,6 +605,26 @@ export default {
     },
     updateTaskTag () {
       db.read().get('data').set('task_tags', this.taskTags).write()
+    },
+
+    switchFocusToTodoTask () {
+      this.doneTasksFolded = true
+      this.todoTasksFolded = false
+      this.resetStateOfTag()
+      this.resetStateOfTask()
+    },
+
+    switchFocusToDoneTask () {
+      this.todoTasksFolded = true
+      this.doneTasksFolded = false
+      this.resetStateOfTag()
+      this.resetStateOfTask()
+    },
+
+    switchFocusToTag () {
+      this.resetStateOfTask()
+      this.resetStateOfTag()
+      this.focusNoTag()
     },
 
     recordLog (log) {
@@ -810,6 +841,10 @@ input::-webkit-input-placeholder {
   /* opacity: 1; */
   font-weight: bolder;
   background: rgba(100,100,100,0.6);
+}
+
+.focus{
+  background: rgba(0,100,100,0.6);
 }
 
 compact-picker {
