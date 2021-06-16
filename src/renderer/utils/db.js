@@ -22,6 +22,8 @@ const adapter = new FileSync(filePath)
 const db = Datastore(adapter)
 db._.mixin(LodashId)
 
+db.set('path', filePath).write()
+
 if (!db.has('initRun').value()) {
   db.set('data', {
     'tags': [
