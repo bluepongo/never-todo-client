@@ -52,8 +52,8 @@
                     v-focus
                     @click.stop=""
                     @input="autoTextarea($event)"
-                    @keyup.enter="modifyTaskContent(task, $event)"
-                    @blur="modifyTaskContent(task)">
+                    @keyup.enter="modifyTaskContent(fullTask.task, $event)"
+                    @blur="modifyTaskContent(fullTask.task)">
                   <span v-if="!fullTask.task.selected">
                   <div
                     class="tag-dot"
@@ -232,6 +232,7 @@ export default {
       newTagInfo: { id: 0, content: '', color: '#AAAAAA', deleted: false },
       noTagActive: false,
       noTagSelect: true,
+      noTagFocus: false,
 
       taskTags: [],
       assignedTags: [],
@@ -381,10 +382,11 @@ export default {
         event.target.blur()
       } else {
         this.updateTask()
+        // console.log(this.standardizeTask(task))
         this.recordLog({
           target: 'tasks',
           type: 'update',
-          data: task,
+          data: this.standardizeTask(task),
           flag: ''
         })
       }
@@ -423,7 +425,7 @@ export default {
       this.recordLog({
         target: 'tasks',
         type: 'delete',
-        data: task,
+        data: this.standardizeTask(task),
         flag: ''
       })
     },
@@ -433,7 +435,7 @@ export default {
       this.recordLog({
         target: 'tasks',
         type: 'complete',
-        data: task,
+        data: this.standardizeTask(task),
         flag: ''
       })
       this.unselectAllTasks()
@@ -445,7 +447,7 @@ export default {
       this.recordLog({
         target: 'tasks',
         type: 'uncomplete',
-        data: task,
+        data: this.standardizeTask(task),
         flag: ''
       })
       this.unselectAllTasks()
@@ -459,23 +461,25 @@ export default {
       this.recordLog({
         target: 'tasks',
         type: 'important',
-        data: task,
+        data: this.standardizeTask(task),
         flag: ''
       })
     },
     updateTask () {
       db.read().get('data').set('tasks', []).write()
       for (let task of this.tasks) {
-        let temp = {
-          id: task.id,
-          content: task.content,
-          completed: task.completed,
-          deleted: task.deleted,
-          important: task.important
-        }
-        db.read().get('data').get('tasks').push(temp).write()
+        db.read().get('data').get('tasks').push(this.standardizeTask(task)).write()
       }
       db.read().get('data').set('taskAutoIncVal', this.taskAutoIncVal).write()
+    },
+    standardizeTask (task) {
+      return {
+        id: task.id,
+        content: task.content,
+        completed: task.completed,
+        deleted: task.deleted,
+        important: task.important
+      }
     },
 
     selectNoTag () {
@@ -524,7 +528,7 @@ export default {
         this.recordLog({
           target: 'tags',
           type: 'update',
-          data: tag,
+          data: this.standardizeTag(tag),
           flag: ''
         })
       }
@@ -563,17 +567,19 @@ export default {
       this.recordLog({
         target: 'tags',
         type: 'delete',
-        data: this.newTagInfo,
+        data: this.standardizeTag(tag),
         flag: ''
       })
     },
     updateTag () {
       db.read().get('data').set('tags', []).write()
       for (let tag of this.tags) {
-        let temp = { id: tag.id, content: tag.content, color: tag.color, deleted: tag.deleted }
-        db.read().get('data').get('tags').push(temp).write()
+        db.read().get('data').get('tags').push(this.standardizeTag(tag)).write()
       }
       db.read().get('data').set('tagAutoIncVal', this.tagAutoIncVal).write()
+    },
+    standardizeTag (tag) {
+      return { id: tag.id, content: tag.content, color: tag.color, deleted: tag.deleted }
     },
 
     addTagForTask (taskId, tagId) {
@@ -628,7 +634,7 @@ export default {
     },
 
     recordLog (log) {
-      db.read().get('data').get('log').push(log).write()
+      db.read().get('log').push(log).write()
     },
 
     handlePickColor (tag) {
@@ -650,7 +656,7 @@ export default {
           this.recordLog({
             target: 'tags',
             type: 'update',
-            data: this.tags[i],
+            data: this.standardizeTag(this.tags[i]),
             flag: ''
           })
           break
