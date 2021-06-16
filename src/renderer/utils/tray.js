@@ -1,13 +1,28 @@
 import {
+  remote,
+  app,
   Tray,
   Menu,
   shell
 } from 'electron'
+import fs from 'fs-extra'
 // import DB from './db'
+
 import path from 'path'
 
 // import {setOpenAtLogin, getOpenAtLogin} from './tools'
 // import pkg from '../../package.json'
+
+const APP = process.type === 'renderer' ? remote.app : app
+const STORE_PATH = APP.getPath('userData')
+
+if (process.type !== 'renderer') {
+  if (!fs.pathExistsSync(STORE_PATH)) {
+    fs.mkdirpSync(STORE_PATH)
+  }
+}
+
+const filePath = path.join(STORE_PATH, '/data.json')
 
 let tray
 
@@ -35,6 +50,14 @@ export function createTray (showWindow) {
       click: () => {
         shell.openExternal(
           'https://github.com/bluepongo/never-todo-frontend/issues'
+        )
+      }
+    },
+    {
+      label: '数据文件',
+      click: () => {
+        shell.openExternal(
+          filePath
         )
       }
     },
