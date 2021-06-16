@@ -132,6 +132,7 @@
               </div>
             </div>
           </div>
+          <span> {{ filePath }} </span>
         </div>
 
       </el-col>
@@ -216,6 +217,8 @@ export default {
   name: 'todo',
   data () {
     return {
+      filePath: '',
+
       tasks: [],
       taskAutoIncVal: -1,
       newTaskVisible: false,
@@ -325,6 +328,7 @@ export default {
     initData () {
       // By Lowdb database
       let data = db.read().get('data').value()
+      this.filePath = db.read().get('path').value()
       // 初始化待办/标签数据
       this.tasks = data.tasks
       this.tags = data.tags
