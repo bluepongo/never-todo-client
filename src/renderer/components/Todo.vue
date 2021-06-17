@@ -827,7 +827,7 @@ input::-webkit-input-placeholder {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  margin: 9px 3px 0px 1px;
+  margin: 9px 5px 0px 1px;
   float:left;
 }
 
