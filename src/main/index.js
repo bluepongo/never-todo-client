@@ -85,7 +85,8 @@ function createWindow () {
     useContentSize: true,
     webPreferences: {
       // devTools: false,
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true
     }
   })
 

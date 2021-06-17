@@ -325,7 +325,20 @@ export default {
       }
     }
   },
+  mounted () {
+    this.initData()
+    this.timer()
+  },
+  destroyed () {
+    clearInterval(this.timer) // 退出页面后销毁定时方法
+  },
   methods: {
+    timer () {
+      return setInterval(() => {
+        this.checkDataUpdate()
+      }, 1000)
+    },
+
     initData () {
       // By Lowdb database
       let data = db.read().get('data').value()
@@ -338,6 +351,14 @@ export default {
       this.tagAutoIncVal = data.tagAutoIncVal
       this.unselectAllTasks()
       this.unselectAllTags()
+    },
+
+    checkDataUpdate () {
+      let updateFlag = db.read().get('update').value()
+      if (updateFlag) {
+        this.initData()
+        db.read().set('update', false).write()
+      }
     },
 
     resetAllState () {
@@ -668,9 +689,6 @@ export default {
     autoTextarea (event) {
       event.target.style.rows = '1'
     }
-  },
-  mounted () {
-    this.initData()
   }
 }
 </script>
