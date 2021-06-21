@@ -3,6 +3,7 @@
     class="container"
     id="Task"
     @click="resetAllState"
+    @keyup.page-down="switchToNextSection"
   >
     <el-row>
       <el-col :span="18">
@@ -219,6 +220,8 @@ export default {
     return {
       filePath: '',
 
+      focusTarget: 'todo',
+
       tasks: [],
       taskAutoIncVal: -1,
       newTaskVisible: false,
@@ -240,9 +243,9 @@ export default {
       pickColorTagId: '',
       availableTagColors: [
         '#FF0000', '#FF8000', '#FFFF00',
-        '#804040', '#00FF80', '#404040',
-        '#00FFFF', '#0080FF', '#0000FF',
-        '#8000FF', '#FF00FF', '#AAAAAA'
+        '#804040', '#00FF80', '#00FFFF',
+        '#0080FF', '#0000FF', '#8000FF',
+        '#FF00FF', '#AAAAAA', '#404040'
       ],
       currentTagColor: '#000000',
 
@@ -509,6 +512,9 @@ export default {
       this.unselectAllTags()
       this.noTagSelect = true
     },
+    focusNoTag () {
+
+    },
     unselectAllTags () {
       for (let tag of this.tags) {
         this.$set(tag, 'selected', false)
@@ -634,6 +640,28 @@ export default {
       db.read().get('data').set('task_tags', this.taskTags).write()
     },
 
+    switchToNextSection () {
+      switch (this.focusTarget) {
+        case 'todo':
+          this.focusTarget = 'done'
+          this.switchFocusToDoneTask()
+          break
+        case 'done':
+          this.focusTarget = 'tag'
+          this.switchFocusToTag()
+          break
+        case 'tag':
+          this.focusTarget = 'todo'
+          this.switchFocusToTodoTask()
+          break
+
+        default:
+          this.focusTarget = 'done'
+          this.switchFocusToDoneTask()
+          break
+      }
+    },
+
     switchFocusToTodoTask () {
       this.doneTasksFolded = true
       this.todoTasksFolded = false
@@ -649,6 +677,8 @@ export default {
     },
 
     switchFocusToTag () {
+      this.doneTasksFolded = true
+      this.todoTasksFolded = false
       this.resetStateOfTask()
       this.resetStateOfTag()
       this.focusNoTag()
@@ -816,9 +846,8 @@ input::-webkit-input-placeholder {
 
 .tag-item {
   opacity: 1;
-  margin: 1px;
   padding-left: 2px;
-  margin-top: 2px;
+  /* margin-top: 2px; */
   text-align:left;
   cursor: default; 
 }
