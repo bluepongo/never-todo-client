@@ -40,11 +40,11 @@ export default {
 
     mouseenter () {
       console.log('enter')
-      ipcRenderer.send('set-ignore-mouse-events', false)
+      ipcRenderer.send('setIgnoreMouseEvents', false)
     },
     mouseleave () {
       console.log('leave')
-      ipcRenderer.send('set-ignore-mouse-events', this.ignoreMouse, { forward: true })
+      ipcRenderer.send('setIgnoreMouseEvents', this.ignoreMouse, { forward: true })
     }
   }
 }

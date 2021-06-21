@@ -110,15 +110,18 @@ function showWindow () {
   if (!mainWindow.isVisible()) mainWindow.show()
 }
 
-// ipcMain.on('setIgnoreMouseEvents', (event, ignore) => {
-//   if (ignore) mainWindow.setIgnoreMouseEvents(true, { forward: true })
-//   else mainWindow.setIgnoreMouseEvents(false)
-// })
+function hideWindow () {
+  if (mainWindow.isVisible()) mainWindow.hide()
+}
 
-ipcMain.on('set-ignore-mouse-events', (event, ...args) => {
+ipcMain.on('setIgnoreMouseEvents', (event, ...args) => {
   BrowserWindow.fromWebContents(event.sender).setIgnoreMouseEvents(...args)
 })
 
 ipcMain.on('hideWindow', event => {
-  mainWindow.hide()
+  hideWindow()
+})
+
+ipcMain.on('switchFlash', event => {
+  hideWindow()
 })
