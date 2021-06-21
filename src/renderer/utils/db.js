@@ -120,6 +120,7 @@ if (!db.has('initRun').value()) {
     'tagAutoIncVal': -3
   }).write()
   db.set('log', []).write()
+  db.set('update', false).write()
   db.set('initRun', true).write()
 }
 
