@@ -32,6 +32,13 @@ export function createTray (showWindow) {
 
   const contextMenu = Menu.buildFromTemplate([
     {
+      label: '显示界面',
+      click () {
+        showWindow()
+      }
+    },
+
+    {
       label: '开机启动',
       type: 'checkbox',
       checked: app.getLoginItemSettings().openAtLogin,
