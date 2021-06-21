@@ -14,9 +14,6 @@ import db from './db'
 
 const dialog = require('electron').dialog
 
-// import {setOpenAtLogin, getOpenAtLogin} from './tools'
-// import pkg from '../../package.json'
-
 const APP = process.type === 'renderer' ? remote.app : app
 const STORE_PATH = APP.getPath('userData')
 
@@ -34,29 +31,24 @@ export function createTray (showWindow) {
   tray = new Tray(path.join(__static, './logo-16.png'))
 
   const contextMenu = Menu.buildFromTemplate([
-    // {
-    //   label: '开机启动',
-    //   type: 'checkbox',
-    //   checked: getOpenAtLogin(),
-    //   click () {
-    //     const openAtLogin = getOpenAtLogin()
-    //     setOpenAtLogin(!openAtLogin)
-    //   }
-    // },
     {
-      label: '项目地址',
-      click: () => {
-        shell.openExternal('https://github.com/bluepongo/never-todo-frontend')
+      label: '开机启动',
+      type: 'checkbox',
+      checked: app.getLoginItemSettings().openAtLogin,
+      click () {
+        if (!app.isPackaged) {
+          app.setLoginItemSettings({
+            openAtLogin: !app.getLoginItemSettings().openAtLogin,
+            path: process.execPath
+          })
+        } else {
+          app.setLoginItemSettings({
+            openAtLogin: !app.getLoginItemSettings().openAtLogin
+          })
+        }
       }
     },
-    {
-      label: '问题反馈',
-      click: () => {
-        shell.openExternal(
-          'https://github.com/bluepongo/never-todo-frontend/issues'
-        )
-      }
-    },
+
     {
       label: '数据文件',
       click: () => {
@@ -117,6 +109,20 @@ export function createTray (showWindow) {
             }
           })
         })
+      }
+    },
+    {
+      label: '项目地址',
+      click: () => {
+        shell.openExternal('https://github.com/bluepongo/never-todo-client')
+      }
+    },
+    {
+      label: '问题反馈',
+      click: () => {
+        shell.openExternal(
+          'https://github.com/bluepongo/never-todo-client/issues'
+        )
       }
     },
     {
