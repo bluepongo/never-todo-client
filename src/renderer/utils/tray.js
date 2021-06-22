@@ -9,7 +9,7 @@ import { readFile } from 'fs'
 import fs from 'fs-extra'
 import path from 'path'
 
-import { validateData } from './validation'
+import { judgeOldData, validateData } from './validation'
 import db from './db'
 
 const dialog = require('electron').dialog
@@ -77,6 +77,9 @@ export function createTray (showWindow) {
           defaultPath: path.join(STORE_PATH, '/export.json'),
           title: '导出数据'
         }, result => {
+          if (!result) {
+            return
+          }
           // 将db中的data导出至文件中
           let str = JSON.stringify({
             data: db.read().get('data').value(),
@@ -98,12 +101,18 @@ export function createTray (showWindow) {
               extensions: ['json']
             }
           ]}, result => {
+          if (!result) {
+            return
+          }
           readFile(result[0], 'utf-8', function (err, jsonStr) {
             if (err) {
               dialog.showErrorBox('导入数据失败', '无法打开所选文件')
             } else {
               let data = JSON.parse(jsonStr)
               if (validateData(data)) {
+                if (judgeOldData(data)) {
+                  data.data.log = data.log
+                }
                 // 仅将对象中的data和log属性导入
                 db.read().set('data', data.data).write()
                 db.read().set('log', data.log).write()
