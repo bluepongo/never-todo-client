@@ -8,7 +8,7 @@
 * [后端数据库（开发中）](https://github.com/SpicyChickenFLY/never-todo-backend) - 使用Golang进行开发
 * [前端Web页面（开发中）]() - 使用Vue进行开发，可能会用dart写Vue
 * [PC端（Win/Linux/Mac）（发布v0.0.1）](https://github.com/bluepongo/never-todo-client)- 使用Electron-Vue框架搭建
-* [移动端（Android/IOS）（开发中）](https://github.com/SpicyChickenFLY/never-todo-mobile) - 使用Dart/Flutter搭建
+* [移动端（Android/IOS）（尚未开发）](https://github.com/SpicyChickenFLY/never-todo-mobile) - 使用Dart/Flutter搭建
 
 PC端的设计思路和逻辑编写的大量灵感来自于[xhznl-todo-list](https://github.com/xiajingren/xhznl-todo-list)这个仓库，这个APP做的特别棒，但是因为没有标签功能所以我们重新设计了一个
 
@@ -30,20 +30,18 @@ PC端的设计思路和逻辑编写的大量灵感来自于[xhznl-todo-list](htt
 * [x] 拖拽顶部移动窗口
 * [x] 点击右下角忽略鼠标事件
 * [x] 将所有的操作记录在数据库中便于远端同步
-* [x] 利用lowdb增加导入导出功能
-* [x] 设置开机启动功能
 
 ## 当前版本修复的问题
 * [x] 标签内容比较长的时候显示不正常
 * [x] MacOS中点击隐藏按钮后无法再次唤出
-
-## 下个版本会修复的问题
-暂无
+* [x] 利用lowdb增加导入导出功能
+* [x] 设置开机启动功能
 
 ## 下个版本做什么
 * [ ] 设置提醒时间，到时图标闪烁提醒
 * [ ] 设计同步机制，与后端交互
 * [ ] 修改优化UI，使其更加人性化
+  * [ ] 改变内容占多行情况下文字的布局
   * [ ] 调试背景的透明度
   * [ ] 改变正常文字和重要待办的颜色和样式
   * [ ] 修改标签调色盘的默认颜色
