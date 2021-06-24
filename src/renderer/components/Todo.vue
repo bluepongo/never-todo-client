@@ -43,27 +43,30 @@
               >
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
-                  <div v-if="!fullTask.task.selected" class="task-dot"></div>
-                  <span v-if="!fullTask.task.selected" :class="fullTask.task.important?'important-text':'text'"> {{ fullTask.task.content }}</span>
-                  <input
-                    class="text"
-                    ref="taskContent"
-                    v-else 
-                    v-model= "fullTask.task.content" 
-                    v-focus
-                    @click.stop=""
-                    @input="autoTextarea($event)"
-                    @keyup.enter="modifyTaskContent(fullTask.task, $event)"
-                    @blur="modifyTaskContent(fullTask.task)">
-                  <span v-if="!fullTask.task.selected">
-                  <div
-                    class="tag-dot"
-                    v-for="tag in fullTask.tags"
-                    :key="tag.id" 
-                    :style="{'background-color': tag.color}"></div>
-                  </span>
-                  
+                  <el-row v-if="!fullTask.task.selected">
+                    <el-col :span="2"><div  class="task-dot"></div></el-col>
+                    <el-col :span="22">
+                      <span :class="fullTask.task.important?'important-text':'text'"> {{ fullTask.task.content }}</span>
+                      <span>
+                        <div
+                          class="tag-dot"
+                          v-for="tag in fullTask.tags"
+                          :key="tag.id" 
+                          :style="{'background-color': tag.color}">
+                        </div>
+                      </span>
+                    </el-col>
+                  </el-row>    
                   <div v-else>
+                    <input
+                      class="text"
+                      ref="taskContent"
+                      v-model= "fullTask.task.content" 
+                      v-focus
+                      @click.stop=""
+                      @input="autoTextarea($event)"
+                      @keyup.enter="modifyTaskContent(fullTask.task, $event)"
+                      @blur="modifyTaskContent(fullTask.task)">
                     <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
                       <span 
                         class="tag-icon"
@@ -81,8 +84,7 @@
                       >{{ tag.content.charAt(0) }}</span>
                     </span>
                   </div>
-                </div>
-                
+                </div>        
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
                     <i 
@@ -110,33 +112,39 @@
                 class="task-list-item"
                 v-for="fullTask in doneFullTasks" 
                 :key="fullTask.task.id" 
-                style="opacity: 0.5"
                 :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
                 @click.stop="selectTask(fullTask.task)"
                 @dblclick.stop="uncompleteTask(fullTask.task)"
               >
-                <div v-if="!fullTask.task.selected" class="task-dot"></div>
-                <span class="text"> <s>{{ fullTask.task.content }}</s></span>
-                <!-- <span v-if="!fullTask.task.selected"> -->
-                <span>
-                  <div
+                <el-row >
+                  <el-col :span="2"><div class="task-dot" style="opacity: 0.5"></div></el-col>
+                  <el-col :span="22">
+                    <span class="text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
+                    <div
                     class="tag-dot"
                     v-for="tag in fullTask.tags"
                     :key="tag.id" 
                     :style="{'background-color': tag.color}"></div>
-                  <span v-if="fullTask.task.selected" class="text">
-                    &nbsp;
-                    <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                    <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
+                  </el-col>
+                  <span v-if="fullTask.task.selected">
+                    <span class="text">
+                      &nbsp;
+                      <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                      <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
+                    </span>
                   </span>
-                </span>
+                </el-row>
+                
+                
+                <!-- <span v-if="!fullTask.task.selected"> -->
+                
               </div>
             </div>
           </div>
           <!-- <span> {{ filePath }} </span> -->
         </div>
-
       </el-col>
+
       <el-col :span="6">
         <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
         <div class="tag-list">
@@ -158,8 +166,14 @@
             @mouseleave="noTagActive = false"
             @click="selectNoTag()"  
           >
-            <span class="tag-flag" :style="{'background-color': '#FFFFFF'}"></span>
-            <span class="tag-item-text text">全部</span>
+            <el-row >
+              <el-col :span="5">
+                <span class="tag-flag" :style="{'background-color': '#FFFFFF'}"></span>
+              </el-col>
+              <el-col :span="19">
+                <span class="tag-item-text text">全部</span>
+              </el-col>
+            </el-row>
           </div>
           <div 
             class="tag-item" 
@@ -170,10 +184,17 @@
             @dblclick="$set(tag, 'edited', true)"
           >
             <div v-if="!tag.deleted">
-              <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span>
+              <!-- <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span> -->
               <!-- <colorPicker v-model="tag.color" /> -->
-              <div v-if="!tag.edited" class="tag-flag" :style="{'background-color': tag.color}"></div>
-              <span v-if="!tag.edited" class="tag-item-text text">{{ tag.content }}</span>
+              <el-row v-if="!tag.edited">
+                <el-col :span="5">
+                  <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
+                </el-col>
+                <el-col :span="19">
+                  <span class="tag-item-text text">{{ tag.content }}</span>
+                </el-col>
+              </el-row>
+            
               <input
                 class="text"
                 ref="tagContent"
