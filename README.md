@@ -1,3 +1,5 @@
+<div align=center><img src="./static/logo.png" width = "200" height = "200" /></div>
+
 # never-todo-client
 
 > 一个基于electron-vue框架搭建的待办列表应用
