@@ -1,5 +1,5 @@
 {
-  "name": "never-todo-frontend",
+  "name": "never-todo-client",
   "version": "0.0.3",
   "author": "SpicyChickenFLY <xixiayuchao@gmail.com>",
   "description": "An electron-vue project",
@@ -23,7 +23,7 @@
   },
   "build": {
     "productName": "never-todo",
-    "appId": "top.spicychicken.never-todo-0.0.1",
+    "appId": "top.spicychicken.never-todo",
     "directories": {
       "output": "build"
     },
