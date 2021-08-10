@@ -27,12 +27,25 @@ const isSecondInstance = app.makeSingleInstance(() => {
     mainWindow.show()
   }
 })
-
 if (isSecondInstance) {
   app.quit()
 }
 
-// 创建 myWindow, 加载应用的其余部分, etc...
+// const gotTheLock = app.requestSingleInstanceLock()
+
+// if (!gotTheLock) {
+//   app.quit()
+// } else {
+//   app.on('second-instance', (event, commandLine, workingDirectory) => {
+//     // focus to first
+//     if (mainWindow) {
+//       if (mainWindow.isMinimized()) mainWindow.restore()
+//       mainWindow.focus()
+//     }
+//   })
+// }
+
+// create mainWindow
 app.on('ready', () => {
   init()
 })
