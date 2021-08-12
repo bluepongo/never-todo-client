@@ -83,13 +83,20 @@ function createWindow () {
     // alwaysOnTop: true,
 
     // pro
+    // 背景透明
     transparent: true,
+    // 边框
     frame: false,
-    resizable: false,
+    // 窗口可变
+    resizable: true,
 
+    // 最小化
     minimizable: false,
+    // 最大化
     maximizable: false,
+    // 标题栏
     skipTaskbar: true,
+    // 窗口置顶
     alwaysOnTop: true,
 
     height: 300,

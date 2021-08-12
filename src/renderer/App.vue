@@ -13,6 +13,7 @@
         @mouseleave="mouseleave"
         @click="ignoreMouse = !ignoreMouse"
       ></i>
+      <i class="el-icon-copy-document" @click=""></i>
     </div>
     <router-view></router-view>
   </div>
@@ -71,15 +72,15 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 20px;
-  padding: 0 20px;
+  height: 30px;
+  padding: 2px 20px;
   box-sizing: border-box;
-  font-size: 12px;
+  font-size: 14px;
   color: rgba($color: #ffffff, $alpha: 0.3);
 }
 
 .tools {
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   right: 0px;
   display: flex;
@@ -87,6 +88,7 @@ export default {
   align-items: center;
   margin-right: 4px;
   margin-bottom: 4px;
+  z-index: 99;
 }
 
 .tools i {
@@ -94,5 +96,5 @@ export default {
   padding: 2px 5px;
   cursor: pointer;
   color: #ffffff;
-} 
+}
 </style>

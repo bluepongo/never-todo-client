@@ -9,8 +9,8 @@
       <el-col :span="18">
         <div>
           <span class="text">
-            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5> 
-            
+            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5>
+
           </span>
         </div>
 
@@ -20,22 +20,22 @@
             placeholder="请输入新任务内容"
             ref="taskContent"
             v-if="newTaskVisible"
-            v-model= "newTaskInfo.content" 
+            v-model= "newTaskInfo.content"
             v-focus
             @input="autoTextarea($event)"
             @keyup.enter="addTask($event)"
             @blur="addTask()">
           <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
           <i v-if="todoTasksFolded" class="el-icon-arrow-right"></i>
-          <i v-else class="el-icon-arrow-down"></i>          
+          <i v-else class="el-icon-arrow-down"></i>
           <span class="text">进行中 </span>
           <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
           </span>
           <div>
             <div v-if="!todoTasksFolded">
-              <div 
+              <div
                 class="task-list-item"
-                v-for="fullTask in todoFullTasks" 
+                v-for="fullTask in todoFullTasks"
                 :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
                 @click.stop="selectTask(fullTask.task)"
@@ -51,24 +51,24 @@
                         <div
                           class="tag-dot"
                           v-for="tag in fullTask.tags"
-                          :key="tag.id" 
+                          :key="tag.id"
                           :style="{'background-color': tag.color}">
                         </div>
                       </span>
                     </el-col>
-                  </el-row>    
+                  </el-row>
                   <div v-else>
                     <input
                       class="text"
                       ref="taskContent"
-                      v-model= "fullTask.task.content" 
+                      v-model= "fullTask.task.content"
                       v-focus
                       @click.stop=""
                       @input="autoTextarea($event)"
                       @keyup.enter="modifyTaskContent(fullTask.task, $event)"
                       @blur="modifyTaskContent(fullTask.task)">
                     <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
-                      <span 
+                      <span
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
                         @click.stop="delTagForTask(fullTask.task.id, tag.id)"
@@ -76,7 +76,7 @@
                     </span>
                     <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
                     <span class="text-small" v-for="tag in tags" :key="'right'+tag.id" >
-                      <span 
+                      <span
                         v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
@@ -84,11 +84,11 @@
                       >{{ tag.content.charAt(0) }}</span>
                     </span>
                   </div>
-                </div>        
+                </div>
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
-                    <i 
-                      :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'" 
+                    <i
+                      :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'"
                       @click.stop="switchImportance(fullTask.task)"
                       @dblclick.stop=""
                     ></i>&nbsp;&nbsp;
@@ -102,16 +102,16 @@
 
           <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
             <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
-            <i v-else class="el-icon-arrow-down"></i>          
+            <i v-else class="el-icon-arrow-down"></i>
             <span class="text">已完成 </span>
             <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
           </span>
           <div>
             <div v-if="!doneTasksFolded">
-              <div 
+              <div
                 class="task-list-item"
-                v-for="fullTask in doneFullTasks" 
-                :key="fullTask.task.id" 
+                v-for="fullTask in doneFullTasks"
+                :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
                 @click.stop="selectTask(fullTask.task)"
                 @dblclick.stop="uncompleteTask(fullTask.task)"
@@ -123,7 +123,7 @@
                     <div
                     class="tag-dot"
                     v-for="tag in fullTask.tags"
-                    :key="tag.id" 
+                    :key="tag.id"
                     :style="{'background-color': tag.color}"></div>
                   </el-col>
                   <span v-if="fullTask.task.selected">
@@ -134,10 +134,10 @@
                     </span>
                   </span>
                 </el-row>
-                
-                
+
+
                 <!-- <span v-if="!fullTask.task.selected"> -->
-                
+
               </div>
             </div>
           </div>
@@ -153,18 +153,18 @@
             placeholder="新标签内容"
             ref="tagContent"
             v-if="newTagVisible"
-            v-model= "newTagInfo.content" 
+            v-model= "newTagInfo.content"
             v-focus
             @input="autoTextarea($event)"
             @click.stop=""
             @keyup.enter="addTag($event)"
             @blur="addTag()">
-          <div 
-            class="tag-item" 
+          <div
+            class="tag-item"
             :class="{'select': noTagSelect, 'focus': noTagFocus}"
             @mouseover="noTagActive = true"
             @mouseleave="noTagActive = false"
-            @click="selectNoTag()"  
+            @click="selectNoTag()"
           >
             <el-row >
               <el-col :span="5">
@@ -175,10 +175,10 @@
               </el-col>
             </el-row>
           </div>
-          <div 
-            class="tag-item" 
-            v-for="tag in tags" 
-            :key="tag.id" 
+          <div
+            class="tag-item"
+            v-for="tag in tags"
+            :key="tag.id"
             :class="{'select':tag.selected, 'focus': tag.focused}"
             @click.stop="selectTag(tag)"
             @dblclick="$set(tag, 'edited', true)"
@@ -194,12 +194,12 @@
                   <span class="tag-item-text text">{{ tag.content }}</span>
                 </el-col>
               </el-row>
-            
+
               <input
                 class="text"
                 ref="tagContent"
-                v-else 
-                v-model= "tag.content" 
+                v-else
+                v-model= "tag.content"
                 v-focus
                 @click.stop=""
                 @input="autoTextarea($event)"
@@ -217,7 +217,7 @@
       </el-col>
     </el-row>
 
-    <compact-picker 
+    <compact-picker
       v-if="colorPickerVisible"
       @input="pickColor"
       :value="currentTagColor"
@@ -767,11 +767,11 @@ export default {
     border-radius:4px;
 } */
 
-*{ 
+*{
  -webkit-touch-callout:none; /*系统默认菜单被禁用*/
  -webkit-user-select:none; /*webkit浏览器*/
- user-select:none; 
-} 
+ user-select:none;
+}
 
 i { cursor: pointer; }
 span {  word-wrap : break-word}
@@ -808,21 +808,22 @@ input::-webkit-input-placeholder {
 .container {
   padding: 0px 20px;
   position: absolute;
-  top: 20px;
-  height: 10px;
+  top: 30px;
+  background-color: #111
 }
 
-.task-list { 
-  height: 220px;
+.task-list {
+  height: 100%;
   overflow:auto;
   overflow-x:hidden;
+  background-color: #111
 }
 
 .task-list-item {
   margin: 4px 2px;
   color: #ddd;
   /* font-weight: bold; */
-  cursor: default; 
+  cursor: default;
   padding: 0px 4px;
   line-height: 17px;
 }
@@ -860,9 +861,10 @@ input::-webkit-input-placeholder {
 }
 
 .tag-list {
-  height: 220px;
+  height: 100%;
   overflow:auto;
   overflow-x:hidden;
+  background-color: #111
 }
 
 .tag-item {
@@ -870,7 +872,7 @@ input::-webkit-input-placeholder {
   padding-left: 2px;
   /* margin-top: 2px; */
   text-align:left;
-  cursor: default; 
+  cursor: default;
 }
 
 .tag-flag {
