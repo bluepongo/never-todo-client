@@ -126,13 +126,15 @@
                     :key="tag.id"
                     :style="{'background-color': tag.color}"></div>
                   </el-col>
-                  <span v-if="fullTask.task.selected">
-                    <span class="text">
-                      &nbsp;
-                      <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                      <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
+                  <div class="second-row">
+                    <span v-if="fullTask.task.selected">
+                      <span class="text">
+                        &nbsp;
+                        <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                        <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
+                      </span>
                     </span>
-                  </span>
+                  </div>
                 </el-row>
 
 
@@ -205,7 +207,7 @@
                 @input="autoTextarea($event)"
                 @keyup.enter="modifyTagContent(tag, $event)"
                 @blur="modifyTagContent(tag)">
-              <div>
+              <div class="second-row">
                 <span v-if="tag.edited"  class="text">
                   <i class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
                   <i class="el-icon-delete" @click.stop="deleteTag(tag)"></i>&nbsp;&nbsp;
@@ -921,6 +923,10 @@ input::-webkit-input-placeholder {
 
 .focus{
   background: rgba(0,100,100,0.6);
+}
+
+.second-row {
+  text-align: right;
 }
 
 compact-picker {
