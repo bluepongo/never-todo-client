@@ -97,7 +97,7 @@ function createWindow () {
     // 标题栏
     skipTaskbar: true,
     // 窗口置顶
-    alwaysOnTop: true,
+    alwaysOnTop: false,
 
     minWidth: 320,
     minHeight: 280,
@@ -136,6 +136,14 @@ function hideWindow () {
   if (mainWindow.isVisible()) mainWindow.hide()
 }
 
+function windowOnTop () {
+  if (mainWindow.isAlwaysOnTop()) {
+    mainWindow.setAlwaysOnTop(false)
+  } else {
+    mainWindow.setAlwaysOnTop(true)
+  }
+}
+
 ipcMain.on('setIgnoreMouseEvents', (event, ...args) => {
   BrowserWindow.fromWebContents(event.sender).setIgnoreMouseEvents(...args)
 })
@@ -146,4 +154,8 @@ ipcMain.on('hideWindow', event => {
 
 ipcMain.on('switchFlash', event => {
   hideWindow()
+})
+
+ipcMain.on('windowOnTop', event => {
+  windowOnTop()
 })

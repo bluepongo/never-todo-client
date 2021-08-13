@@ -3,14 +3,14 @@
     <div class="header">
       <b>{{ appName }}</b>
       <div class="toolkit">
-        <i class="el-icon-copy-document" @click=""></i>
+        <i class="el-icon-copy-document" @click="windowOnTop"></i>
         <i
           :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
           @mouseenter="mouseenter"
           @mouseleave="mouseleave"
           @click="ignoreMouse = !ignoreMouse"
         ></i>
-        <i class="el-icon-view" @click="hideWindow"></i>
+        <i class="el-icon-close" @click="hideWindow"></i>
       </div>
     </div>
     <div class="producers">
@@ -47,6 +47,9 @@ export default {
     mouseleave () {
       console.log('leave')
       ipcRenderer.send('setIgnoreMouseEvents', this.ignoreMouse, { forward: true })
+    },
+    windowOnTop () {
+      ipcRenderer.send('windowOnTop')
     }
   }
 }
