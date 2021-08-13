@@ -3,9 +3,14 @@
     <div class="header">
       <b>{{ appName }}</b>
       <div class="toolkit">
-        <i class="el-icon-copy-document" @click="windowOnTop"></i>
+        <i
+          class="el-icon-copy-document"
+          :style="notTop ? 'color: #505050' : 'color: #ffffff'"
+          @click="windowOnTop"
+        ></i>
         <i
           :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
+          :style="!ignoreMouse ? 'color: #ffffff' : 'color: #505050'"
           @mouseenter="mouseenter"
           @mouseleave="mouseleave"
           @click="ignoreMouse = !ignoreMouse"
@@ -29,7 +34,8 @@ export default {
   data () {
     return {
       appName: 'Never Todo',
-      ignoreMouse: false
+      ignoreMouse: false,
+      notTop: true
     }
   },
   methods: {
@@ -49,6 +55,7 @@ export default {
       ipcRenderer.send('setIgnoreMouseEvents', this.ignoreMouse, { forward: true })
     },
     windowOnTop () {
+      this.notTop = !this.notTop
       ipcRenderer.send('windowOnTop')
     }
   }
