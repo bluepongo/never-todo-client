@@ -99,8 +99,10 @@ function createWindow () {
     // 窗口置顶
     alwaysOnTop: true,
 
+    minWidth: 320,
+    minHeight: 280,
     height: 300,
-    width: 350,
+    width: 380,
 
     useContentSize: true,
     webPreferences: {

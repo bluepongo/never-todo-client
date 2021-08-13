@@ -808,7 +808,7 @@ input::-webkit-input-placeholder {
 .container {
   padding: 0px 20px;
   position: absolute;
-  top: 30px;
+  top: 40px;
   background-color: #111
 }
 

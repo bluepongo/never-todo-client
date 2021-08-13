@@ -2,18 +2,19 @@
   <div id="app" :class="{ unfocused: ignoreMouse }">
     <div class="header">
       <b>{{ appName }}</b>
-      <i>Powered by Zhy/Yc</i>
+      <div class="toolkit">
+        <i class="el-icon-copy-document" @click=""></i>
+        <i
+          :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
+          @mouseenter="mouseenter"
+          @mouseleave="mouseleave"
+          @click="ignoreMouse = !ignoreMouse"
+        ></i>
+        <i class="el-icon-view" @click="hideWindow"></i>
+      </div>
     </div>
-    <div class="tools">
-      <!-- <i class="el-icon-upload" key="export" @click="exportData"></i> -->
-      <i class="el-icon-view" @click="hideWindow"></i>
-      <i
-        :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
-        @mouseenter="mouseenter"
-        @mouseleave="mouseleave"
-        @click="ignoreMouse = !ignoreMouse"
-      ></i>
-      <i class="el-icon-copy-document" @click=""></i>
+    <div class="producers">
+      <i>Powered by Zhy/Yc</i>
     </div>
     <router-view></router-view>
   </div>
@@ -72,14 +73,14 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 30px;
-  padding: 2px 20px;
+  height: 40px;
+  padding: 2px 15px;
   box-sizing: border-box;
-  font-size: 14px;
-  color: rgba($color: #ffffff, $alpha: 0.3);
+  font-size: 15px;
+  color: #ffffff;
 }
 
-.tools {
+.producers {
   position: fixed;
   bottom: 0px;
   right: 0px;
@@ -91,7 +92,14 @@ export default {
   z-index: 99;
 }
 
-.tools i {
+.producers i {
+  font-size: 14px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: rgba($color: #ffffff, $alpha: 0.1);
+}
+
+.toolkit i {
   font-size: 18px;
   padding: 2px 5px;
   cursor: pointer;
