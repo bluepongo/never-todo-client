@@ -471,6 +471,7 @@ export default {
       }
     },
     handleAddTask () {
+      this.colorPickerVisible = false
       this.newTaskInfo = { id: 0, content: '', completed: false, deleted: false, important: false }
       this.newTaskVisible = true
       this.unselectAllTasks()
@@ -616,6 +617,7 @@ export default {
       }
     },
     handleAddTag () {
+      this.colorPickerVisible = false
       this.newTagInfo = { id: 0, content: '', color: '#AAAAAA', deleted: false }
       this.newTagVisible = true
       this.unselectAllTags()
@@ -631,7 +633,25 @@ export default {
         if (this.newTagInfo.content !== '') {
           this.newTagInfo.id = this.tagAutoIncVal
           this.tagAutoIncVal--
+          for (var ac = 0; ac < this.availableTagColors.length; ac++) {
+            var flag = 1
+            for (var ta = 0; ta < this.tags.length; ta++) {
+              if (!this.tags[ta].deleted && this.tags[ta].color === this.availableTagColorsName[ac]) {
+                flag = 0
+                break
+              }
+            }
+            if (flag === 1) {
+              this.newTagInfo.color = this.availableTagColors[ac]
+              break
+            }
+          }
           this.tags.push(this.newTagInfo)
+          for (var i = 0; i < this.availableTagColors.length; i++) {
+            if (this.newTagInfo.color === this.availableTagColors[i]) {
+              this.newTagInfo.color = this.availableTagColorsName[i]
+            }
+          }
           this.updateTag()
           this.recordLog({
             target: 'tags',
