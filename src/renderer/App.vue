@@ -110,6 +110,7 @@ export default {
 }
 
 .toolkit i {
+  -webkit-app-region: no-drag;
   font-size: 18px;
   padding: 2px 5px;
   cursor: pointer;
