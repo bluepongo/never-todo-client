@@ -46,7 +46,7 @@
                   <el-row v-if="!fullTask.task.selected">
                     <el-col :span="0"></el-col>
                     <el-col :span="24">
-                      <div class="task-dot-new" @click.stop="completeTask(fullTask.task)"></div>
+                      <div title="完成任务" class="task-dot-new" @click.stop="completeTask(fullTask.task)"></div>
                       <span :class="fullTask.task.important?'important-text':'text'"> {{ fullTask.task.content }}</span>
                       <span>
                         <div
@@ -141,7 +141,7 @@
                 <el-row >
                   <el-col :span="0"></el-col>
                   <el-col :span="24">
-                    <div class="task-dot-new" style="font-size: 10px; border-color: #7a797b;" @click.stop="uncompleteTask(fullTask.task)">
+                    <div title="取消完成任务" class="task-dot-new" style="font-size: 10px; border-color: #7a797b;" @click.stop="uncompleteTask(fullTask.task)">
                       <i class="el-icon-check"></i>
                     </div>
                     <span class="text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
@@ -155,7 +155,7 @@
                     <span v-if="fullTask.task.selected">
                       <span class="text">
                         &nbsp;
-                        <i title="重新设置任务为进行中" class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                        <i title="取消完成任务" class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>&nbsp;&nbsp;
                         <i title="删除任务" class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>
                       </span>
                     </span>
@@ -290,6 +290,12 @@ export default {
       assignedTags: [],
 
       pickColorTagId: '',
+      availableTagColorsName: [
+        'crimson', 'red', 'yellow',
+        'brown', 'green', 'cyan',
+        'sky', 'blue', 'purple',
+        'pink', 'grey', 'black'
+      ],
       availableTagColors: [
         '#FF0000', '#FF8000', '#FFFF00',
         '#804040', '#00FF80', '#00FFFF',
@@ -752,6 +758,11 @@ export default {
         if (this.tags[i].id === this.pickColorTagId) {
           this.tags[i].color = val.hex
           this.tags[i].edited = false
+          for (var j = 0; j < this.availableTagColors.length; j++) {
+            if (val.hex === this.availableTagColors[j]) {
+              console.log('current color is', this.availableTagColorsName[j])
+            }
+          }
           this.updateTag()
           this.recordLog({
             target: 'tags',
