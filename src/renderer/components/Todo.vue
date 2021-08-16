@@ -760,7 +760,7 @@ export default {
           this.tags[i].edited = false
           for (var j = 0; j < this.availableTagColors.length; j++) {
             if (val.hex === this.availableTagColors[j]) {
-              console.log('current color is', this.availableTagColorsName[j])
+              this.tags[i].color = this.availableTagColorsName[j]
             }
           }
           this.updateTag()
