@@ -1,21 +1,23 @@
 <template>
   <div id="app" :class="{ unfocused: ignoreMouse }">
     <div class="header">
-      <b>{{ appName }}</b>
+      <b title="「彩蛋 Powered by Zhy/Yc」">{{ appName }}</b>
       <div class="toolkit">
         <i
+          title="窗口始终至于顶层"
           class="el-icon-copy-document"
           :style="notTop ? 'color: #505050' : 'color: #ffffff'"
           @click="windowOnTop"
         ></i>
         <i
+          title="锁定窗口"
           :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
           :style="!ignoreMouse ? 'color: #ffffff' : 'color: #505050'"
           @mouseenter="mouseenter"
           @mouseleave="mouseleave"
           @click="ignoreMouse = !ignoreMouse"
         ></i>
-        <i class="el-icon-close" @click="hideWindow"></i>
+        <i title="关闭窗口" class="el-icon-close" @click="hideWindow"></i>
       </div>
     </div>
     <div class="producers">

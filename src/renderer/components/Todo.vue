@@ -9,7 +9,7 @@
       <el-col :span="16">
         <div>
           <span class="text">
-            <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5>
+            <h5>任务&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5>
 
           </span>
         </div>
@@ -68,39 +68,54 @@
                       @input="autoTextarea($event)"
                       @keyup.enter="modifyTaskContent(fullTask.task, $event)"
                       @blur="modifyTaskContent(fullTask.task)">
+                    <div>
                     <span class="text-small">
                      已选择：
                     </span>
                     <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
                       <span
+                        title="取消标签"
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
+                        style="margin-right: 4px;"
                         @click.stop="delTagForTask(fullTask.task.id, tag.id)"
                       >{{ tag.content }}</span>
                     </span>
+                    </div>
+                    <div>
                     <span class="text-small">
-                      <i class="el-icon-d-arrow-left"></i>
+                      <!-- <i class="el-icon-d-arrow-left"></i>
                       选择标签
-                      <i class="el-icon-d-arrow-right"></i>
+                      <i class="el-icon-d-arrow-right"></i> -->
+                      未选择：
                     </span>
                     <span class="text-small" v-for="tag in tags" :key="'right'+tag.id" >
                       <span
+                        title="选择标签"
                         v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
+                        style="margin-right: 4px;"
                         @click.stop="addTagForTask(fullTask.task.id, tag.id)"
                       >{{ tag.content }}</span>
                     </span>
+                    </div>
                   </div>
                 </div>
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
+                      <i
+                        title="将任务设为重要"
+                        :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'"
+                        @click.stop="switchImportance(fullTask.task)"
+                        @dblclick.stop=""
+                      ></i>&nbsp;&nbsp;
+
                     <i
-                      :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'"
-                      @click.stop="switchImportance(fullTask.task)"
-                      @dblclick.stop=""
-                    ></i>&nbsp;&nbsp;
-                    <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>
+                      title="删除任务"
+                      class="el-icon-delete"
+                      @click.stop="deleteTask(fullTask.task)"
+                    ></i>
                   </span>
                 </div>
               </div>
@@ -110,7 +125,7 @@
           <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
             <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
             <i v-else class="el-icon-arrow-down"></i>
-            <span class="text">已完成 </span>
+            <span class="text">已完成</span>
             <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
           </span>
           <div>
@@ -140,8 +155,8 @@
                     <span v-if="fullTask.task.selected">
                       <span class="text">
                         &nbsp;
-                        <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                        <i class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>
+                        <i title="重新设置任务为进行中" class="el-icon-refresh-left" @click.stop="uncompleteTask(fullTask.task)"></i>&nbsp;&nbsp;
+                        <i title="删除任务" class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>
                       </span>
                     </span>
                   </div>
@@ -158,7 +173,7 @@
       </el-col>
 
       <el-col :span="8">
-        <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
+        <div><span class="text"><h5>标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
         <div class="tag-list">
           <input
             class="text"
@@ -209,6 +224,7 @@
 
               <input
                 class="text"
+                style="font-size: 14px;"
                 ref="tagContent"
                 v-else
                 v-model= "tag.content"
@@ -219,8 +235,8 @@
                 @blur="modifyTagContent(tag)">
               <div class="second-row">
                 <span v-if="tag.edited"  class="text">
-                  <i class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
-                  <i class="el-icon-delete" @click.stop="deleteTag(tag)"></i>&nbsp;&nbsp;
+                  <i title="选择标签颜色" class="el-icon-brush" @click.stop="handlePickColor(tag)"></i>&nbsp;&nbsp;
+                  <i title="删除标签" class="el-icon-delete" @click.stop="deleteTag(tag)"></i>&nbsp;&nbsp;
                 </span>
               </div>
             </div>
