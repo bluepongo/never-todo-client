@@ -6,7 +6,7 @@
     @keyup.page-down="switchToNextSection"
   >
     <el-row>
-      <el-col :span="18">
+      <el-col :span="16">
         <div>
           <span class="text">
             <h5>任务&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5>
@@ -28,7 +28,7 @@
           <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
           <i v-if="todoTasksFolded" class="el-icon-arrow-right"></i>
           <i v-else class="el-icon-arrow-down"></i>
-          <span class="text">进行中 </span>
+          <span class="text">进行中</span>
           <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
           </span>
           <div>
@@ -44,8 +44,9 @@
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
                   <el-row v-if="!fullTask.task.selected">
-                    <el-col :span="2"><div  class="task-dot"></div></el-col>
-                    <el-col :span="22">
+                    <el-col :span="0"></el-col>
+                    <el-col :span="24">
+                      <div class="task-dot-new" @click.stop="completeTask(fullTask.task)"></div>
                       <span :class="fullTask.task.important?'important-text':'text'"> {{ fullTask.task.content }}</span>
                       <span>
                         <div
@@ -67,21 +68,28 @@
                       @input="autoTextarea($event)"
                       @keyup.enter="modifyTaskContent(fullTask.task, $event)"
                       @blur="modifyTaskContent(fullTask.task)">
+                    <span class="text-small">
+                     已选择：
+                    </span>
                     <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
                       <span
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
                         @click.stop="delTagForTask(fullTask.task.id, tag.id)"
-                      >{{ tag.content.charAt(0) }}</span>
+                      >{{ tag.content }}</span>
                     </span>
-                    <span class="text-small"> &nbsp;&lt;=&gt;&nbsp; </span>
+                    <span class="text-small">
+                      <i class="el-icon-d-arrow-left"></i>
+                      选择标签
+                      <i class="el-icon-d-arrow-right"></i>
+                    </span>
                     <span class="text-small" v-for="tag in tags" :key="'right'+tag.id" >
                       <span
                         v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
                         @click.stop="addTagForTask(fullTask.task.id, tag.id)"
-                      >{{ tag.content.charAt(0) }}</span>
+                      >{{ tag.content }}</span>
                     </span>
                   </div>
                 </div>
@@ -92,8 +100,7 @@
                       @click.stop="switchImportance(fullTask.task)"
                       @dblclick.stop=""
                     ></i>&nbsp;&nbsp;
-                    <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>&nbsp;&nbsp;
-                    <i class="el-icon-s-claim" @click.stop="completeTask(fullTask.task)"></i>
+                    <i class="el-icon-delete" @click.stop="deleteTask(fullTask.task)"></i>
                   </span>
                 </div>
               </div>
@@ -117,8 +124,11 @@
                 @dblclick.stop="uncompleteTask(fullTask.task)"
               >
                 <el-row >
-                  <el-col :span="2"><div class="task-dot" style="opacity: 0.5"></div></el-col>
-                  <el-col :span="22">
+                  <el-col :span="0"></el-col>
+                  <el-col :span="24">
+                    <div class="task-dot-new" style="font-size: 10px; border-color: #7a797b;" @click.stop="uncompleteTask(fullTask.task)">
+                      <i class="el-icon-check"></i>
+                    </div>
                     <span class="text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
                     <div
                     class="tag-dot"
@@ -147,7 +157,7 @@
         </div>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="8">
         <div><span class="text"><h5>标签&nbsp;<i class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
         <div class="tag-list">
           <input
@@ -169,11 +179,11 @@
             @click="selectNoTag()"
           >
             <el-row >
-              <el-col :span="5">
-                <span class="tag-flag" :style="{'background-color': '#FFFFFF'}"></span>
+              <el-col :span="0">
               </el-col>
-              <el-col :span="19">
-                <span class="tag-item-text text">全部</span>
+              <el-col :span="24">
+                <span class="tag-flag" :style="{'background-color': '#FFFFFF'}"></span>
+                <span class="tag-item-text text" style="font-size: 14px;">全部</span>
               </el-col>
             </el-row>
           </div>
@@ -189,11 +199,11 @@
               <!-- <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span> -->
               <!-- <colorPicker v-model="tag.color" /> -->
               <el-row v-if="!tag.edited">
-                <el-col :span="5">
-                  <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
+                <el-col :span="0">
                 </el-col>
-                <el-col :span="19">
-                  <span class="tag-item-text text">{{ tag.content }}</span>
+                <el-col :span="24">
+                  <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
+                  <span class="tag-item-text text" style="font-size: 14px;">{{ tag.content }}</span>
                 </el-col>
               </el-row>
 
@@ -839,6 +849,19 @@ input::-webkit-input-placeholder {
   background-color: #ddd;
 }
 
+.task-dot-new {
+  background-color: rgba(0,0,0,0.8);;
+  width: 15px;
+  height: 15px;
+  display: inline-flex;
+  border: 2px solid;
+  border-radius: 4px;
+  padding: 1px;
+  margin: 1px;
+  align-content: center;
+  vertical-align: middle;
+}
+
 .tag-dot {
   width: 8px;
   height: 8px;
@@ -852,14 +875,14 @@ input::-webkit-input-placeholder {
 .tag-icon {
   background-color: rgba(0,0,0,0.8);;
   min-width: 10px;
-  height: 19px;
-  display: inline-block;
+  height: 18px;
+  display: inline-flexbox;
   border: 2px solid;
   border-radius: 4px;
   padding: 1px;
   margin: 1px;
   align-content: center;
-  vertical-align:middle;
+  vertical-align: middle;
 }
 
 .tag-list {

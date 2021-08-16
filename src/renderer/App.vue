@@ -87,7 +87,7 @@ export default {
   padding: 2px 15px;
   box-sizing: border-box;
   font-size: 15px;
-  color: #ffffff;
+  color: #AAAAAA;
 }
 
 .producers {
@@ -106,7 +106,7 @@ export default {
   font-size: 14px;
   padding: 2px 5px;
   cursor: pointer;
-  color: rgba($color: #ffffff, $alpha: 0.1);
+  color: rgba($color: #AAAAAA, $alpha: 0.1);
 }
 
 .toolkit i {
@@ -114,6 +114,6 @@ export default {
   font-size: 18px;
   padding: 2px 5px;
   cursor: pointer;
-  color: #ffffff;
+  color: #AAAAAA;
 }
 </style>
