@@ -647,6 +647,7 @@ export default {
             }
           }
           this.tags.push(this.newTagInfo)
+          var colorCode = this.newTagInfo.color
           for (var i = 0; i < this.availableTagColors.length; i++) {
             if (this.newTagInfo.color === this.availableTagColors[i]) {
               this.newTagInfo.color = this.availableTagColorsName[i]
@@ -659,6 +660,7 @@ export default {
             data: this.newTagInfo,
             flag: ''
           })
+          this.newTagInfo.color = colorCode
         }
         this.cancelAddTag()
       }
@@ -790,6 +792,7 @@ export default {
             data: this.standardizeTag(this.tags[i]),
             flag: ''
           })
+          this.tags[i].color = val.hex
           break
         }
       }
