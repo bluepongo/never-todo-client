@@ -128,6 +128,17 @@ export function createTray (showWindow) {
       }
     },
     {
+      label: '主题换肤',
+      submenu: [
+        {
+          label: '暗黑深色'
+        },
+        {
+          label: '明亮浅色'
+        }
+      ]
+    },
+    {
       label: '项目地址',
       click: () => {
         shell.openExternal('https://github.com/bluepongo/never-todo-client')

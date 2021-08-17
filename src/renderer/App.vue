@@ -12,10 +12,10 @@
         <i
           title="锁定窗口"
           :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
-          :style="!ignoreMouse ? 'color: #ffffff' : 'color: #505050'"
+          :style="locklight ? 'color: #ffffff' : 'color: #505050'"
           @mouseenter="mouseenter"
           @mouseleave="mouseleave"
-          @click="ignoreMouse = !ignoreMouse"
+          @click="lock"
         ></i>
         <i title="关闭窗口" class="el-icon-close" @click="hideWindow"></i>
       </div>
@@ -37,7 +37,8 @@ export default {
     return {
       appName: 'Never Todo',
       ignoreMouse: false,
-      notTop: true
+      notTop: true,
+      locklight: false
     }
   },
   methods: {
@@ -59,6 +60,12 @@ export default {
     windowOnTop () {
       this.notTop = !this.notTop
       ipcRenderer.send('windowOnTop')
+    },
+    lock () {
+      if (!this.notTop) {
+        this.ignoreMouse = !this.ignoreMouse
+        this.locklight = !this.locklight
+      }
     }
   }
 }
@@ -76,7 +83,7 @@ export default {
   border-radius: 5px;
 }
 #app.unfocused {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .header {
