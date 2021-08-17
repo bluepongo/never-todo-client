@@ -1,6 +1,7 @@
 <template>
   <div
     class="container"
+    :style="theme ? 'background-color: #111' : 'background-color: #fff'"
     id="Task"
     @click="resetAllState"
     @keyup.page-down="switchToNextSection"
@@ -46,7 +47,7 @@
                   <el-row v-if="!fullTask.task.selected">
                     <el-col :span="0"></el-col>
                     <el-col :span="24">
-                      <div title="完成任务" class="task-dot-new" @click.stop="completeTask(fullTask.task)"></div>
+                      <div title="完成任务" class="task-dot" @click.stop="completeTask(fullTask.task)"></div>
                       <span :class="fullTask.task.important?'important-text':'text'"> {{ fullTask.task.content }}</span>
                       <span>
                         <div
@@ -141,7 +142,7 @@
                 <el-row >
                   <el-col :span="0"></el-col>
                   <el-col :span="24">
-                    <div title="取消完成任务" class="task-dot-new" style="font-size: 10px; border-color: #7a797b;" @click.stop="uncompleteTask(fullTask.task)">
+                    <div title="取消完成任务" class="task-dot"  @click.stop="uncompleteTask(fullTask.task)">
                       <i class="el-icon-check"></i>
                     </div>
                     <span class="text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
@@ -269,8 +270,10 @@ export default {
     return {
       filePath: '',
 
-      focusTarget: 'todo',
+      // true暗黑，false明亮
+      theme: false,
 
+      focusTarget: 'todo',
       tasks: [],
       taskAutoIncVal: -1,
       newTaskVisible: false,
@@ -807,6 +810,8 @@ export default {
 </script>
 
 <style>
+
+// 深色主题
 ::-webkit-scrollbar-track-piece{
     background-color:#000000;
     border-radius:0;
@@ -891,16 +896,8 @@ input::-webkit-input-placeholder {
 }
 
 .task-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 1px;
-  background-color: #ddd;
-}
-
-.task-dot-new {
   background-color: rgba(0,0,0,0.8);;
+  border-color: #7a797b;
   width: 15px;
   height: 15px;
   display: inline-flex;
@@ -908,6 +905,7 @@ input::-webkit-input-placeholder {
   border-radius: 4px;
   padding: 1px;
   margin: 1px;
+  font-size: 10px;
   align-content: center;
   vertical-align: middle;
 }
@@ -1006,5 +1004,4 @@ compact-picker {
   position: absolute;
   bottom: 0px;
 }
-
 </style>

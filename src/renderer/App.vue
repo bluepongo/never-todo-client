@@ -1,8 +1,8 @@
 <template>
-  <div id="app" :class="{ unfocused: ignoreMouse }">
-    <div class="header">
+  <div id="app-light" :class="{ unfocused: ignoreMouse }">
+    <div class="header-light">
       <b title="「彩蛋 Powered by Zhy/Yc」">{{ appName }}</b>
-      <div class="toolkit">
+      <div class="toolkit-light">
         <i
           title="窗口始终至于顶层"
           class="el-icon-copy-document"
@@ -10,7 +10,7 @@
           @click="windowOnTop"
         ></i>
         <i
-          title="锁定窗口"
+          title="锁定窗口(窗口置顶时可用)"
           :class="ignoreMouse ? 'el-icon-lock' : 'el-icon-unlock'"
           :style="locklight ? 'color: #ffffff' : 'color: #505050'"
           @mouseenter="mouseenter"
@@ -20,7 +20,7 @@
         <i title="关闭窗口" class="el-icon-close" @click="hideWindow"></i>
       </div>
     </div>
-    <div class="producers">
+    <div class="producers-light">
       <i>Powered by Zhy/Yc</i>
     </div>
     <router-view></router-view>
@@ -38,7 +38,9 @@ export default {
       appName: 'Never Todo',
       ignoreMouse: false,
       notTop: true,
-      locklight: false
+      locklight: false,
+      // true暗黑，false明亮
+      theme: false
     }
   },
   methods: {
@@ -72,6 +74,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+// 深色主题
 #app {
   display: flex;
   flex-direction: column;
@@ -124,5 +128,61 @@ export default {
   padding: 2px 5px;
   cursor: pointer;
   color: #AAAAAA;
+}
+
+// 浅色主题
+#app-light {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #ffffff, $alpha: 1);
+  opacity: 0.8;
+
+  border-radius: 5px;
+}
+
+#app-light.unfocused {
+  opacity: 0.6;
+}
+
+.header-light {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 2px 15px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #111;
+}
+
+.producers-light {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  z-index: 99;
+}
+
+.producers-light i {
+  font-size: 14px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: rgba($color: #111, $alpha: 0.2);
+}
+
+.toolkit-light i {
+  -webkit-app-region: no-drag;
+  font-size: 18px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: #111;
 }
 </style>
