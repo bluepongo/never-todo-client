@@ -198,6 +198,67 @@ export function createTray (showWindow) {
       ]
     },
     {
+      label: '不透明度',
+      submenu: [
+        {
+          label: '100%',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('opacity', '100').write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
+        },
+        {
+          label: '80%',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('opacity', '80').write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
+        },
+        {
+          label: '60%',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('opacity', '60').write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
+        },
+        {
+          label: '40%',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('opacity', '40').write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
+        }
+      ]
+    },
+    {
       label: '项目地址',
       click: () => {
         shell.openExternal('https://github.com/bluepongo/never-todo-client')

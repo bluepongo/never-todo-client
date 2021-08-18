@@ -1,5 +1,5 @@
 <template>
-  <div :id=theme.app :class="{ unfocused: ignoreMouse }">
+  <div :id=theme.app :class="{ unfocused: ignoreMouse }" :style=theme.opacity>
     <div :class=theme.header>
       <b title="「彩蛋 Powered by Zhy/Yc」">{{ appName }}</b>
       <div :class=theme.toolkit>
@@ -45,7 +45,8 @@ export default {
         app: '',
         header: '',
         toolkit: '',
-        producers: ''
+        producers: '',
+        opacity: '60'
       }
     }
   },
@@ -72,8 +73,11 @@ export default {
     initData () {
       // By Lowdb database
       let theme = db.read().get('theme').value()
+      let opacity = db.read().get('opacity').value()
       this.theme.style = theme
+      this.theme.opacity = opacity
       this.switchTheme()
+      this.switchOpacity()
     },
     switchTheme () {
       switch (this.theme.style) {
@@ -100,6 +104,24 @@ export default {
           this.theme.header = 'header-green'
           this.theme.toolkit = 'toolkit-green'
           this.theme.producers = 'producers-green'
+          break
+      }
+    },
+    switchOpacity () {
+      console.log(this.theme.opacity)
+      switch (this.theme.opacity) {
+        case '100':
+          console.log('200100')
+          this.theme.opacity = 'opacity: 1'
+          break
+        case '80':
+          this.theme.opacity = 'opacity: 0.9'
+          break
+        case '60':
+          this.theme.opacity = 'opacity: 0.8'
+          break
+        case '40':
+          this.theme.opacity = 'opacity: 0.7'
           break
       }
     },
@@ -268,7 +290,7 @@ export default {
   padding: 2px 15px;
   box-sizing: border-box;
   font-size: 15px;
-  color: #fff;
+  color: #444;
 }
 
 .producers-pink {
@@ -287,7 +309,7 @@ export default {
   font-size: 14px;
   padding: 2px 5px;
   cursor: pointer;
-  color: rgba($color: #fff, $alpha: 0.3);
+  color: rgba($color: #444, $alpha: 0.3);
 }
 
 .toolkit-pink i {
@@ -324,7 +346,7 @@ export default {
   padding: 2px 15px;
   box-sizing: border-box;
   font-size: 15px;
-  color: #fff;
+  color: #444;
 }
 
 .producers-green {
@@ -343,7 +365,7 @@ export default {
   font-size: 14px;
   padding: 2px 5px;
   cursor: pointer;
-  color: rgba($color: #fff, $alpha: 0.3);
+  color: rgba($color: #444, $alpha: 0.2);
 }
 
 .toolkit-green i {
