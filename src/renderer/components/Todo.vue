@@ -959,6 +959,7 @@ input::-webkit-input-placeholder {
   margin: 4px 2px;
   color: #ddd;
   /* font-weight: bold; */
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   cursor: default;
   padding: 0px 4px;
   line-height: 17px;
@@ -1013,6 +1014,7 @@ input::-webkit-input-placeholder {
   opacity: 1;
   padding-left: 2px;
   /* margin-top: 2px; */
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   text-align:left;
   cursor: default;
 }
