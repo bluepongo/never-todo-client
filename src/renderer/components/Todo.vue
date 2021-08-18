@@ -274,7 +274,7 @@ export default {
       filePath: '',
 
       theme: {
-        style: 'light',
+        style: 'dark',
         container: '',
         taskList: '',
         taskListItem: '',
@@ -471,6 +471,7 @@ export default {
       // By Lowdb database
       let data = db.read().get('data').value()
       let theme = db.read().get('theme').value()
+      if (!theme) theme = 'dark'
       this.filePath = db.read().get('path').value()
       // 初始化待办/标签数据
       this.tasks = data.tasks
@@ -1042,7 +1043,7 @@ input::-webkit-input-placeholder {
 }
 
 .important-text {
-  color: rgb(247, 166, 90);
+  color: rgb(252, 124, 57);
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   cursor: default;
 }

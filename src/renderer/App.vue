@@ -41,7 +41,7 @@ export default {
       notTop: false,
       locklight: false,
       theme: {
-        style: 'pink',
+        style: 'dark',
         app: '',
         header: '',
         toolkit: '',
@@ -73,7 +73,9 @@ export default {
     initData () {
       // By Lowdb database
       let theme = db.read().get('theme').value()
+      if (!theme) theme = 'dark'
       let opacity = db.read().get('opacity').value()
+      if (!opacity) opacity = '60'
       this.theme.style = theme
       this.theme.opacity = opacity
       this.switchTheme()
