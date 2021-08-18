@@ -58,75 +58,80 @@ export function createTray (showWindow) {
 
     {
       label: '数据文件',
-      click: () => {
-        console.log(filePath)
-        shell.openItem(
-          filePath
-        )
-      }
-    },
-    {
-      label: '导出数据',
-      click: () => {
-        dialog.showSaveDialog({
-          filters: [
-            {
-              name: '数据文件',
-              extensions: ['json'] // 文件后缀名类型， 如md
-            }
-          ],
-          defaultPath: path.join(STORE_PATH, '/export.json'),
-          title: '导出数据'
-        }, result => {
-          if (!result) {
-            return
+      submenu: [
+        {
+          label: '查看文件',
+          click: () => {
+            console.log(filePath)
+            shell.openItem(
+              filePath
+            )
           }
-          // 将db中的data导出至文件中
-          let str = JSON.stringify({
-            data: db.read().get('data').value(),
-            log: db.read().get('log').value()
-          })
-          fs.writeFileSync(result, str, 'utf8')
-        })
-      }
-    },
-    {
-      label: '导入数据',
-      click: () => {
-        dialog.showOpenDialog({
-          properties: ['openFile'],
-          title: '导入数据',
-          filters: [
-            {
-              name: '数据文件',
-              extensions: ['json']
-            }
-          ]}, result => {
-          if (!result) {
-            return
-          }
-          readFile(result[0], 'utf-8', function (err, jsonStr) {
-            if (err) {
-              dialog.showErrorBox('导入数据失败', '无法打开所选文件')
-            } else {
-              let data = JSON.parse(jsonStr)
-              if (validateData(data)) {
-                if (judgeOldData(data)) {
-                  data.data.log = data.log
+        },
+        {
+          label: '导出数据',
+          click: () => {
+            dialog.showSaveDialog({
+              filters: [
+                {
+                  name: '数据文件',
+                  extensions: ['json'] // 文件后缀名类型， 如md
                 }
-                // 仅将对象中的data和log属性导入
-                db.read().set('data', data.data).write()
-                db.read().set('log', data.log).write()
-                // 设置需要进行数据更新
-                db.read().set('initRun', true).write()
-                db.read().set('update', true).write()
-              } else {
-                dialog.showErrorBox('导入数据失败', '所选文件包含无效数据')
+              ],
+              defaultPath: path.join(STORE_PATH, '/export.json'),
+              title: '导出数据'
+            }, result => {
+              if (!result) {
+                return
               }
-            }
-          })
-        })
-      }
+              // 将db中的data导出至文件中
+              let str = JSON.stringify({
+                data: db.read().get('data').value(),
+                log: db.read().get('log').value()
+              })
+              fs.writeFileSync(result, str, 'utf8')
+            })
+          }
+        },
+        {
+          label: '导入数据',
+          click: () => {
+            dialog.showOpenDialog({
+              properties: ['openFile'],
+              title: '导入数据',
+              filters: [
+                {
+                  name: '数据文件',
+                  extensions: ['json']
+                }
+              ]}, result => {
+              if (!result) {
+                return
+              }
+              readFile(result[0], 'utf-8', function (err, jsonStr) {
+                if (err) {
+                  dialog.showErrorBox('导入数据失败', '无法打开所选文件')
+                } else {
+                  let data = JSON.parse(jsonStr)
+                  if (validateData(data)) {
+                    if (judgeOldData(data)) {
+                      data.data.log = data.log
+                    }
+                    // 仅将对象中的data和log属性导入
+                    db.read().set('data', data.data).write()
+                    db.read().set('log', data.log).write()
+                    // 设置需要进行数据更新
+                    db.read().set('initRun', true).write()
+                    db.read().set('update', true).write()
+                  } else {
+                    dialog.showErrorBox('导入数据失败', '所选文件包含无效数据')
+                  }
+                }
+              })
+            })
+          }
+        }
+      ]
     },
     {
       label: '主题换肤',
