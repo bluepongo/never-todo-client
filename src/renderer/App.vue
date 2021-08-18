@@ -31,6 +31,7 @@
 
 <script>
 import { ipcRenderer } from 'electron'
+import db from '@/utils/db'
 
 export default {
   data () {
@@ -49,12 +50,32 @@ export default {
     }
   },
   mounted () {
-    this.switchTheme()
+    this.initData()
+    this.timer()
   },
   methods: {
     // exportData () {
     //   ipcRenderer.invoke('exportData')
     // },
+    timer () {
+      return setInterval(() => {
+        this.checkDataUpdate()
+      }, 1000)
+    },
+    checkDataUpdate () {
+      let updateFlag = db.read().get('updateApp').value()
+      if (updateFlag) {
+        this.initData()
+        db.read().set('updateApp', false).write()
+      }
+    },
+    initData () {
+      // By Lowdb database
+      let theme = db.read().get('theme').value()
+      this.theme.style = theme
+      console.log(theme)
+      this.switchTheme()
+    },
     switchTheme () {
       switch (this.theme.style) {
         case 'dark':

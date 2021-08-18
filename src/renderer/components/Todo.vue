@@ -402,7 +402,6 @@ export default {
   mounted () {
     this.initData()
     this.timer()
-    this.switchTheme()
   },
   destroyed () {
     clearInterval(this.timer) // 退出页面后销毁定时方法
@@ -444,6 +443,7 @@ export default {
     initData () {
       // By Lowdb database
       let data = db.read().get('data').value()
+      let theme = db.read().get('theme').value()
       this.filePath = db.read().get('path').value()
       // 初始化待办/标签数据
       this.tasks = data.tasks
@@ -451,8 +451,10 @@ export default {
       this.taskTags = data.task_tags
       this.taskAutoIncVal = data.taskAutoIncVal
       this.tagAutoIncVal = data.tagAutoIncVal
+      this.theme.style = theme
       this.unselectAllTasks()
       this.unselectAllTags()
+      this.switchTheme()
     },
 
     checkDataUpdate () {
