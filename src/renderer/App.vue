@@ -1,8 +1,8 @@
 <template>
-  <div :id=theme.app :class="{ unfocused: ignoreMouse }" :style=theme.opacity>
-    <div :class=theme.header>
+  <div :id="theme.app" :class="{ unfocused: ignoreMouse }" :style="theme.opacity">
+    <div :class="theme.header">
       <b title="「彩蛋 Powered by Zhy/Yc」">{{ appName }}</b>
-      <div :class=theme.toolkit>
+      <div :class="theme.toolkit">
         <i
           title="窗口始终至于顶层"
           class="el-icon-copy-document"
@@ -20,7 +20,7 @@
         <i title="关闭窗口" class="el-icon-close" @click="hideWindow"></i>
       </div>
     </div>
-    <div :class=theme.producers :style="">
+    <div :class="theme.producers">
       <i>Powered by Zhy/Yc</i>
     </div>
     <router-view></router-view>
@@ -271,7 +271,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgba($color: #ffb6fb, $alpha: 1);
+  background-color: rgba($color: #ffbbf9, $alpha: 1);
   opacity: 0.8;
 
   border-radius: 5px;

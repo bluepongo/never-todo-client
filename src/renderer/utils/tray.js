@@ -166,7 +166,7 @@ export function createTray (showWindow) {
           }
         },
         {
-          label: '少女粉色',
+          label: '樱花粉色',
           click: () => {
             readFile(filePath, 'utf-8', function (err, jsonStr) {
               if (err) {
