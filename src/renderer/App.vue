@@ -41,7 +41,7 @@ export default {
       notTop: false,
       locklight: false,
       theme: {
-        style: 'light',
+        style: 'pink',
         app: '',
         header: '',
         toolkit: '',
@@ -73,7 +73,6 @@ export default {
       // By Lowdb database
       let theme = db.read().get('theme').value()
       this.theme.style = theme
-      console.log(theme)
       this.switchTheme()
     },
     switchTheme () {
@@ -89,6 +88,18 @@ export default {
           this.theme.header = 'header-light'
           this.theme.toolkit = 'toolkit-light'
           this.theme.producers = 'producers-light'
+          break
+        case 'pink':
+          this.theme.app = 'app-pink'
+          this.theme.header = 'header-pink'
+          this.theme.toolkit = 'toolkit-pink'
+          this.theme.producers = 'producers-pink'
+          break
+        case 'green':
+          this.theme.app = 'app-green'
+          this.theme.header = 'header-green'
+          this.theme.toolkit = 'toolkit-green'
+          this.theme.producers = 'producers-green'
           break
       }
     },
@@ -120,7 +131,7 @@ export default {
 
 <style lang="scss" scoped>
 
-// 深色主题
+/* 深色主题 */
 #app {
   display: flex;
   flex-direction: column;
@@ -175,7 +186,7 @@ export default {
   color: #AAAAAA;
 }
 
-// 浅色主题
+/* 浅色主题 */
 #app-light {
   display: flex;
   flex-direction: column;
@@ -224,6 +235,118 @@ export default {
 }
 
 .toolkit-light i {
+  -webkit-app-region: no-drag;
+  font-size: 18px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: #444;
+}
+
+/* 粉色主题 */
+#app-pink {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #ffb6fb, $alpha: 1);
+  opacity: 0.8;
+
+  border-radius: 5px;
+}
+
+#app-pink.unfocused {
+  opacity: 0.6;
+}
+
+.header-pink {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 2px 15px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #fff;
+}
+
+.producers-pink {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  z-index: 99;
+}
+
+.producers-pink i {
+  font-size: 14px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: rgba($color: #fff, $alpha: 0.3);
+}
+
+.toolkit-pink i {
+  -webkit-app-region: no-drag;
+  font-size: 18px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: #444;
+}
+
+/* 绿色主题 */
+#app-green {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #40e2c1, $alpha: 1);
+  opacity: 0.8;
+
+  border-radius: 5px;
+}
+
+#app-green.unfocused {
+  opacity: 0.6;
+}
+
+.header-green {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 2px 15px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #fff;
+}
+
+.producers-green {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  z-index: 99;
+}
+
+.producers-green i {
+  font-size: 14px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: rgba($color: #fff, $alpha: 0.3);
+}
+
+.toolkit-green i {
   -webkit-app-region: no-drag;
   font-size: 18px;
   padding: 2px 5px;

@@ -164,6 +164,36 @@ export function createTray (showWindow) {
               }
             })
           }
+        },
+        {
+          label: '猛男粉色',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('theme', 'pink').write()
+                db.read().set('update', true).write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
+        },
+        {
+          label: '夏日绿色',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('theme', 'green').write()
+                db.read().set('update', true).write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
         }
       ]
     },

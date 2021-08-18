@@ -144,7 +144,7 @@
                   <el-col :span="0"></el-col>
                   <el-col :span="24">
                     <div title="取消完成任务" class="task-dot" :style=theme.taskDot @click.stop="uncompleteTask(fullTask.task)">
-                      <i class="el-icon-check"></i>
+                      <i class="el-icon-check" :style=theme.dotTick></i>
                     </div>
                     <span :class=theme.text style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
                     <div
@@ -283,7 +283,8 @@ export default {
         textSmall: '',
         tagList: '',
         tagItemText: '',
-        allTag: ''
+        allTag: '',
+        dotTick: ''
       },
 
       focusTarget: 'todo',
@@ -419,6 +420,7 @@ export default {
           this.theme.tagList = 'background-color: #111'
           this.theme.tagItemText = 'color: #ddd'
           this.theme.allTag = 'background-color: #FFFFFF'
+          this.theme.dotTick = 'color: #ddd'
           break
         case 'light':
           this.theme.container = 'background-color: #ddd'
@@ -430,6 +432,31 @@ export default {
           this.theme.tagList = 'background-color: #ddd'
           this.theme.tagItemText = 'color: #444'
           this.theme.allTag = 'background-color: #444'
+          this.theme.dotTick = 'color: #444'
+          break
+        case 'pink':
+          this.theme.container = 'background-color: #ffb6fb'
+          this.theme.taskList = 'background-color: #ffb6fb'
+          this.theme.taskListItem = 'color: #fff'
+          this.theme.taskDot = 'background-color: rgba(251, 129, 243, 1.0); border-color: #444;'
+          this.theme.text = 'color: #fff'
+          this.theme.textSmall = 'text-small'
+          this.theme.tagList = 'background-color: #ffb6fb'
+          this.theme.tagItemText = 'color: #fff'
+          this.theme.allTag = 'background-color: #fff'
+          this.theme.dotTick = 'color: #444'
+          break
+        case 'green':
+          this.theme.container = 'background-color: #40e2c1'
+          this.theme.taskList = 'background-color: #40e2c1'
+          this.theme.taskListItem = 'color: #fff'
+          this.theme.taskDot = 'background-color: rgba(129, 244, 189, 1.0); border-color: #444;'
+          this.theme.text = 'color: #fff'
+          this.theme.textSmall = 'text-small'
+          this.theme.tagList = 'background-color: #40e2c1'
+          this.theme.tagItemText = 'color: #fff'
+          this.theme.allTag = 'background-color: #fff'
+          this.theme.dotTick = 'color: #444'
           break
       }
     },
