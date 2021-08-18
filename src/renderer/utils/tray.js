@@ -138,7 +138,6 @@ export function createTray (showWindow) {
         {
           label: '暗黑深色',
           click: () => {
-            console.log('dark')
             readFile(filePath, 'utf-8', function (err, jsonStr) {
               if (err) {
                 dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
@@ -147,7 +146,6 @@ export function createTray (showWindow) {
                 db.read().set('theme', 'dark').write()
                 db.read().set('update', true).write()
                 db.read().set('updateApp', true).write()
-                console.log('修改主题为深色')
               }
             })
           }
@@ -155,7 +153,6 @@ export function createTray (showWindow) {
         {
           label: '明亮浅色',
           click: () => {
-            console.log('light')
             readFile(filePath, 'utf-8', function (err, jsonStr) {
               if (err) {
                 dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
@@ -164,7 +161,6 @@ export function createTray (showWindow) {
                 db.read().set('theme', 'light').write()
                 db.read().set('update', true).write()
                 db.read().set('updateApp', true).write()
-                console.log('修改主题为浅色')
               }
             })
           }
