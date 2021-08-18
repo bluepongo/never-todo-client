@@ -59,7 +59,8 @@ export function createTray (showWindow) {
     {
       label: '数据文件',
       click: () => {
-        shell.openExternal(
+        console.log(filePath)
+        shell.openItem(
           filePath
         )
       }
@@ -131,10 +132,16 @@ export function createTray (showWindow) {
       label: '主题换肤',
       submenu: [
         {
-          label: '暗黑深色'
+          label: '暗黑深色',
+          click: () => {
+            console.log('dark')
+          }
         },
         {
-          label: '明亮浅色'
+          label: '明亮浅色',
+          click: () => {
+            console.log('light')
+          }
         }
       ]
     },

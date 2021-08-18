@@ -1,7 +1,7 @@
 <template>
   <div
     class="container"
-    :style="theme ? 'background-color: #111' : 'background-color: #fff'"
+    :style=theme.container
     id="Task"
     @click="resetAllState"
     @keyup.page-down="switchToNextSection"
@@ -9,15 +9,16 @@
     <el-row>
       <el-col :span="16">
         <div>
-          <span class="text">
+          <span class="text" :style=theme.text>
             <h5>任务&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5>
 
           </span>
         </div>
 
-        <div class="task-list">
+        <div class="task-list" :style=theme.taskList>
           <input
             class="text"
+            :style=theme.text
             placeholder="请输入新任务内容"
             ref="taskContent"
             v-if="newTaskVisible"
@@ -26,16 +27,17 @@
             @input="autoTextarea($event)"
             @keyup.enter="addTask($event)"
             @blur="addTask()">
-          <span class="text" @click.stop="todoTasksFolded = !todoTasksFolded">
+          <span class="text" :style=theme.text @click.stop="todoTasksFolded = !todoTasksFolded">
           <i v-if="todoTasksFolded" class="el-icon-arrow-right"></i>
           <i v-else class="el-icon-arrow-down"></i>
-          <span class="text">进行中</span>
+          <span :class=theme.text>进行中</span>
           <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
           </span>
           <div>
             <div v-if="!todoTasksFolded">
               <div
                 class="task-list-item"
+                :style=theme.taskListItem
                 v-for="fullTask in todoFullTasks"
                 :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
@@ -47,8 +49,8 @@
                   <el-row v-if="!fullTask.task.selected">
                     <el-col :span="0"></el-col>
                     <el-col :span="24">
-                      <div title="完成任务" class="task-dot" @click.stop="completeTask(fullTask.task)"></div>
-                      <span :class="fullTask.task.important?'important-text':'text'"> {{ fullTask.task.content }}</span>
+                      <div title="完成任务" class="task-dot" :style=theme.taskDot @click.stop="completeTask(fullTask.task)"></div>
+                      <span :class="fullTask.task.important?'important-text':theme.text"> {{ fullTask.task.content }}</span>
                       <span>
                         <div
                           class="tag-dot"
@@ -62,6 +64,7 @@
                   <div v-else>
                     <input
                       class="text"
+                      :style=theme.text
                       ref="taskContent"
                       v-model= "fullTask.task.content"
                       v-focus
@@ -70,7 +73,7 @@
                       @keyup.enter="modifyTaskContent(fullTask.task, $event)"
                       @blur="modifyTaskContent(fullTask.task)">
                     <div>
-                    <span class="text-small">
+                    <span :class=theme.textSmall>
                      已选择：
                     </span>
                     <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
@@ -84,10 +87,7 @@
                     </span>
                     </div>
                     <div>
-                    <span class="text-small">
-                      <!-- <i class="el-icon-d-arrow-left"></i>
-                      选择标签
-                      <i class="el-icon-d-arrow-right"></i> -->
+                    <span :class=theme.textSmall>
                       未选择：
                     </span>
                     <span class="text-small" v-for="tag in tags" :key="'right'+tag.id" >
@@ -123,16 +123,17 @@
             </div>
           </div>
 
-          <span class="text" @click.stop="doneTasksFolded = !doneTasksFolded">
+          <span class="text" :style=theme.text @click.stop="doneTasksFolded = !doneTasksFolded">
             <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
             <i v-else class="el-icon-arrow-down"></i>
-            <span class="text">已完成</span>
+            <span class="text" :style=theme.text>已完成</span>
             <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
           </span>
           <div>
             <div v-if="!doneTasksFolded">
               <div
                 class="task-list-item"
+                :style=theme.taskListItem
                 v-for="fullTask in doneFullTasks"
                 :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
@@ -142,10 +143,10 @@
                 <el-row >
                   <el-col :span="0"></el-col>
                   <el-col :span="24">
-                    <div title="取消完成任务" class="task-dot"  @click.stop="uncompleteTask(fullTask.task)">
+                    <div title="取消完成任务" class="task-dot" :style=theme.taskDot @click.stop="uncompleteTask(fullTask.task)">
                       <i class="el-icon-check"></i>
                     </div>
-                    <span class="text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
+                    <span :class=theme.text style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
                     <div
                     class="tag-dot"
                     v-for="tag in fullTask.tags"
@@ -174,10 +175,11 @@
       </el-col>
 
       <el-col :span="8">
-        <div><span class="text"><h5>标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
-        <div class="tag-list">
+        <div><span class="text" :style=theme.text><h5>标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
+        <div class="tag-list" :style=theme.tagList>
           <input
             class="text"
+            :style=theme.text
             placeholder="新标签内容"
             ref="tagContent"
             v-if="newTagVisible"
@@ -198,8 +200,8 @@
               <el-col :span="0">
               </el-col>
               <el-col :span="24">
-                <span class="tag-flag" :style="{'background-color': '#FFFFFF'}"></span>
-                <span class="tag-item-text text" style="font-size: 14px;">全部</span>
+                <span class="tag-flag" :style=theme.allTag></span>
+                <span class="tag-item-text text" :style=theme.tagItemText>全部</span>
               </el-col>
             </el-row>
           </div>
@@ -219,12 +221,13 @@
                 </el-col>
                 <el-col :span="24">
                   <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
-                  <span class="tag-item-text text" style="font-size: 14px;">{{ tag.content }}</span>
+                  <span class="tag-item-text text" :style=theme.tagItemText>{{ tag.content }}</span>
                 </el-col>
               </el-row>
 
               <input
                 class="text"
+                :style=theme.text
                 style="font-size: 14px;"
                 ref="tagContent"
                 v-else
@@ -270,8 +273,18 @@ export default {
     return {
       filePath: '',
 
-      // true暗黑，false明亮
-      theme: false,
+      theme: {
+        style: 'light',
+        container: '',
+        taskList: '',
+        taskListItem: '',
+        taskDot: '',
+        text: '',
+        textSmall: '',
+        tagList: '',
+        tagItemText: '',
+        allTag: ''
+      },
 
       focusTarget: 'todo',
       tasks: [],
@@ -389,11 +402,39 @@ export default {
   mounted () {
     this.initData()
     this.timer()
+    this.switchTheme()
   },
   destroyed () {
     clearInterval(this.timer) // 退出页面后销毁定时方法
   },
   methods: {
+    switchTheme () {
+      switch (this.theme.style) {
+        case 'dark':
+          this.theme.container = 'background-color: #111'
+          this.theme.taskList = 'background-color: #111'
+          this.theme.taskListItem = 'color: #ddd'
+          this.theme.taskDot = 'background-color: rgba(0,0,0,0.8); border-color: #7a797b;'
+          this.theme.text = 'color: #ddd'
+          this.theme.textSmall = 'text-small'
+          this.theme.tagList = 'background-color: #111'
+          this.theme.tagItemText = 'color: #ddd'
+          this.theme.allTag = 'background-color: #FFFFFF'
+          break
+        case 'light':
+          this.theme.container = 'background-color: #ddd'
+          this.theme.taskList = 'background-color: #ddd'
+          this.theme.taskListItem = 'color: #444'
+          this.theme.taskDot = 'background-color: rgba(201, 197, 209, 1.0); border-color: #444;'
+          this.theme.text = 'color: #444'
+          this.theme.textSmall = 'text-small-light'
+          this.theme.tagList = 'background-color: #ddd'
+          this.theme.tagItemText = 'color: #444'
+          this.theme.allTag = 'background-color: #444'
+          break
+      }
+    },
+
     timer () {
       return setInterval(() => {
         this.checkDataUpdate()
@@ -847,11 +888,11 @@ input {
   width: 100%;
   border: none;
   outline: none;
-  color: #FFFFFF;
+  color: #bbbbbb;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
 }
 input::-webkit-input-placeholder {
-  color: #FFFFFF;
+  color: #bbbbbb;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
 }
 
@@ -896,7 +937,7 @@ input::-webkit-input-placeholder {
 }
 
 .task-dot {
-  background-color: rgba(0,0,0,0.8);;
+  background-color: rgba(0,0,0,0.8);
   border-color: #7a797b;
   width: 15px;
   height: 15px;
@@ -960,6 +1001,7 @@ input::-webkit-input-placeholder {
 
 .tag-item-text {
   color:#ddd;
+  font-size: 14px;
   /* background-color: #000000; */
 }
 
@@ -977,6 +1019,13 @@ input::-webkit-input-placeholder {
 
 .text-small {
   color: #ddd;
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+  font-size: 10px;
+  cursor: default;
+}
+
+.text-small-light {
+  color: #444;
   font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   font-size: 10px;
   cursor: default;

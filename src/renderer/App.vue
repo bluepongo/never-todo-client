@@ -1,8 +1,8 @@
 <template>
-  <div id="app-light" :class="{ unfocused: ignoreMouse }">
-    <div class="header-light">
+  <div :id=theme.app :class="{ unfocused: ignoreMouse }">
+    <div :class=theme.header>
       <b title="「彩蛋 Powered by Zhy/Yc」">{{ appName }}</b>
-      <div class="toolkit-light">
+      <div :class=theme.toolkit>
         <i
           title="窗口始终至于顶层"
           class="el-icon-copy-document"
@@ -20,7 +20,7 @@
         <i title="关闭窗口" class="el-icon-close" @click="hideWindow"></i>
       </div>
     </div>
-    <div class="producers-light">
+    <div :class=theme.producers :style="">
       <i>Powered by Zhy/Yc</i>
     </div>
     <router-view></router-view>
@@ -39,14 +39,38 @@ export default {
       ignoreMouse: false,
       notTop: true,
       locklight: false,
-      // true暗黑，false明亮
-      theme: false
+      theme: {
+        style: 'light',
+        app: '',
+        header: '',
+        toolkit: '',
+        producers: ''
+      }
     }
+  },
+  mounted () {
+    this.switchTheme()
   },
   methods: {
     // exportData () {
     //   ipcRenderer.invoke('exportData')
     // },
+    switchTheme () {
+      switch (this.theme.style) {
+        case 'dark':
+          this.theme.app = 'app'
+          this.theme.header = 'header'
+          this.theme.toolkit = 'toolkit'
+          this.theme.producers = 'producers'
+          break
+        case 'light':
+          this.theme.app = 'app-light'
+          this.theme.header = 'header-light'
+          this.theme.toolkit = 'toolkit-light'
+          this.theme.producers = 'producers-light'
+          break
+      }
+    },
     hideWindow () {
       ipcRenderer.send('hideWindow')
     },
@@ -136,7 +160,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgba($color: #ffffff, $alpha: 1);
+  background-color: rgba($color: #ddd, $alpha: 1);
   opacity: 0.8;
 
   border-radius: 5px;
@@ -156,7 +180,7 @@ export default {
   padding: 2px 15px;
   box-sizing: border-box;
   font-size: 15px;
-  color: #111;
+  color: #444;
 }
 
 .producers-light {
@@ -175,7 +199,7 @@ export default {
   font-size: 14px;
   padding: 2px 5px;
   cursor: pointer;
-  color: rgba($color: #111, $alpha: 0.2);
+  color: rgba($color: #444, $alpha: 0.2);
 }
 
 .toolkit-light i {
@@ -183,6 +207,6 @@ export default {
   font-size: 18px;
   padding: 2px 5px;
   cursor: pointer;
-  color: #111;
+  color: #444;
 }
 </style>
