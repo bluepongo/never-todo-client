@@ -108,10 +108,8 @@ export default {
       }
     },
     switchOpacity () {
-      console.log(this.theme.opacity)
       switch (this.theme.opacity) {
         case '100':
-          console.log('200100')
           this.theme.opacity = 'opacity: 1'
           break
         case '80':
@@ -122,6 +120,9 @@ export default {
           break
         case '40':
           this.theme.opacity = 'opacity: 0.7'
+          break
+        case '20':
+          this.theme.opacity = 'opacity: 0.6'
           break
       }
     },

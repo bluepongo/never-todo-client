@@ -881,7 +881,6 @@ export default {
 
 <style>
 
-// 深色主题
 ::-webkit-scrollbar-track-piece{
     background-color:#000000;
     border-radius:0;

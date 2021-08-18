@@ -255,6 +255,20 @@ export function createTray (showWindow) {
               }
             })
           }
+        },
+        {
+          label: '20%',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('opacity', '20').write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
         }
       ]
     },

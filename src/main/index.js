@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, screen, ipcMain } from 'electron'
+import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron'
 import { createTray } from '../renderer/utils/tray'
 // import { autoUpdater } from 'electron-updater'
 
@@ -48,6 +48,13 @@ if (isSecondInstance) {
 // create mainWindow
 app.on('ready', () => {
   init()
+  globalShortcut.register('Alt+CommandOrControl+H', function () {
+    if (mainWindow.isVisible()) {
+      hideWindow()
+    } else {
+      showWindow()
+    }
+  })
 })
 
 app.on('window-all-closed', () => {
