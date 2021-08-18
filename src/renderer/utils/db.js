@@ -124,7 +124,7 @@ if (!db.has('initRun').value()) {
   db.set('updateApp', false).write()
   db.set('initRun', true).write()
   db.set('theme', 'dark').write()
-  db.set('opacity','60').write()
+  db.set('opacity', '60').write()
 }
 
 export default db
