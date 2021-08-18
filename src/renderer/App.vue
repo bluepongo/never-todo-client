@@ -37,7 +37,7 @@ export default {
     return {
       appName: 'Never Todo',
       ignoreMouse: false,
-      notTop: true,
+      notTop: false,
       locklight: false,
       theme: {
         style: 'light',

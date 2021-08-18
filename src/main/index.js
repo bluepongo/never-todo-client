@@ -97,7 +97,7 @@ function createWindow () {
     // 标题栏
     skipTaskbar: true,
     // 窗口置顶
-    alwaysOnTop: false,
+    alwaysOnTop: true,
 
     minWidth: 320,
     minHeight: 280,
