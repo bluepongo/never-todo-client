@@ -955,7 +955,7 @@ input::-webkit-input-placeholder {
   position: absolute;
   height:100%; 
   left: 20px;
-  right: 145px;
+  right: 125px;
 }
 
 .title {
@@ -1001,7 +1001,7 @@ input::-webkit-input-placeholder {
   position: absolute;
   right: 20px;
   height:100%; 
-  width: 120px; 
+  width: 100px; 
 }
 
 
