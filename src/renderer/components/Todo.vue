@@ -1,7 +1,7 @@
 <template>
   <div
-    class="container"
-    :style="theme.container"
+    class="box"
+    :style="theme.box"
     id="Task"
     @click="resetAllState"
     @keyup.page-down="switchToNextSection"
@@ -270,7 +270,7 @@ export default {
 
       theme: {
         style: 'dark',
-        container: '',
+        box: '',
         taskList: '',
         taskListItem: '',
         taskDot: '',
@@ -406,7 +406,7 @@ export default {
     switchTheme () {
       switch (this.theme.style) {
         case 'dark':
-          this.theme.container = 'background-color: #111'
+          this.theme.box = 'background-color: #111'
           this.theme.taskList = 'background-color: #111'
           this.theme.taskListItem = 'color: #ddd'
           this.theme.taskDot = 'background-color: rgba(0,0,0,0.8); border-color: #7a797b;'
@@ -418,7 +418,7 @@ export default {
           this.theme.dotTick = 'color: #ddd'
           break
         case 'light':
-          this.theme.container = 'background-color: #ddd'
+          this.theme.box = 'background-color: #ddd'
           this.theme.taskList = 'background-color: #ddd'
           this.theme.taskListItem = 'color: #444'
           this.theme.taskDot = 'background-color: rgba(201, 197, 209, 1.0); border-color: #444;'
@@ -430,7 +430,7 @@ export default {
           this.theme.dotTick = 'color: #444'
           break
         case 'pink':
-          this.theme.container = 'background-color: #ffbbf9'
+          this.theme.box = 'background-color: #ffbbf9'
           this.theme.taskList = 'background-color: #ffbbf9'
           this.theme.taskListItem = 'color: #444'
           this.theme.taskDot = 'background-color: rgba(249, 157, 234, 1.0); border-color: #444;'
@@ -442,7 +442,7 @@ export default {
           this.theme.dotTick = 'color: #444'
           break
         case 'green':
-          this.theme.container = 'background-color: #40e2c1'
+          this.theme.box = 'background-color: #40e2c1'
           this.theme.taskList = 'background-color: #40e2c1'
           this.theme.taskListItem = 'color: #444'
           this.theme.taskDot = 'background-color: rgba(129, 244, 189, 1.0); border-color: #444;'
@@ -938,12 +938,13 @@ input::-webkit-input-placeholder {
 .el-icon-delete {color: crimson;}
 .el-icon-refresh-left {color: chartreuse;}
 
-.container {
+.box {
   /* height: 100%; */
   padding: 0px 20px;
   position: absolute;
   top: 40px;
   bottom: 40px;
+  width: 100%;
   background-color: #111
 }
 
