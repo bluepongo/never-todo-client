@@ -137,6 +137,7 @@ function setDefaultPos () {
 
 function showWindow () {
   if (!mainWindow.isVisible()) mainWindow.show()
+  if (!mainWindow.isAlwaysOnTop()) mainWindow.focus()
 }
 
 function hideWindow () {
