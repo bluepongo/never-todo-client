@@ -46,8 +46,7 @@
               >
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
-                  <el-row v-if="!fullTask.task.selected">
-                    <el-col :span="24">
+                  <div v-if="!fullTask.task.selected">
                       <div style="float: left; width:20px">
                         <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
                       </div>
@@ -62,8 +61,7 @@
                           </div>
                         </span>
                       </div>
-                    </el-col>
-                  </el-row>
+                  </div>
                   <div v-else>
                     <input
                       class="text"
