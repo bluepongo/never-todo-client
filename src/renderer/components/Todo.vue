@@ -9,8 +9,8 @@
     <el-row>
       <el-col :span="16">
         <div>
-          <span class="text" :style="theme.text">
-            <h5>任务&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTask"></i></h5>
+          <span class="text" :style="theme.text" style="font-size: 20px;">
+            &nbsp;任务&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTask"></i>
 
           </span>
         </div>
@@ -38,6 +38,7 @@
               <div
                 class="task-list-item"
                 :style="theme.taskListItem"
+                style="font-size: 16px;"
                 v-for="fullTask in todoFullTasks"
                 :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
@@ -135,6 +136,7 @@
               <div
                 class="task-list-item"
                 :style="theme.taskListItem"
+                style="font-size: 16px;"
                 v-for="fullTask in doneFullTasks"
                 :key="fullTask.task.id"
                 :class="{'select':fullTask.task.selected, 'focus': fullTask.task.focused}"
@@ -173,7 +175,7 @@
       </el-col>
 
       <el-col :span="8">
-        <div><span class="text" :style="theme.text"><h5>标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></h5></span></div>
+        <div><span class="text" :style="theme.text" style="font-size: 20px;">标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
         <div class="tag-list" :style="theme.tagList">
           <input
             class="text"
