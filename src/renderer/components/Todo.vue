@@ -710,7 +710,8 @@ export default {
           for (var ac = 0; ac < this.availableTagColors.length; ac++) {
             var flag = 1
             for (var ta = 0; ta < this.tags.length; ta++) {
-              if (!this.tags[ta].deleted && this.tags[ta].color === this.availableTagColorsName[ac]) {
+              console.log(this.tags[ta].color, this.availableTagColorsName[ac])
+              if (!this.tags[ta].deleted && this.tags[ta].color === this.availableTagColors[ac]) {
                 flag = 0
                 break
               }
