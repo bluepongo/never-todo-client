@@ -222,8 +222,12 @@
               <!-- <colorPicker v-model="tag.color" /> -->
               <el-row v-if="!tag.edited">
                 <el-col :span="24">
-                  <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
-                  <span class="tag-item-text text" :style="theme.tagItemText">{{ tag.content }}</span>
+                  <div style="float: left; width:16px">
+                    <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
+                  </div>
+                  <div style="display: flex;">
+                    <span class="tag-item-text text" :style="theme.tagItemText">{{ tag.content }}</span>
+                  </div>
                 </el-col>
               </el-row>
 
