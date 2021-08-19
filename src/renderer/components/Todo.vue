@@ -46,24 +46,22 @@
               >
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
-                  <el-row v-if="!fullTask.task.selected">
-                    <el-col :span="24">
-                      <div style="float: left; width:20px">
-                        <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
-                      </div>
-                      <div style="display: inline">
-                        <span :class="fullTask.task.important?'important-text':theme.text"> {{ fullTask.task.content }}</span>
-                        <span>
-                          <div
-                            class="tag-dot"
-                            v-for="tag in fullTask.tags"
-                            :key="tag.id"
-                            :style="{'background-color': tag.color}">
-                          </div>
-                        </span>
-                      </div>
-                    </el-col>
-                  </el-row>
+                  <div v-if="!fullTask.task.selected">
+                    <div style="float: left; width:20px">
+                      <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
+                    </div>
+                    <div style="display: inline">
+                      <span :class="fullTask.task.important?'important-text':theme.text"> {{ fullTask.task.content }}</span>
+                      <span>
+                        <div
+                          class="tag-dot"
+                          v-for="tag in fullTask.tags"
+                          :key="tag.id"
+                          :style="{'background-color': tag.color}">
+                        </div>
+                      </span>
+                    </div>
+                  </div>
                   <div v-else>
                     <input
                       class="text"
@@ -143,22 +141,20 @@
                 @click.stop="selectTask(fullTask.task)"
                 @dblclick.stop="uncompleteTask(fullTask.task)"
               >
-                <el-row >
-                  <el-col :span="24">
-                    <div style="float: left; width:20px">
-                      <div title="取消完成任务" class="task-dot" :style="theme.taskDot" @click.stop="uncompleteTask(fullTask.task)">
-                        <i class="el-icon-check" :style="theme.dotTick"></i>
-                      </div>
+                <div >
+                  <div style="float: left; width:20px">
+                    <div title="取消完成任务" class="task-dot" :style="theme.taskDot" @click.stop="uncompleteTask(fullTask.task)">
+                      <i class="el-icon-check" :style="theme.dotTick"></i>
                     </div>
-                    <div style="display: inline">
-                      <span :class="theme.text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
-                      <div
-                      class="tag-dot"
-                      v-for="tag in fullTask.tags"
-                      :key="tag.id"
-                      :style="{'background-color': tag.color}"></div>
-                    </div>
-                  </el-col>
+                  </div>
+                  <div style="display: inline">
+                    <span :class="theme.text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
+                    <div
+                    class="tag-dot"
+                    v-for="tag in fullTask.tags"
+                    :key="tag.id"
+                    :style="{'background-color': tag.color}"></div>
+                  </div>
                   <div class="second-row">
                     <span v-if="fullTask.task.selected">
                       <span class="text">
@@ -168,11 +164,7 @@
                       </span>
                     </span>
                   </div>
-                </el-row>
-
-
-                <!-- <span v-if="!fullTask.task.selected"> -->
-
+                </div>
               </div>
             </div>
           </div>
@@ -202,12 +194,10 @@
             @mouseleave="noTagActive = false"
             @click="selectNoTag()"
           >
-            <el-row >
-              <el-col :span="24">
-                <span class="tag-flag" :style="theme.allTag"></span>
-                <span class="tag-item-text text" :style="theme.tagItemText">全部</span>
-              </el-col>
-            </el-row>
+            <div >
+              <span class="tag-flag" :style="theme.allTag"></span>
+              <span class="tag-item-text text" :style="theme.tagItemText">全部</span>
+            </div>
           </div>
           <div
             class="tag-item"
@@ -220,16 +210,14 @@
             <div v-if="!tag.deleted">
               <!-- <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span> -->
               <!-- <colorPicker v-model="tag.color" /> -->
-              <el-row v-if="!tag.edited">
-                <el-col :span="24">
-                  <div style="float: left; width:16px">
-                    <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
-                  </div>
-                  <div style="display: flex;">
-                    <span class="tag-item-text text" :style="theme.tagItemText">{{ tag.content }}</span>
-                  </div>
-                </el-col>
-              </el-row>
+              <div v-if="!tag.edited">
+                <div style="float: left; width:16px">
+                  <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
+                </div>
+                <div style="display: flex;">
+                  <span class="tag-item-text text" :style="theme.tagItemText">{{ tag.content }}</span>
+                </div>
+              </div>
 
               <input
                 class="text"
