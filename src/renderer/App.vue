@@ -21,7 +21,7 @@
       </div>
     </div>
     <div :class="theme.producers">
-      <i>Powered by Zhy/Yc</i>
+      <i>Version V0.1.0</i>
     </div>
     <router-view></router-view>
   </div>

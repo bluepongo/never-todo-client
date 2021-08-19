@@ -47,18 +47,21 @@
                 <!-- <el-checkbox @change="completeTask(fullTask.task_id)" v-model="fullTask.task.Completed"></el-checkbox> -->
                 <div v-if="!fullTask.task.deleted" class="first-row">
                   <el-row v-if="!fullTask.task.selected">
-                    <el-col :span="0"></el-col>
                     <el-col :span="24">
-                      <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
-                      <span :class="fullTask.task.important?'important-text':theme.text"> {{ fullTask.task.content }}</span>
-                      <span>
-                        <div
-                          class="tag-dot"
-                          v-for="tag in fullTask.tags"
-                          :key="tag.id"
-                          :style="{'background-color': tag.color}">
-                        </div>
-                      </span>
+                      <div style="float: left; width:20px">
+                        <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
+                      </div>
+                      <div style="display: inline">
+                        <span :class="fullTask.task.important?'important-text':theme.text"> {{ fullTask.task.content }}</span>
+                        <span>
+                          <div
+                            class="tag-dot"
+                            v-for="tag in fullTask.tags"
+                            :key="tag.id"
+                            :style="{'background-color': tag.color}">
+                          </div>
+                        </span>
+                      </div>
                     </el-col>
                   </el-row>
                   <div v-else>
@@ -141,17 +144,20 @@
                 @dblclick.stop="uncompleteTask(fullTask.task)"
               >
                 <el-row >
-                  <el-col :span="0"></el-col>
                   <el-col :span="24">
-                    <div title="取消完成任务" class="task-dot" :style="theme.taskDot" @click.stop="uncompleteTask(fullTask.task)">
-                      <i class="el-icon-check" :style="theme.dotTick"></i>
+                    <div style="float: left; width:20px">
+                      <div title="取消完成任务" class="task-dot" :style="theme.taskDot" @click.stop="uncompleteTask(fullTask.task)">
+                        <i class="el-icon-check" :style="theme.dotTick"></i>
+                      </div>
                     </div>
-                    <span :class="theme.text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
-                    <div
-                    class="tag-dot"
-                    v-for="tag in fullTask.tags"
-                    :key="tag.id"
-                    :style="{'background-color': tag.color}"></div>
+                    <div style="display: inline">
+                      <span :class="theme.text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
+                      <div
+                      class="tag-dot"
+                      v-for="tag in fullTask.tags"
+                      :key="tag.id"
+                      :style="{'background-color': tag.color}"></div>
+                    </div>
                   </el-col>
                   <div class="second-row">
                     <span v-if="fullTask.task.selected">
@@ -197,8 +203,6 @@
             @click="selectNoTag()"
           >
             <el-row >
-              <el-col :span="0">
-              </el-col>
               <el-col :span="24">
                 <span class="tag-flag" :style="theme.allTag"></span>
                 <span class="tag-item-text text" :style="theme.tagItemText">全部</span>
@@ -217,11 +221,13 @@
               <!-- <span v-if="tag.assigned" :style="{'background-color': tag.color}"></span> -->
               <!-- <colorPicker v-model="tag.color" /> -->
               <el-row v-if="!tag.edited">
-                <el-col :span="0">
-                </el-col>
                 <el-col :span="24">
-                  <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
-                  <span class="tag-item-text text" :style="theme.tagItemText">{{ tag.content }}</span>
+                  <div style="float: left; width:16px">
+                    <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
+                  </div>
+                  <div style="display: flex;">
+                    <span class="tag-item-text text" :style="theme.tagItemText">{{ tag.content }}</span>
+                  </div>
                 </el-col>
               </el-row>
 
@@ -710,7 +716,8 @@ export default {
           for (var ac = 0; ac < this.availableTagColors.length; ac++) {
             var flag = 1
             for (var ta = 0; ta < this.tags.length; ta++) {
-              if (!this.tags[ta].deleted && this.tags[ta].color === this.availableTagColorsName[ac]) {
+              console.log(this.tags[ta].color, this.availableTagColorsName[ac])
+              if (!this.tags[ta].deleted && this.tags[ta].color === this.availableTagColors[ac]) {
                 flag = 0
                 break
               }
