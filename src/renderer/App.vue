@@ -164,6 +164,7 @@ export default {
   height: 100%;
   background-color: rgba($color: #111, $alpha: 1);
   opacity: 0.8;
+  overflow: hidden;
 
   border-radius: 5px;
 }

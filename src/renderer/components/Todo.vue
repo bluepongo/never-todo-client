@@ -6,12 +6,11 @@
     @click="resetAllState"
     @keyup.page-down="switchToNextSection"
   >
-    <el-row>
-      <el-col :span="16">
-        <div>
+    <div class="body">
+      <div class="left-panel">
+        <div class="title">
           <span class="text" :style="theme.text" style="font-size: 20px;">
             &nbsp;任务&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTask"></i>
-
           </span>
         </div>
 
@@ -172,9 +171,9 @@
           </div>
           <!-- <span> {{ filePath }} </span> -->
         </div>
-      </el-col>
+      </div>
 
-      <el-col :span="8">
+      <div class="right-panel">
         <div><span class="text" :style="theme.text" style="font-size: 20px;">标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
         <div class="tag-list" :style="theme.tagList">
           <input
@@ -242,8 +241,8 @@
             </div>
           </div>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
 
     <compact-picker
       v-if="colorPickerVisible"
@@ -940,15 +939,36 @@ input::-webkit-input-placeholder {
 .el-icon-refresh-left {color: chartreuse;}
 
 .container {
+  /* height: 100%; */
   padding: 0px 20px;
   position: absolute;
   top: 40px;
+  bottom: 40px;
   background-color: #111
 }
 
+.body {
+  height:100%;
+  width: 100%;
+}
+
+.left-panel {
+  position: absolute;
+  height:100%; 
+  left: 20px;
+  right: 145px;
+}
+
+.title {
+  height: 30px;
+}
+
 .task-list {
-  height: 100%;
-  overflow:auto;
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
   overflow-x:hidden;
   background-color: #111
 }
@@ -978,6 +998,14 @@ input::-webkit-input-placeholder {
   vertical-align: middle;
 }
 
+.right-panel {
+  position: absolute;
+  right: 20px;
+  height:100%; 
+  width: 120px; 
+}
+
+
 .tag-dot {
   width: 8px;
   height: 8px;
@@ -1002,8 +1030,11 @@ input::-webkit-input-placeholder {
 }
 
 .tag-list {
-  height: 100%;
-  overflow:auto;
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
   overflow-x:hidden;
   background-color: #111
 }
