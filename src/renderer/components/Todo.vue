@@ -51,7 +51,7 @@
                       <div style="float: left; width:20px">
                         <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
                       </div>
-                      <div style="display: inline">
+                      <div style="display: flex">
                         <span :class="fullTask.task.important?'important-text':theme.text"> {{ fullTask.task.content }}</span>
                         <span>
                           <div
