@@ -51,15 +51,18 @@
                       <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
                     </div>
                     <div style="display: flex">
-                      <span :class="fullTask.task.important?'important-text':theme.text"> {{ fullTask.task.content }}</span>
-                      <span>
-                        <div
-                          class="tag-dot"
-                          v-for="tag in fullTask.tags"
-                          :key="tag.id"
-                          :style="{'background-color': tag.color}">
-                        </div>
+                      <span :class="fullTask.task.important?'important-text':theme.text"> 
+                        {{ fullTask.task.content }}
+                        <span>
+                          <div
+                            class="tag-dot"
+                            v-for="tag in fullTask.tags"
+                            :key="tag.id"
+                            :style="{'background-color': tag.color}">
+                          </div>
+                        </span>
                       </span>
+                      
                     </div>
                   </div>
                   <div v-else>
@@ -878,6 +881,7 @@ export default {
 
 <style>
 
+/* TODO: 修改不同主题的滚动条颜色 */
 ::-webkit-scrollbar-track-piece{
     background-color:#000000;
     border-radius:0;
@@ -892,13 +896,7 @@ export default {
     border-radius:4px;
     outline:2px solid #ddd;
     outline-offset:-2px;
-    /* border: 2px solid #fff; */
 }
-/* ::-webkit-scrollbar-thumb:hover{
-    height:50px;
-    background-color:#444;
-    border-radius:4px;
-} */
 
 *{
  -webkit-touch-callout:none; /*系统默认菜单被禁用*/
