@@ -17,7 +17,7 @@
           @mouseleave="mouseleave"
           @click="lock"
         ></i>
-        <i title="关闭窗口" class="el-icon-close" @click="hideWindow"></i>
+        <i title="关闭窗口" class="el-icon-close" style="color: #ffffff" @click="hideWindow"></i>
       </div>
     </div>
     <div :class="theme.producers">

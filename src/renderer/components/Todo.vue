@@ -965,7 +965,7 @@ input::-webkit-input-placeholder {
 }
 
 .task-list::-webkit-scrollbar-track-piece{
-    background-color:#000000;
+    background-color:#111;
     border-radius:0;
 }
 .task-list::-webkit-scrollbar{
@@ -974,9 +974,9 @@ input::-webkit-input-placeholder {
 }
 .task-list::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#ddd;
+    background-color:#222;
     border-radius:4px;
-    outline:2px solid #ddd;
+    outline:2px solid #222;
     outline-offset:-2px;
 }
 
@@ -1000,9 +1000,9 @@ input::-webkit-input-placeholder {
 }
 .task-list-light::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#222;
+    background-color:#eee;
     border-radius:4px;
-    outline:2px solid #222;
+    outline:2px solid #eee;
     outline-offset:-2px;
 }
 
@@ -1127,7 +1127,7 @@ input::-webkit-input-placeholder {
 }
 
 .tag-list::-webkit-scrollbar-track-piece{
-    background-color:#000000;
+    background-color:#111;
     border-radius:0;
 }
 .tag-list::-webkit-scrollbar{
@@ -1136,9 +1136,9 @@ input::-webkit-input-placeholder {
 }
 .tag-list::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#ddd;
+    background-color:#222;
     border-radius:4px;
-    outline:2px solid #ddd;
+    outline:2px solid #222;
     outline-offset:-2px;
 }
 
@@ -1162,9 +1162,9 @@ input::-webkit-input-placeholder {
 }
 .tag-list-light::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#222;
+    background-color:#eee;
     border-radius:4px;
-    outline:2px solid #222;
+    outline:2px solid #eee;
     outline-offset:-2px;
 }
 
