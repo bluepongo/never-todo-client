@@ -14,7 +14,7 @@
           </span>
         </div>
 
-        <div class="task-list" :style="theme.taskList">
+        <div :class="theme.taskListScroll" :style="theme.taskList">
           <input
             class="text"
             :style="theme.text"
@@ -59,7 +59,7 @@
                             :style="{'background-color': tag.color}"></div>
                         </span>
                       </span>
-                      
+
                     </div>
                   </div>
                   <div v-else>
@@ -157,7 +157,7 @@
                       :key="tag.id"
                       :style="{'background-color': tag.color}"></div>
                     </span>
-                    
+
                   </div>
                   <div class="second-row">
                     <span v-if="fullTask.task.selected">
@@ -178,7 +178,7 @@
 
       <div class="right-panel">
         <div><span class="text" :style="theme.text" style="font-size: 20px;">标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
-        <div class="tag-list" :style="theme.tagList">
+        <div :class="theme.tagListScroll" :style="theme.tagList">
           <input
             class="text"
             :style="theme.text"
@@ -282,7 +282,9 @@ export default {
         tagList: '',
         tagItemText: '',
         allTag: '',
-        dotTick: ''
+        dotTick: '',
+        taskListScroll: '',
+        tagListScroll: 'dark'
       },
 
       focusTarget: 'todo',
@@ -419,6 +421,8 @@ export default {
           this.theme.tagItemText = 'color: #ddd'
           this.theme.allTag = 'background-color: #FFFFFF'
           this.theme.dotTick = 'color: #ddd'
+          this.theme.taskListScroll = 'task-list'
+          this.theme.tagListScroll = 'tag-List'
           break
         case 'light':
           this.theme.box = 'background-color: #ddd'
@@ -431,6 +435,8 @@ export default {
           this.theme.tagItemText = 'color: #444'
           this.theme.allTag = 'background-color: #444'
           this.theme.dotTick = 'color: #444'
+          this.theme.taskListScroll = 'task-list-light'
+          this.theme.tagListScroll = 'tag-list-light'
           break
         case 'pink':
           this.theme.box = 'background-color: #ffbbf9'
@@ -443,6 +449,8 @@ export default {
           this.theme.tagItemText = 'color: #444'
           this.theme.allTag = 'background-color: #444'
           this.theme.dotTick = 'color: #444'
+          this.theme.taskListScroll = 'task-list-pink'
+          this.theme.tagListScroll = 'tag-list-pink'
           break
         case 'green':
           this.theme.box = 'background-color: #40e2c1'
@@ -455,6 +463,8 @@ export default {
           this.theme.tagItemText = 'color: #444'
           this.theme.allTag = 'background-color: #444'
           this.theme.dotTick = 'color: #444'
+          this.theme.taskListScroll = 'task-list-green'
+          this.theme.tagListScroll = 'tag-list-green'
           break
       }
     },
@@ -923,7 +933,7 @@ input::-webkit-input-placeholder {
   padding: 0px 20px;
   position: absolute;
   top: 40px;
-  bottom: 40px;
+  bottom: 15px;
   width: 100%;
   background-color: #111
 }
@@ -935,7 +945,7 @@ input::-webkit-input-placeholder {
 
 .left-panel {
   position: absolute;
-  height:100%; 
+  height:100%;
   left: 20px;
   right: 125px;
 }
@@ -964,9 +974,87 @@ input::-webkit-input-placeholder {
 }
 .task-list::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#222;
+    background-color:#ddd;
     border-radius:4px;
     outline:2px solid #ddd;
+    outline-offset:-2px;
+}
+
+.task-list-light {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.task-list-light::-webkit-scrollbar-track-piece{
+    background-color:#ddd;
+    border-radius:0;
+}
+.task-list-light::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.task-list-light::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#222;
+    border-radius:4px;
+    outline:2px solid #222;
+    outline-offset:-2px;
+}
+
+.task-list-pink {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.task-list-pink::-webkit-scrollbar-track-piece{
+    background-color:#ffbbf9;
+    border-radius:0;
+}
+.task-list-pink::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.task-list-pink::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#f490ed;
+    border-radius:4px;
+    outline:2px solid #f490ed;
+    outline-offset:-2px;
+}
+
+.task-list-green {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.task-list-green::-webkit-scrollbar-track-piece{
+    background-color:#40e2c1;
+    border-radius:0;
+}
+.task-list-green::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.task-list-green::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#84f7b4;
+    border-radius:4px;
+    outline:2px solid #84f7b4;
     outline-offset:-2px;
 }
 
@@ -1000,8 +1088,8 @@ input::-webkit-input-placeholder {
 .right-panel {
   position: absolute;
   right: 20px;
-  height:100%; 
-  width: 100px; 
+  height:100%;
+  width: 100px;
 }
 
 
@@ -1048,12 +1136,89 @@ input::-webkit-input-placeholder {
 }
 .tag-list::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#222;
+    background-color:#ddd;
     border-radius:4px;
     outline:2px solid #ddd;
     outline-offset:-2px;
 }
 
+.tag-list-light {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.tag-list-light::-webkit-scrollbar-track-piece{
+    background-color:#ddd;
+    border-radius:0;
+}
+.tag-list-light::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.tag-list-light::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#222;
+    border-radius:4px;
+    outline:2px solid #222;
+    outline-offset:-2px;
+}
+
+.tag-list-pink {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.tag-list-pink::-webkit-scrollbar-track-piece{
+    background-color:#ffbbf9;
+    border-radius:0;
+}
+.tag-list-pink::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.tag-list-pink::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#f490ed;
+    border-radius:4px;
+    outline:2px solid #f490ed;
+    outline-offset:-2px;
+}
+
+.tag-list-green {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.tag-list-green::-webkit-scrollbar-track-piece{
+    background-color:#40e2c1;
+    border-radius:0;
+}
+.tag-list-green::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.tag-list-green::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#84f7b4;
+    border-radius:4px;
+    outline:2px solid #84f7b4;
+    outline-offset:-2px;
+}
 
 .tag-item {
   opacity: 1;
