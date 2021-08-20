@@ -880,23 +880,6 @@ export default {
 
 <style>
 
-/* TODO: 修改不同主题的滚动条颜色 */
-::-webkit-scrollbar-track-piece{
-    background-color:#000000;
-    border-radius:0;
-}
-::-webkit-scrollbar{
-    width:8px;
-    height:8px;
-}
-::-webkit-scrollbar-thumb{
-    height:50px;
-    background-color:#222;
-    border-radius:4px;
-    outline:2px solid #ddd;
-    outline-offset:-2px;
-}
-
 *{
  -webkit-touch-callout:none; /*系统默认菜单被禁用*/
  -webkit-user-select:none; /*webkit浏览器*/
@@ -971,6 +954,22 @@ input::-webkit-input-placeholder {
   background-color: #111
 }
 
+.task-list::-webkit-scrollbar-track-piece{
+    background-color:#000000;
+    border-radius:0;
+}
+.task-list::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.task-list::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#222;
+    border-radius:4px;
+    outline:2px solid #ddd;
+    outline-offset:-2px;
+}
+
 .task-list-item {
   margin: 4px 2px;
   color: #ddd;
@@ -1038,6 +1037,23 @@ input::-webkit-input-placeholder {
   overflow-x:hidden;
   background-color: #111
 }
+
+.tag-list::-webkit-scrollbar-track-piece{
+    background-color:#000000;
+    border-radius:0;
+}
+.tag-list::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.tag-list::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#222;
+    border-radius:4px;
+    outline:2px solid #ddd;
+    outline-offset:-2px;
+}
+
 
 .tag-item {
   opacity: 1;
