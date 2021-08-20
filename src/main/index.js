@@ -2,7 +2,6 @@
 
 import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron'
 import { createTray } from '../renderer/utils/tray'
-// import { autoUpdater } from 'electron-updater'
 
 import '../renderer/store'
 
@@ -14,7 +13,7 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let mainWindow
+let mainWindow = null
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -27,70 +26,46 @@ const isSecondInstance = app.makeSingleInstance(() => {
     mainWindow.show()
   }
 })
+
 if (isSecondInstance) {
   app.quit()
-}
+} else {
+  // create mainWindow
+  app.on('ready', () => {
+    init()
+  })
 
-// const gotTheLock = app.requestSingleInstanceLock()
-
-// if (!gotTheLock) {
-//   app.quit()
-// } else {
-//   app.on('second-instance', (event, commandLine, workingDirectory) => {
-//     // focus to first
-//     if (mainWindow) {
-//       if (mainWindow.isMinimized()) mainWindow.restore()
-//       mainWindow.focus()
-//     }
-//   })
-// }
-
-// create mainWindow
-app.on('ready', () => {
-  init()
-  globalShortcut.register('Alt+CommandOrControl+H', function () {
-    if (mainWindow.isVisible()) {
-      hideWindow()
-    } else {
-      showWindow()
+  app.on('activate', () => {
+    if (mainWindow === null) {
+      init()
     }
   })
-})
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-app.on('activate', () => {
-  if (mainWindow === null) {
-    init()
-  }
-})
-
-// app.on('ready', () => {
-//   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-// })
-
-// autoUpdater.on('update-downloaded', () => {
-//   autoUpdater.quitAndInstall()
-// })
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+}
 
 function init () {
-  createTray(showWindow)
   createWindow()
+  setDefaultPos()
+  setIPCEvent()
+  createShorcut()
+  createTray(showWindow)
 }
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    // dev
-    // transparent: false,
-    // frame: true,
-    // resizable: true,
-    // alwaysOnTop: true,
+  // dev
+  // transparent: false,
+  // frame: true,
+  // resizable: true,
+  // alwaysOnTop: true,
 
-    // pro
-    // 背景透明
+  // pro
+  // 背景透明
     transparent: true,
     // 边框
     frame: false,
@@ -113,16 +88,13 @@ function createWindow () {
 
     useContentSize: true,
     webPreferences: {
-      // devTools: false,
+    // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true
     }
   })
 
-  setDefaultPos()
-
   mainWindow.loadURL(winURL)
-  // mainWindow.setIgnoreMouseEvents(true)
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -133,6 +105,34 @@ function setDefaultPos () {
   const scrSize = screen.getPrimaryDisplay().workAreaSize
   const winSize = mainWindow.getSize()
   mainWindow.setPosition(scrSize.width - winSize[0] - 30, 30)
+}
+
+function setIPCEvent () {
+  ipcMain.on('setIgnoreMouseEvents', (event, ...args) => {
+    BrowserWindow.fromWebContents(event.sender).setIgnoreMouseEvents(...args)
+  })
+
+  ipcMain.on('hideWindow', event => {
+    hideWindow()
+  })
+
+  ipcMain.on('switchFlash', event => {
+    hideWindow()
+  })
+
+  ipcMain.on('windowOnTop', event => {
+    windowOnTop()
+  })
+}
+
+function createShorcut () {
+  globalShortcut.register('Alt+CommandOrControl+H', function () {
+    if (mainWindow.isVisible()) {
+      hideWindow()
+    } else {
+      showWindow()
+    }
+  })
 }
 
 function showWindow () {
@@ -152,18 +152,24 @@ function windowOnTop () {
   }
 }
 
-ipcMain.on('setIgnoreMouseEvents', (event, ...args) => {
-  BrowserWindow.fromWebContents(event.sender).setIgnoreMouseEvents(...args)
-})
+// const gotTheLock = app.requestSingleInstanceLock()
 
-ipcMain.on('hideWindow', event => {
-  hideWindow()
-})
+// if (!gotTheLock) {
+//   app.quit()
+// } else {
+//   app.on('second-instance', (event, commandLine, workingDirectory) => {
+//     // focus to first
+//     if (mainWindow) {
+//       if (mainWindow.isMinimized()) mainWindow.restore()
+//       mainWindow.focus()
+//     }
+//   })
+// }
 
-ipcMain.on('switchFlash', event => {
-  hideWindow()
-})
-
-ipcMain.on('windowOnTop', event => {
-  windowOnTop()
-})
+// 自动更新
+// app.on('ready', () => {
+//   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+// })
+// autoUpdater.on('update-downloaded', () => {
+//   autoUpdater.quitAndInstall()
+// })
