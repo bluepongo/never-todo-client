@@ -422,7 +422,7 @@ export default {
           this.theme.allTag = 'background-color: #FFFFFF'
           this.theme.dotTick = 'color: #ddd'
           this.theme.taskListScroll = 'task-list'
-          this.theme.tagListScroll = 'tag-List'
+          this.theme.tagListScroll = 'tag-list'
           break
         case 'light':
           this.theme.box = 'background-color: #ddd'
