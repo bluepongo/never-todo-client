@@ -51,15 +51,12 @@
                       <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
                     </div>
                     <div style="display: flex">
-                      <span :class="fullTask.task.important?'important-text':theme.text"> 
-                        {{ fullTask.task.content }}
-                        <span>
+                      <span :class="fullTask.task.important?'important-text':theme.text">  {{ fullTask.task.content }} <span>
                           <div
                             class="tag-dot"
                             v-for="tag in fullTask.tags"
                             :key="tag.id"
-                            :style="{'background-color': tag.color}">
-                          </div>
+                            :style="{'background-color': tag.color}"></div>
                         </span>
                       </span>
                       
@@ -151,13 +148,16 @@
                       <i class="el-icon-check" :style="theme.dotTick"></i>
                     </div>
                   </div>
-                  <div style="display: inline">
-                    <span :class="theme.text" style="opacity: 0.5"> <s>{{ fullTask.task.content }}</s></span>
-                    <div
-                    class="tag-dot"
-                    v-for="tag in fullTask.tags"
-                    :key="tag.id"
-                    :style="{'background-color': tag.color}"></div>
+                  <div style="display: flex">
+                    <span :class="fullTask.task.important?'important-text':theme.text" style="opacity: 0.5">
+                      <s>{{ fullTask.task.content }}</s>
+                      <div
+                      class="tag-dot"
+                      v-for="tag in fullTask.tags"
+                      :key="tag.id"
+                      :style="{'background-color': tag.color}"></div>
+                    </span>
+                    
                   </div>
                   <div class="second-row">
                     <span v-if="fullTask.task.selected">
@@ -979,6 +979,8 @@ input::-webkit-input-placeholder {
   cursor: default;
   padding: 0px 4px;
   line-height: 17px;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 .task-dot {
