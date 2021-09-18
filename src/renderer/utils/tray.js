@@ -181,7 +181,7 @@ export function createTray (showWindow) {
           }
         },
         {
-          label: '夏日绿色',
+          label: '夏日翠色',
           click: () => {
             readFile(filePath, 'utf-8', function (err, jsonStr) {
               if (err) {
@@ -189,6 +189,36 @@ export function createTray (showWindow) {
               } else {
                 // 设置需要进行数据更新
                 db.read().set('theme', 'green').write()
+                db.read().set('update', true).write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
+        },
+        {
+          label: '护眼绿色',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('theme', 'eyes').write()
+                db.read().set('update', true).write()
+                db.read().set('updateApp', true).write()
+              }
+            })
+          }
+        },
+        {
+          label: '长裙黄色',
+          click: () => {
+            readFile(filePath, 'utf-8', function (err, jsonStr) {
+              if (err) {
+                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
+              } else {
+                // 设置需要进行数据更新
+                db.read().set('theme', 'yellow').write()
                 db.read().set('update', true).write()
                 db.read().set('updateApp', true).write()
               }

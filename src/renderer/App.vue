@@ -107,6 +107,18 @@ export default {
           this.theme.toolkit = 'toolkit-green'
           this.theme.producers = 'producers-green'
           break
+        case 'eyes':
+          this.theme.app = 'app-eyes'
+          this.theme.header = 'header-eyes'
+          this.theme.toolkit = 'toolkit-eyes'
+          this.theme.producers = 'producers-eyes'
+          break
+        case 'yellow':
+          this.theme.app = 'app-yellow'
+          this.theme.header = 'header-yellow'
+          this.theme.toolkit = 'toolkit-yellow'
+          this.theme.producers = 'producers-yellow'
+          break
       }
     },
     switchOpacity () {
@@ -274,7 +286,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgba($color: #ffbbf9, $alpha: 1);
+  background-color: rgba($color: #f9daed, $alpha: 1);
   opacity: 0.8;
 
   border-radius: 5px;
@@ -330,7 +342,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgba($color: #40e2c1, $alpha: 1);
+  background-color: rgba($color: #00b7aa, $alpha: 1);
   opacity: 0.8;
 
   border-radius: 5px;
@@ -373,6 +385,118 @@ export default {
 }
 
 .toolkit-green i {
+  -webkit-app-region: no-drag;
+  font-size: 18px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: #444;
+}
+
+/* 护眼主题 */
+#app-eyes {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #c7edcc, $alpha: 1);
+  opacity: 0.8;
+
+  border-radius: 5px;
+}
+
+#app-eyes.unfocused {
+  opacity: 0.6;
+}
+
+.header-eyes {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 2px 15px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #444;
+}
+
+.producers-eyes {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  z-index: 99;
+}
+
+.producers-eyes i {
+  font-size: 14px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: rgba($color: #444, $alpha: 0.3);
+}
+
+.toolkit-eyes i {
+  -webkit-app-region: no-drag;
+  font-size: 18px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: #444;
+}
+
+/* 黄色主题 */
+#app-yellow {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #f9fad3, $alpha: 1);
+  opacity: 0.8;
+
+  border-radius: 5px;
+}
+
+#app-yellow.unfocused {
+  opacity: 0.6;
+}
+
+.header-yellow {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 2px 15px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #444;
+}
+
+.producers-yellow {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  z-index: 99;
+}
+
+.producers-yellow i {
+  font-size: 14px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: rgba($color: #444, $alpha: 0.3);
+}
+
+.toolkit-yellow i {
   -webkit-app-region: no-drag;
   font-size: 18px;
   padding: 2px 5px;
