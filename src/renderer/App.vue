@@ -76,8 +76,10 @@ export default {
       if (!theme) theme = 'dark'
       let opacity = db.read().get('opacity').value()
       if (!opacity) opacity = '60'
+      let notTop = db.read().get('notTop').value()
       this.theme.style = theme
       this.theme.opacity = opacity
+      this.notTop = notTop
       this.switchTheme()
       this.switchOpacity()
     },
@@ -154,6 +156,8 @@ export default {
     },
     windowOnTop () {
       this.notTop = !this.notTop
+      db.read().set('notTop', this.notTop).write()
+      db.read().set('update', true).write()
       ipcRenderer.send('windowOnTop')
     },
     lock () {

@@ -107,6 +107,11 @@
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
                       <i
+                        title="设置提醒时间"
+                        class="el-icon-bell"
+                        @click.stop=""
+                      ></i>&nbsp;&nbsp;
+                      <i
                         title="将任务设为重要"
                         :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'"
                         @click.stop="switchImportance(fullTask.task)"
@@ -294,7 +299,6 @@ export default {
       newTaskInfo: { id: 0, content: '', completed: false, deleted: false, important: false },
       doneTasksFolded: true,
       todoTasksFolded: false,
-
       tags: [],
       tagAutoIncVal: -1,
       newTagVisible: false,
@@ -955,6 +959,7 @@ input::-webkit-input-placeholder {
 .el-icon-star-off {color:gold;}
 .el-icon-price-tag {color:coral;}
 .el-icon-delete {color: crimson;}
+.el-icon-bell {color: yellow;}
 .el-icon-refresh-left {color: chartreuse;}
 
 .box {
