@@ -45,6 +45,7 @@ This repo was greatly inspired by [xhznl-todo-list](https://github.com/xiajingre
   * [x] Custom transparency
   * [x] Allow scale
 * [x] Call/Hide window by binding key
+* [x] Pop Error when open another instance
 
 ## What for Next version?
 * [ ] improve database struct
