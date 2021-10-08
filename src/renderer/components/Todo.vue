@@ -934,7 +934,7 @@ input::-webkit-input-placeholder {
   padding: 0px 20px;
   position: absolute;
   top: 40px;
-  bottom: 15px;
+  bottom: 35px;
   width: 100%;
   background-color: #111
 }
@@ -1292,6 +1292,7 @@ input::-webkit-input-placeholder {
 
 compact-picker {
   position: absolute;
-  bottom: 0px;
+  bottom: 2px;
 }
+
 </style>
