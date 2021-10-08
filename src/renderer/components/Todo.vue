@@ -107,6 +107,11 @@
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
                       <i
+                        title="设置提醒时间"
+                        class="el-icon-bell"
+                        @click.stop=""
+                      ></i>&nbsp;&nbsp;
+                      <i
                         title="将任务设为重要"
                         :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'"
                         @click.stop="switchImportance(fullTask.task)"
@@ -294,7 +299,6 @@ export default {
       newTaskInfo: { id: 0, content: '', completed: false, deleted: false, important: false },
       doneTasksFolded: true,
       todoTasksFolded: false,
-
       tags: [],
       tagAutoIncVal: -1,
       newTagVisible: false,
@@ -439,13 +443,13 @@ export default {
           this.theme.tagListScroll = 'tag-list-light'
           break
         case 'pink':
-          this.theme.box = 'background-color: #ffbbf9'
-          this.theme.taskList = 'background-color: #ffbbf9'
+          this.theme.box = 'background-color: #f9daed'
+          this.theme.taskList = 'background-color: #f9daed'
           this.theme.taskListItem = 'color: #444'
-          this.theme.taskDot = 'background-color: rgba(249, 157, 234, 1.0); border-color: #444;'
+          this.theme.taskDot = 'background-color: rgba(248, 178, 203, 1.0); border-color: #444;'
           this.theme.text = 'color: #444'
           this.theme.textSmall = 'text-small'
-          this.theme.tagList = 'background-color: #ffbbf9'
+          this.theme.tagList = 'background-color: #f9daed'
           this.theme.tagItemText = 'color: #444'
           this.theme.allTag = 'background-color: #444'
           this.theme.dotTick = 'color: #444'
@@ -453,18 +457,46 @@ export default {
           this.theme.tagListScroll = 'tag-list-pink'
           break
         case 'green':
-          this.theme.box = 'background-color: #40e2c1'
-          this.theme.taskList = 'background-color: #40e2c1'
+          this.theme.box = 'background-color: #00b7aa'
+          this.theme.taskList = 'background-color: #00b7aa'
           this.theme.taskListItem = 'color: #444'
-          this.theme.taskDot = 'background-color: rgba(129, 244, 189, 1.0); border-color: #444;'
+          this.theme.taskDot = 'background-color: rgba(22, 202, 175, 1.0); border-color: #444;'
           this.theme.text = 'color: #444'
           this.theme.textSmall = 'text-small'
-          this.theme.tagList = 'background-color: #40e2c1'
+          this.theme.tagList = 'background-color: #00b7aa'
           this.theme.tagItemText = 'color: #444'
           this.theme.allTag = 'background-color: #444'
           this.theme.dotTick = 'color: #444'
           this.theme.taskListScroll = 'task-list-green'
           this.theme.tagListScroll = 'tag-list-green'
+          break
+        case 'eyes':
+          this.theme.box = 'background-color: #c7edcc'
+          this.theme.taskList = 'background-color: #c7edcc'
+          this.theme.taskListItem = 'color: #444'
+          this.theme.taskDot = 'background-color: rgba(167, 236, 198, 1.0); border-color: #444;'
+          this.theme.text = 'color: #444'
+          this.theme.textSmall = 'text-small'
+          this.theme.tagList = 'background-color: #c7edcc'
+          this.theme.tagItemText = 'color: #444'
+          this.theme.allTag = 'background-color: #444'
+          this.theme.dotTick = 'color: #444'
+          this.theme.taskListScroll = 'task-list-eyes'
+          this.theme.tagListScroll = 'tag-list-eyes'
+          break
+        case 'yellow':
+          this.theme.box = 'background-color: #f9fad3'
+          this.theme.taskList = 'background-color: #f9fad3'
+          this.theme.taskListItem = 'color: #444'
+          this.theme.taskDot = 'background-color: rgba(240, 229, 147, 1.0); border-color: #444;'
+          this.theme.text = 'color: #444'
+          this.theme.textSmall = 'text-small'
+          this.theme.tagList = 'background-color: #f9fad3'
+          this.theme.tagItemText = 'color: #444'
+          this.theme.allTag = 'background-color: #444'
+          this.theme.dotTick = 'color: #444'
+          this.theme.taskListScroll = 'task-list-yellow'
+          this.theme.tagListScroll = 'tag-list-yellow'
           break
       }
     },
@@ -577,7 +609,7 @@ export default {
             data: this.newTaskInfo,
             flag: ''
           })
-          this.unselectAllTags()
+          this.selectNoTag()
         }
         this.cancelAddTask()
       }
@@ -927,6 +959,7 @@ input::-webkit-input-placeholder {
 .el-icon-star-off {color:gold;}
 .el-icon-price-tag {color:coral;}
 .el-icon-delete {color: crimson;}
+.el-icon-bell {color: yellow;}
 .el-icon-refresh-left {color: chartreuse;}
 
 .box {
@@ -1018,7 +1051,7 @@ input::-webkit-input-placeholder {
 }
 
 .task-list-pink::-webkit-scrollbar-track-piece{
-    background-color:#ffbbf9;
+    background-color:#f9daed;
     border-radius:0;
 }
 .task-list-pink::-webkit-scrollbar{
@@ -1027,9 +1060,9 @@ input::-webkit-input-placeholder {
 }
 .task-list-pink::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#f490ed;
+    background-color:#f7cfe9;
     border-radius:4px;
-    outline:2px solid #f490ed;
+    outline:2px solid #f7cfe9;
     outline-offset:-2px;
 }
 
@@ -1044,7 +1077,7 @@ input::-webkit-input-placeholder {
 }
 
 .task-list-green::-webkit-scrollbar-track-piece{
-    background-color:#40e2c1;
+    background-color:#00b7aa;
     border-radius:0;
 }
 .task-list-green::-webkit-scrollbar{
@@ -1053,9 +1086,61 @@ input::-webkit-input-placeholder {
 }
 .task-list-green::-webkit-scrollbar-thumb{
     height:50px;
-    background-color:#84f7b4;
+    background-color:#16ab99;
     border-radius:4px;
-    outline:2px solid #84f7b4;
+    outline:2px solid #16ab99;
+    outline-offset:-2px;
+}
+
+.task-list-eyes {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.task-list-eyes::-webkit-scrollbar-track-piece{
+    background-color:#c7edcc;
+    border-radius:0;
+}
+.task-list-eyes::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.task-list-eyes::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#9bee9e;
+    border-radius:4px;
+    outline:2px solid #bcebc1;
+    outline-offset:-2px;
+}
+
+.task-list-yellow {
+  position: absolute;
+  top: 30px;
+  bottom: 0px;
+  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color: #111
+}
+
+.task-list-yellow::-webkit-scrollbar-track-piece{
+    background-color:#f9fad3;
+    border-radius:0;
+}
+.task-list-yellow::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+.task-list-yellow::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#f3f264;
+    border-radius:4px;
+    outline:2px solid #bcebc1;
     outline-offset:-2px;
 }
 
