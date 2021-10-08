@@ -577,6 +577,7 @@ export default {
             data: this.newTaskInfo,
             flag: ''
           })
+          this.unselectAllTags()
         }
         this.cancelAddTask()
       }
