@@ -177,7 +177,7 @@
       </div>
 
       <div class="right-panel">
-        <div><span class="text" :style="theme.text" style="font-size: 20px;">标签&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
+        <div><span class="text" :style="theme.text" style="font-size: 20px;">标签&nbsp;<i title="添加标签" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
         <div :class="theme.tagListScroll" :style="theme.tagList">
           <input
             class="text"
