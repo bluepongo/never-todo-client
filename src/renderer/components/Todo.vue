@@ -1,7 +1,7 @@
 <template>
   <div
     class="box"
-    :style="theme.box"
+    :style="theme.basicBg"
     id="Task"
     @click="resetAllState"
     @keyup.page-down="switchToNextSection"
@@ -9,15 +9,15 @@
     <div class="body">
       <div class="left-panel">
         <div class="title">
-          <span class="text" :style="theme.text" style="font-size: 20px;">
+          <span class="text" :style="theme.basicFg" style="font-size: 20px;">
             &nbsp;任务&nbsp;<i title="添加任务" class="el-icon-circle-plus" @click.stop="handleAddTask"></i>
           </span>
         </div>
 
-        <div :class="theme.taskListScroll" :style="theme.taskList">
+        <div :class="theme.taskListScroll" :style="theme.basicBg">
           <input
             class="text"
-            :style="theme.text"
+            :style="theme.basicFg"
             placeholder="请输入新任务内容"
             ref="taskContent"
             v-if="newTaskVisible"
@@ -26,17 +26,17 @@
             @input="autoTextarea($event)"
             @keyup.enter="addTask($event)"
             @blur="addTask()">
-          <span class="text" :style="theme.text" @click.stop="todoTasksFolded = !todoTasksFolded">
+          <span class="text" :style="theme.basicFg" @click.stop="todoTasksFolded = !todoTasksFolded">
           <i v-if="todoTasksFolded" class="el-icon-arrow-right"></i>
           <i v-else class="el-icon-arrow-down"></i>
-          <span :class="theme.text">进行中</span>
+          <span :class="theme.basicFg">进行中</span>
           <span class="badge badge-secondary badge-pill">{{todoFullTasks.length}}</span>
           </span>
           <div>
             <div v-if="!todoTasksFolded">
               <div
                 class="task-list-item"
-                :style="theme.taskListItem"
+                :style="theme.basicFg"
                 style="font-size: 16px;"
                 v-for="fullTask in todoFullTasks"
                 :key="fullTask.task.id"
@@ -51,7 +51,7 @@
                       <div title="完成任务" class="task-dot" :style="theme.taskDot" @click.stop="completeTask(fullTask.task)"></div>
                     </div>
                     <div style="display: flex">
-                      <span :class="fullTask.task.important?'important-text':theme.text">  {{ fullTask.task.content }} <span>
+                      <span :class="fullTask.task.important?'important-text':theme.basicFg">  {{ fullTask.task.content }} <span>
                           <div
                             class="tag-dot"
                             v-for="tag in fullTask.tags"
@@ -65,7 +65,7 @@
                   <div v-else>
                     <input
                       class="text"
-                      :style="theme.text"
+                      :style="theme.basicFg"
                       ref="taskContent"
                       v-model= "fullTask.task.content"
                       v-focus
@@ -74,10 +74,10 @@
                       @keyup.enter="modifyTaskContent(fullTask.task, $event)"
                       @blur="modifyTaskContent(fullTask.task)">
                     <div>
-                    <span :class="theme.textSmall">
+                    <span class="text-small" :class="theme.basicFg">
                      已选择：
                     </span>
-                    <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
+                    <span class="text-small" :class="theme.basicFg" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
                       <span
                         title="取消标签"
                         class="tag-icon"
@@ -88,10 +88,10 @@
                     </span>
                     </div>
                     <div>
-                    <span :class="theme.textSmall">
+                    <span class="text-small" :class="theme.basicFg">
                       未选择：
                     </span>
-                    <span class="text-small" v-for="tag in tags" :key="'right'+tag.id" >
+                    <span class="text-small" :class="theme.basicFg" v-for="tag in tags" :key="'right'+tag.id" >
                       <span
                         title="选择标签"
                         v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
@@ -129,17 +129,17 @@
             </div>
           </div>
 
-          <span class="text" :style="theme.text" @click.stop="doneTasksFolded = !doneTasksFolded">
+          <span class="text" :style="theme.basicFg" @click.stop="doneTasksFolded = !doneTasksFolded">
             <i v-if="doneTasksFolded" class="el-icon-arrow-right"></i>
             <i v-else class="el-icon-arrow-down"></i>
-            <span class="text" :style="theme.text">已完成</span>
+            <span class="text" :style="theme.basicFg">已完成</span>
             <span class="badge badge-secondary badge-pill">{{doneFullTasks.length}}</span>
           </span>
           <div>
             <div v-if="!doneTasksFolded">
               <div
                 class="task-list-item"
-                :style="theme.taskListItem"
+                :style="theme.basicFg"
                 style="font-size: 16px;"
                 v-for="fullTask in doneFullTasks"
                 :key="fullTask.task.id"
@@ -150,11 +150,11 @@
                 <div >
                   <div style="float: left; width:20px">
                     <div title="取消完成任务" class="task-dot" :style="theme.taskDot" @click.stop="uncompleteTask(fullTask.task)">
-                      <i class="el-icon-check" :style="theme.dotTick"></i>
+                      <i class="el-icon-check" :style="theme.basicFg"></i>
                     </div>
                   </div>
                   <div style="display: flex">
-                    <span :class="fullTask.task.important?'important-text':theme.text" style="opacity: 0.5">
+                    <span :class="fullTask.task.important?'important-text':theme.basicFg" style="opacity: 0.5">
                       <s>{{ fullTask.task.content }}</s>
                       <div
                       class="tag-dot"
@@ -182,11 +182,11 @@
       </div>
 
       <div class="right-panel">
-        <div><span class="text" :style="theme.text" style="font-size: 20px;">标签&nbsp;<i title="添加标签" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
-        <div :class="theme.tagListScroll" :style="theme.tagList">
+        <div><span class="text" :style="theme.basicFg" style="font-size: 20px;">标签&nbsp;<i title="添加标签" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
+        <div :class="theme.tagListScroll" :style="theme.basicBg">
           <input
             class="text"
-            :style="theme.text"
+            :style="theme.basicFg"
             placeholder="新标签内容"
             ref="tagContent"
             v-if="newTagVisible"
@@ -205,7 +205,7 @@
           >
             <div >
               <span class="tag-flag" :style="theme.allTag"></span>
-              <span class="tag-item-text text" :style="theme.tagItemText">全部</span>
+              <span class="tag-item-text text" :style="theme.basicFg">全部</span>
             </div>
           </div>
           <div
@@ -224,13 +224,13 @@
                   <div  class="tag-flag" :style="{'background-color': tag.color}"></div>
                 </div>
                 <div style="display: flex;">
-                  <span class="tag-item-text text" :style="theme.tagItemText">{{ tag.content }}</span>
+                  <span class="tag-item-text text" :style="theme.basicFg">{{ tag.content }}</span>
                 </div>
               </div>
 
               <input
                 class="text"
-                :style="theme.text"
+                :style="theme.basicFg"
                 style="font-size: 14px;"
                 ref="tagContent"
                 v-else
@@ -278,18 +278,12 @@ export default {
 
       theme: {
         style: 'dark',
-        box: '',
-        taskList: '',
-        taskListItem: '',
+        basicBg: '',
+        basicFg: '',
         taskDot: '',
-        text: '',
-        textSmall: '',
-        tagList: '',
-        tagItemText: '',
         allTag: '',
-        dotTick: '',
         taskListScroll: '',
-        tagListScroll: 'dark'
+        tagListScroll: ''
       },
 
       focusTarget: 'todo',
@@ -413,92 +407,21 @@ export default {
   },
   methods: {
     switchTheme () {
-      switch (this.theme.style) {
-        case 'dark':
-          this.theme.box = 'background-color: #111'
-          this.theme.taskList = 'background-color: #111'
-          this.theme.taskListItem = 'color: #ddd'
-          this.theme.taskDot = 'background-color: rgba(0,0,0,0.8); border-color: #7a797b;'
-          this.theme.text = 'color: #ddd'
-          this.theme.textSmall = 'text-small'
-          this.theme.tagList = 'background-color: #111'
-          this.theme.tagItemText = 'color: #ddd'
-          this.theme.allTag = 'background-color: #FFFFFF'
-          this.theme.dotTick = 'color: #ddd'
-          this.theme.taskListScroll = 'task-list'
-          this.theme.tagListScroll = 'tag-list'
-          break
-        case 'light':
-          this.theme.box = 'background-color: #ddd'
-          this.theme.taskList = 'background-color: #ddd'
-          this.theme.taskListItem = 'color: #444'
-          this.theme.taskDot = 'background-color: rgba(201, 197, 209, 1.0); border-color: #444;'
-          this.theme.text = 'color: #444'
-          this.theme.textSmall = 'text-small-light'
-          this.theme.tagList = 'background-color: #ddd'
-          this.theme.tagItemText = 'color: #444'
-          this.theme.allTag = 'background-color: #444'
-          this.theme.dotTick = 'color: #444'
-          this.theme.taskListScroll = 'task-list-light'
-          this.theme.tagListScroll = 'tag-list-light'
-          break
-        case 'pink':
-          this.theme.box = 'background-color: #f9daed'
-          this.theme.taskList = 'background-color: #f9daed'
-          this.theme.taskListItem = 'color: #444'
-          this.theme.taskDot = 'background-color: rgba(248, 178, 203, 1.0); border-color: #444;'
-          this.theme.text = 'color: #444'
-          this.theme.textSmall = 'text-small'
-          this.theme.tagList = 'background-color: #f9daed'
-          this.theme.tagItemText = 'color: #444'
-          this.theme.allTag = 'background-color: #444'
-          this.theme.dotTick = 'color: #444'
-          this.theme.taskListScroll = 'task-list-pink'
-          this.theme.tagListScroll = 'tag-list-pink'
-          break
-        case 'green':
-          this.theme.box = 'background-color: #00b7aa'
-          this.theme.taskList = 'background-color: #00b7aa'
-          this.theme.taskListItem = 'color: #444'
-          this.theme.taskDot = 'background-color: rgba(22, 202, 175, 1.0); border-color: #444;'
-          this.theme.text = 'color: #444'
-          this.theme.textSmall = 'text-small'
-          this.theme.tagList = 'background-color: #00b7aa'
-          this.theme.tagItemText = 'color: #444'
-          this.theme.allTag = 'background-color: #444'
-          this.theme.dotTick = 'color: #444'
-          this.theme.taskListScroll = 'task-list-green'
-          this.theme.tagListScroll = 'tag-list-green'
-          break
-        case 'eyes':
-          this.theme.box = 'background-color: #c7edcc'
-          this.theme.taskList = 'background-color: #c7edcc'
-          this.theme.taskListItem = 'color: #444'
-          this.theme.taskDot = 'background-color: rgba(167, 236, 198, 1.0); border-color: #444;'
-          this.theme.text = 'color: #444'
-          this.theme.textSmall = 'text-small'
-          this.theme.tagList = 'background-color: #c7edcc'
-          this.theme.tagItemText = 'color: #444'
-          this.theme.allTag = 'background-color: #444'
-          this.theme.dotTick = 'color: #444'
-          this.theme.taskListScroll = 'task-list-eyes'
-          this.theme.tagListScroll = 'tag-list-eyes'
-          break
-        case 'yellow':
-          this.theme.box = 'background-color: #f9fad3'
-          this.theme.taskList = 'background-color: #f9fad3'
-          this.theme.taskListItem = 'color: #444'
-          this.theme.taskDot = 'background-color: rgba(240, 229, 147, 1.0); border-color: #444;'
-          this.theme.text = 'color: #444'
-          this.theme.textSmall = 'text-small'
-          this.theme.tagList = 'background-color: #f9fad3'
-          this.theme.tagItemText = 'color: #444'
-          this.theme.allTag = 'background-color: #444'
-          this.theme.dotTick = 'color: #444'
-          this.theme.taskListScroll = 'task-list-yellow'
-          this.theme.tagListScroll = 'tag-list-yellow'
-          break
-      }
+      const themeCssMap = new Map([
+        ['dark', { 'bg': '#111111', 'fg': '#DDDDDD', 'dotBg': '0,0,0,0.8' }],
+        ['light', { 'bg': '#DDDDDD', 'fg': '#444444', 'dotBg': '201,197,209,1.0' }],
+        ['pink', { 'bg': '#F9DAED', 'fg': '#444444', 'dotBg': '248,178,203,1.0' }],
+        ['green', { 'bg': '#00B7AA', 'fg': '#444444', 'dotBg': '22,202,175,1.0' }],
+        ['eye', { 'bg': '#C7EDCC', 'fg': '#444444', 'dotBg': '167,236,198,1.0' }],
+        ['yellow', { 'bg': '#F9FAD3', 'fg': '#444444', 'dotBg': '240,229,147,1.0' }]
+      ])
+      const style = themeCssMap.get(this.theme.style)
+      this.theme.basicBg = 'background-color: ' + style.bg
+      this.theme.basicFg = 'color: ' + style.fg
+      this.theme.allTag = 'background-color: ' + style.fg
+      this.theme.taskDot = 'background-color: rgba(' + style.dotBg + '); border-color: ' + style.fg + ';'
+      this.theme.taskListScroll = 'task-list-' + this.theme.style
+      this.theme.tagListScroll = 'tag-list-' + this.theme.style
     },
 
     timer () {
@@ -988,25 +911,24 @@ input::-webkit-input-placeholder {
   height: 30px;
 }
 
-.task-list {
+.task-list-dark {
   position: absolute;
   top: 30px;
   bottom: 0px;
   width: 100%;
   overflow-y:auto;
   overflow-x:hidden;
-  background-color: #111
 }
 
-.task-list::-webkit-scrollbar-track-piece{
+.task-list-dark::-webkit-scrollbar-track-piece{
     background-color:#111;
     border-radius:0;
 }
-.task-list::-webkit-scrollbar{
+.task-list-dark::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.task-list::-webkit-scrollbar-thumb{
+.task-list-dark::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#222;
     border-radius:4px;
@@ -1202,7 +1124,7 @@ input::-webkit-input-placeholder {
   vertical-align: middle;
 }
 
-.tag-list {
+.tag-list-dark {
   position: absolute;
   top: 30px;
   bottom: 0px;
@@ -1212,15 +1134,15 @@ input::-webkit-input-placeholder {
   background-color: #111
 }
 
-.tag-list::-webkit-scrollbar-track-piece{
+.tag-list-dark::-webkit-scrollbar-track-piece{
     background-color:#111;
     border-radius:0;
 }
-.tag-list::-webkit-scrollbar{
+.tag-list-dark::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.tag-list::-webkit-scrollbar-thumb{
+.tag-list-dark::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#222;
     border-radius:4px;
