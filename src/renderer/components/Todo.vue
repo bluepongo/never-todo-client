@@ -106,11 +106,11 @@
                 </div>
                 <div class="second-row" v-show="fullTask.task.selected">
                   <span class="text">
-                      <i
+                      <!-- <i
                         title="设置提醒时间"
                         class="el-icon-bell"
                         @click.stop=""
-                      ></i>&nbsp;&nbsp;
+                      ></i>&nbsp;&nbsp; -->
                       <i
                         title="将任务设为重要"
                         :class="fullTask.task.important?'el-icon-star-on':'el-icon-star-off'"
