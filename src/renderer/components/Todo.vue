@@ -74,7 +74,7 @@
                       @keyup.enter="modifyTaskContent(fullTask.task, $event)"
                       @blur="modifyTaskContent(fullTask.task)">
                     <div>
-                    <span :class="theme.textSmall">
+                    <span :style="theme.textSmall" style="font-size: 11px;">
                      已选择：
                     </span>
                     <span class="text-small" v-for="tag in fullTask.tags" :key="'left'+tag.id" >
@@ -82,13 +82,13 @@
                         title="取消标签"
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
-                        style="margin-right: 4px;"
+                        style="margin-right: 4px; color: #aaa;"
                         @click.stop="delTagForTask(fullTask.task.id, tag.id)"
                       >{{ tag.content }}</span>
                     </span>
                     </div>
                     <div>
-                    <span :class="theme.textSmall">
+                    <span :style="theme.textSmall" style="font-size: 11px;">
                       未选择：
                     </span>
                     <span class="text-small" v-for="tag in tags" :key="'right'+tag.id" >
@@ -97,7 +97,7 @@
                         v-if="!tag.deleted && assignedTags.indexOf(tag.id) === -1"
                         class="tag-icon"
                         :style="{'border-color': tag.color,}"
-                        style="margin-right: 4px;"
+                        style="margin-right: 4px; color: #aaa;"
                         @click.stop="addTagForTask(fullTask.task.id, tag.id)"
                       >{{ tag.content }}</span>
                     </span>
