@@ -21,7 +21,7 @@
       </div>
     </div>
     <div :class="theme.producers">
-      <i>Version V0.0.3</i>
+      <i>Version V0.0.4</i>
     </div>
     <router-view></router-view>
   </div>
