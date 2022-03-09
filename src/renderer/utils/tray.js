@@ -27,6 +27,92 @@ const filePath = path.join(STORE_PATH, '/data.json')
 
 let tray
 
+function getThemeSubMenus () {
+  let themeSubMenus = []
+  const themes = [
+    {name: '暗黑深色', theme: 'dark'},
+    {name: '明亮浅色', theme: 'light'},
+    {name: '樱花粉色', theme: 'pink'},
+    {name: '夏日翠色', theme: 'green'},
+    {name: '护眼绿色', theme: 'eyes'},
+    {name: '长裙黄色', theme: 'yellow'}
+  ]
+  themes.forEach(theme => {
+    themeSubMenus.push(
+      {
+        label: theme.name,
+        click: () => {
+          readFile(filePath, 'utf-8', function (err, jsonStr) {
+            if (err) {
+              dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
+            } else {
+              // 设置需要进行数据更新
+              db.read().set('theme', theme.theme).write()
+              db.read().set('update', true).write()
+              db.read().set('updateApp', true).write()
+            }
+          })
+        }
+      }
+    )
+  })
+  return themeSubMenus
+}
+
+function getOpacitySubMenus () {
+  let opacitySubMenus = []
+  const opacitys = [
+    {name: '100%', value: '100'},
+    {name: '80%', value: '80'},
+    {name: '60%', value: '60'},
+    {name: '40%', value: '40'}
+  ]
+  opacitys.forEach(opacity => {
+    opacitySubMenus.push(
+      {
+        label: opacity.name,
+        click: () => {
+          readFile(filePath, 'utf-8', function (err, jsonStr) {
+            if (err) {
+              dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
+            } else {
+              // 设置需要进行数据更新
+              db.read().set('opacity', opacity.value).write()
+              db.read().set('updateApp', true).write()
+            }
+          })
+        }
+      }
+    )
+  })
+  return opacitySubMenus
+}
+
+function getZoomSubMenus () {
+  let zoomSubMenus = []
+  const zooms = [0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2]
+  zooms.forEach(zoom => {
+    zoomSubMenus.push(
+      {
+        label: Math.floor(zoom * 100) + '%',
+        click: () => {
+          readFile(filePath, 'utf-8', function (err, jsonStr) {
+            if (err) {
+              dialog.showErrorBox('修改缩放比例失败', '当前无法修改缩放比例，请稍后再试')
+            } else {
+              // 设置需要进行数据更新
+              db.read().set('zoom', zoom.toString()).write()
+              db.read().set('update', true).write()
+              db.read().set('updateApp', true).write()
+            }
+          })
+        }
+      }
+    )
+  })
+  return zoomSubMenus
+}
+
 export function createTray (showWindow) {
   tray = new Tray(path.join(__static, './logo-16.png'))
 
@@ -133,174 +219,16 @@ export function createTray (showWindow) {
       ]
     },
     {
+      label: '页面缩放',
+      submenu: getZoomSubMenus()
+    },
+    {
       label: '主题换肤',
-      submenu: [
-        {
-          label: '暗黑深色',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('theme', 'dark').write()
-                db.read().set('update', true).write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '明亮浅色',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('theme', 'light').write()
-                db.read().set('update', true).write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '樱花粉色',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('theme', 'pink').write()
-                db.read().set('update', true).write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '夏日翠色',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('theme', 'green').write()
-                db.read().set('update', true).write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '护眼绿色',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('theme', 'eyes').write()
-                db.read().set('update', true).write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '长裙黄色',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改主题失败', '当前无法修改主题，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('theme', 'yellow').write()
-                db.read().set('update', true).write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        }
-      ]
+      submenu: getThemeSubMenus()
     },
     {
       label: '不透明度',
-      submenu: [
-        {
-          label: '100%',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('opacity', '100').write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '80%',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('opacity', '80').write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '60%',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('opacity', '60').write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '40%',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('opacity', '40').write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        },
-        {
-          label: '20%',
-          click: () => {
-            readFile(filePath, 'utf-8', function (err, jsonStr) {
-              if (err) {
-                dialog.showErrorBox('修改透明度失败', '当前无法修改透明度，请稍后再试')
-              } else {
-                // 设置需要进行数据更新
-                db.read().set('opacity', '20').write()
-                db.read().set('updateApp', true).write()
-              }
-            })
-          }
-        }
-      ]
+      submenu: getOpacitySubMenus()
     },
     {
       label: '项目地址',

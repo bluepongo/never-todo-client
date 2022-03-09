@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron'
 import { createTray } from '../renderer/utils/tray'
+import { getZoomFactor, setZoomFactor } from '../renderer/utils/zoom'
 
 import '../renderer/store'
 
@@ -81,8 +82,8 @@ function createWindow () {
     // 窗口置顶
     alwaysOnTop: true,
 
-    minWidth: 320,
-    minHeight: 280,
+    minWidth: 228,
+    minHeight: 200,
     height: 300,
     width: 380,
 
@@ -125,6 +126,37 @@ function setIPCEvent () {
   })
 }
 
+function registerLocalShortcuts () {
+  const zoomFactors = [0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5]
+  globalShortcut.register('CommandOrControl+-', () => {
+    const currentZoomFactor = getZoomFactor()
+    if (currentZoomFactor <= zoomFactors[0]) {
+      return
+    }
+    for (let i = 0; i < zoomFactors.length; i++) {
+      if (currentZoomFactor < zoomFactors[i]) {
+        setZoomFactor(zoomFactors[i])
+      }
+    }
+  })
+  globalShortcut.register('CommandOrControl+=', () => {
+    const currentZoomFactor = getZoomFactor()
+    if (currentZoomFactor >= zoomFactors[-1]) {
+      return
+    }
+    for (let i = zoomFactors.length - 1; i >= 0; i--) {
+      if (currentZoomFactor > zoomFactors[i]) {
+        setZoomFactor(zoomFactors[i])
+      }
+    }
+  })
+}
+
+function unregisterLocalShortcuts () {
+  globalShortcut.unregister('CommandOrControl+-')
+  globalShortcut.unregister('CommandOrControl+=')
+}
+
 function createShorcut () {
   globalShortcut.register('Alt+CommandOrControl+H', function () {
     if (mainWindow.isVisible()) {
@@ -133,6 +165,9 @@ function createShorcut () {
       showWindow()
     }
   })
+  registerLocalShortcuts()
+  mainWindow.on('focus', registerLocalShortcuts)
+  mainWindow.on('blur', unregisterLocalShortcuts)
 }
 
 function showWindow () {
@@ -151,20 +186,6 @@ function windowOnTop () {
     mainWindow.setAlwaysOnTop(true)
   }
 }
-
-// const gotTheLock = app.requestSingleInstanceLock()
-
-// if (!gotTheLock) {
-//   app.quit()
-// } else {
-//   app.on('second-instance', (event, commandLine, workingDirectory) => {
-//     // focus to first
-//     if (mainWindow) {
-//       if (mainWindow.isMinimized()) mainWindow.restore()
-//       mainWindow.focus()
-//     }
-//   })
-// }
 
 // 自动更新
 // app.on('ready', () => {

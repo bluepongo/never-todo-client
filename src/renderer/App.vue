@@ -30,7 +30,7 @@
 
 
 <script>
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, webFrame } from 'electron'
 import db from '@/utils/db'
 
 export default {
@@ -46,7 +46,8 @@ export default {
         header: '',
         toolkit: '',
         producers: '',
-        opacity: '60'
+        opacity: '60',
+        zoom: '1'
       }
     }
   },
@@ -60,6 +61,7 @@ export default {
     // },
     timer () {
       return setInterval(() => {
+        console.log('app update timer')
         this.checkDataUpdate()
       }, 1000)
     },
@@ -76,12 +78,16 @@ export default {
       if (!theme) theme = 'dark'
       let opacity = db.read().get('opacity').value()
       if (!opacity) opacity = '60'
+      let zoom = db.read().get('zoom').value()
+      if (!zoom) zoom = '1'
       let notTop = db.read().get('notTop').value()
       this.theme.style = theme
       this.theme.opacity = opacity
+      this.theme.zoom = zoom
       this.notTop = notTop
       this.switchTheme()
       this.switchOpacity()
+      this.switchZoom()
     },
     switchTheme () {
       switch (this.theme.style) {
@@ -141,6 +147,9 @@ export default {
           this.theme.opacity = 'opacity: 0.6'
           break
       }
+    },
+    switchZoom () {
+      webFrame.setZoomFactor(parseFloat(this.theme.zoom))
     },
     hideWindow () {
       ipcRenderer.send('hideWindow')

@@ -125,6 +125,7 @@ if (!db.has('initRun').value()) {
   db.set('initRun', true).write()
   db.set('theme', 'dark').write()
   db.set('opacity', '60').write()
+  db.set('zoom', '1').write()
 }
 
 export default db
