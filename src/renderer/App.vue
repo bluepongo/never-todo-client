@@ -169,7 +169,7 @@ export default {
       ipcRenderer.send('windowOnTop')
     },
     lock () {
-      if (!this.alwaysTop) {
+      if (this.alwaysTop) {
         this.ignoreMouse = !this.ignoreMouse
         this.locklight = !this.locklight
       }
