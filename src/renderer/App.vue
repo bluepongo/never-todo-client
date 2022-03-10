@@ -6,7 +6,7 @@
         <i
           title="窗口始终至于顶层"
           class="el-icon-copy-document"
-          :style="notTop ? 'color: #505050' : 'color: #ffffff'"
+          :style="alwaysTop ? 'color: #ffffff' : 'color: #505050'"
           @click="windowOnTop"
         ></i>
         <i
@@ -38,7 +38,7 @@ export default {
     return {
       appName: 'Never Todo',
       ignoreMouse: false,
-      notTop: false,
+      alwaysTop: false,
       locklight: false,
       theme: {
         style: 'dark',
@@ -79,11 +79,11 @@ export default {
       if (!opacity) opacity = '60'
       let zoom = db.read().get('zoom').value()
       if (!zoom) zoom = '1'
-      let notTop = db.read().get('notTop').value()
+      let alwaysTop = db.read().get('alwaysTop').value()
       this.theme.style = theme
       this.theme.opacity = opacity
       this.theme.zoom = zoom
-      this.notTop = notTop
+      this.alwaysTop = alwaysTop
       this.switchTheme()
       this.switchOpacity()
       this.switchZoom()
@@ -163,13 +163,13 @@ export default {
       ipcRenderer.send('setIgnoreMouseEvents', this.ignoreMouse, { forward: true })
     },
     windowOnTop () {
-      this.notTop = !this.notTop
-      db.read().set('notTop', this.notTop).write()
+      this.alwaysTop = !this.alwaysTop
+      db.read().set('alwaysTop', this.alwaysTop).write()
       db.read().set('update', true).write()
       ipcRenderer.send('windowOnTop')
     },
     lock () {
-      if (!this.notTop) {
+      if (!this.alwaysTop) {
         this.ignoreMouse = !this.ignoreMouse
         this.locklight = !this.locklight
       }

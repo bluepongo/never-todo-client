@@ -2,7 +2,7 @@
 
 import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron'
 import { createTray, updateContextMenu } from '../renderer/utils/tray'
-import { getZoomFactor, setZoomFactor } from '../renderer/utils/zoom'
+import { getZoomFactor, setZoomFactor, setWinPos, setWinSize, getWinSize, getWinPos, isAlwaysOnTop } from '../renderer/utils/win'
 
 import '../renderer/store'
 
@@ -51,13 +51,15 @@ if (isSecondInstance) {
 
 function init () {
   createWindow()
-  setDefaultPos()
   setIPCEvent()
   createShorcut()
   createTray(showWindow)
 }
 
 function createWindow () {
+  const scrSize = screen.getPrimaryDisplay().workAreaSize
+  const sizeData = getWinSize(scrSize)
+  const alwaysTop = isAlwaysOnTop()
   mainWindow = new BrowserWindow({
     // dev
     // transparent: false,
@@ -69,6 +71,7 @@ function createWindow () {
     transparent: true, // 背景透明
     frame: false, // 边框
     resizable: true, // 窗口可变
+    alwaysOnTop: alwaysTop,
 
     minimizable: false, // 最小化
     maximizable: false, // 最大化
@@ -76,28 +79,29 @@ function createWindow () {
 
     minWidth: 228,
     minHeight: 200,
-    height: 300,
-    width: 380,
+    width: sizeData[0],
+    height: sizeData[1],
 
     useContentSize: true,
     webPreferences: {
-    // devTools: false,
+      // devTools: false,
       nodeIntegration: true,
       enableRemoteModule: true
     }
   })
 
+  const posData = getWinPos()
+  mainWindow.setPosition(posData[0], posData[1])
+
   mainWindow.loadURL(winURL)
 
-  mainWindow.on('closed', () => {
+  mainWindow.on('close', () => {
+    const sizeData = mainWindow.getSize()
+    const posData = mainWindow.getPosition()
+    setWinSize(sizeData[0], sizeData[1])
+    setWinPos(posData[0], posData[1])
     mainWindow = null
   })
-}
-
-function setDefaultPos () {
-  const scrSize = screen.getPrimaryDisplay().workAreaSize
-  const winSize = mainWindow.getSize()
-  mainWindow.setPosition(scrSize.width - winSize[0] - 30, 30)
 }
 
 function setIPCEvent () {
