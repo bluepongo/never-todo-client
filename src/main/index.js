@@ -59,28 +59,20 @@ function init () {
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-  // dev
-  // transparent: false,
-  // frame: true,
-  // resizable: true,
-  // alwaysOnTop: true,
+    // dev
+    // transparent: false,
+    // frame: true,
+    // resizable: true,
+    // alwaysOnTop: true,
 
-  // pro
-  // 背景透明
-    transparent: true,
-    // 边框
-    frame: false,
-    // 窗口可变
-    resizable: true,
+    // pro
+    transparent: true, // 背景透明
+    frame: false, // 边框
+    resizable: true, // 窗口可变
 
-    // 最小化
-    minimizable: false,
-    // 最大化
-    maximizable: false,
-    // 标题栏
-    skipTaskbar: true,
-    // 窗口置顶
-    alwaysOnTop: true,
+    minimizable: false, // 最小化
+    maximizable: false, // 最大化
+    skipTaskbar: true, // 标题栏
 
     minWidth: 228,
     minHeight: 200,
