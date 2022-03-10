@@ -94,7 +94,7 @@ function getOpacitySubMenus () {
 
 function getZoomSubMenus () {
   let zoomSubMenus = []
-  const zooms = [0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2]
+  const zooms = [0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2]
   zooms.forEach(zoom => {
     zoomSubMenus.push(
       {
@@ -108,7 +108,6 @@ function getZoomSubMenus () {
             } else {
               // 设置需要进行数据更新
               db.read().set('zoom', zoom.toString()).write()
-              db.read().set('update', true).write()
               db.read().set('updateApp', true).write()
             }
           })
@@ -119,9 +118,7 @@ function getZoomSubMenus () {
   return zoomSubMenus
 }
 
-export function createTray (showWindow) {
-  tray = new Tray(path.join(__static, './logo-16.png'))
-
+export function updateContextMenu (showWindow) {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: '显示界面',
@@ -256,6 +253,12 @@ export function createTray (showWindow) {
     }
   ])
   tray.setContextMenu(contextMenu)
+}
+
+export function createTray (showWindow) {
+  tray = new Tray(path.join(__static, './logo-16.png'))
+
+  updateContextMenu(showWindow)
 
   // tray.setToolTip(pkg.name)
 

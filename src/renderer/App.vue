@@ -61,7 +61,6 @@ export default {
     // },
     timer () {
       return setInterval(() => {
-        console.log('app update timer')
         this.checkDataUpdate()
       }, 1000)
     },

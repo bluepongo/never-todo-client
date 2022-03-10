@@ -1,9 +1,10 @@
-import { webFrame } from 'electron'
+import db from './db'
 
 export function getZoomFactor () {
-  return webFrame.getZoomFactor()
+  return db.read().get('zoom').value()
 }
 
-export function setZoomFactor (zoomFactor) {
-  return webFrame.setZoomFactor(zoomFactor)
+export function setZoomFactor (zoom) {
+  db.read().set('zoom', zoom.toString()).write()
+  db.read().set('updateApp', true).write()
 }

@@ -1,7 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow, screen, ipcMain, globalShortcut } from 'electron'
-import { createTray } from '../renderer/utils/tray'
+import { createTray, updateContextMenu } from '../renderer/utils/tray'
 import { getZoomFactor, setZoomFactor } from '../renderer/utils/zoom'
 
 import '../renderer/store'
@@ -119,15 +119,17 @@ function setIPCEvent () {
 }
 
 function registerLocalShortcuts () {
-  const zoomFactors = [0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5]
+  const zoomFactors = [0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2]
   globalShortcut.register('CommandOrControl+-', () => {
     const currentZoomFactor = getZoomFactor()
     if (currentZoomFactor <= zoomFactors[0]) {
       return
     }
-    for (let i = 0; i < zoomFactors.length; i++) {
-      if (currentZoomFactor < zoomFactors[i]) {
+    for (let i = zoomFactors.length - 1; i >= 0; i--) {
+      if (currentZoomFactor > zoomFactors[i]) {
         setZoomFactor(zoomFactors[i])
+        updateContextMenu(showWindow)
+        return
       }
     }
   })
@@ -136,9 +138,11 @@ function registerLocalShortcuts () {
     if (currentZoomFactor >= zoomFactors[-1]) {
       return
     }
-    for (let i = zoomFactors.length - 1; i >= 0; i--) {
-      if (currentZoomFactor > zoomFactors[i]) {
+    for (let i = 0; i < zoomFactors.length; i++) {
+      if (currentZoomFactor < zoomFactors[i]) {
         setZoomFactor(zoomFactors[i])
+        updateContextMenu(showWindow)
+        return
       }
     }
   })
