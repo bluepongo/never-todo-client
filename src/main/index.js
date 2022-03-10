@@ -59,7 +59,9 @@ function init () {
 function createWindow () {
   const scrSize = screen.getPrimaryDisplay().workAreaSize
   const sizeData = getWinSize(scrSize)
+  const posData = getWinPos(scrSize)
   const alwaysTop = isAlwaysOnTop()
+
   mainWindow = new BrowserWindow({
     // dev
     // transparent: false,
@@ -71,7 +73,6 @@ function createWindow () {
     transparent: true, // 背景透明
     frame: false, // 边框
     resizable: true, // 窗口可变
-    alwaysOnTop: alwaysTop,
 
     minimizable: false, // 最小化
     maximizable: false, // 最大化
@@ -79,8 +80,6 @@ function createWindow () {
 
     minWidth: 228,
     minHeight: 200,
-    width: sizeData[0],
-    height: sizeData[1],
 
     useContentSize: true,
     webPreferences: {
@@ -90,8 +89,9 @@ function createWindow () {
     }
   })
 
-  const posData = getWinPos()
   mainWindow.setPosition(posData[0], posData[1])
+  mainWindow.setSize(sizeData[0], sizeData[1])
+  mainWindow.setAlwaysOnTop(alwaysTop)
 
   mainWindow.loadURL(winURL)
 
