@@ -41,6 +41,8 @@ function getThemeSubMenus () {
     themeSubMenus.push(
       {
         label: theme.name,
+        type: 'radio',
+        checked: db.read().get('theme').value() === theme.theme,
         click: () => {
           readFile(filePath, 'utf-8', function (err, jsonStr) {
             if (err) {
@@ -71,6 +73,8 @@ function getOpacitySubMenus () {
     opacitySubMenus.push(
       {
         label: opacity.name,
+        type: 'radio',
+        checked: db.read().get('opacity').value() === opacity.value,
         click: () => {
           readFile(filePath, 'utf-8', function (err, jsonStr) {
             if (err) {
@@ -95,6 +99,8 @@ function getZoomSubMenus () {
     zoomSubMenus.push(
       {
         label: Math.floor(zoom * 100) + '%',
+        type: 'radio',
+        checked: db.read().get('zoom').value() === zoom.toString(),
         click: () => {
           readFile(filePath, 'utf-8', function (err, jsonStr) {
             if (err) {
