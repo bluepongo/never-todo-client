@@ -14,7 +14,7 @@
           </span>
         </div>
 
-        <div :class="theme.taskListScroll" :style="theme.taskList">
+        <div :class="theme.listScroll" :style="theme.taskList">
           <input
             class="text"
             :style="theme.text"
@@ -183,7 +183,7 @@
 
       <div class="right-panel">
         <div><span class="text" :style="theme.text" style="font-size: 20px;">标签&nbsp;<i title="添加标签" class="el-icon-circle-plus" @click.stop="handleAddTag"></i></span></div>
-        <div :class="theme.tagListScroll" :style="theme.tagList">
+        <div :class="theme.listScroll" :style="theme.tagList">
           <input
             class="text"
             :style="theme.text"
@@ -288,8 +288,7 @@ export default {
         tagItemText: '',
         allTag: '',
         tick: '',
-        taskListScroll: '',
-        tagListScroll: 'dark'
+        listScroll: ''
       },
 
       focusTarget: 'todo',
@@ -434,8 +433,7 @@ export default {
       this.theme.tagItemText = basicFg
       this.theme.allTag = 'background-color: ' + style.fg
       this.tick = basicFg
-      this.theme.taskListScroll = 'task-list-' + this.theme.style
-      this.theme.tagListScroll = 'tag-list-' + this.theme.style
+      this.theme.listScroll = 'list-' + this.theme.style
     },
 
     timer () {
@@ -889,7 +887,7 @@ input::-webkit-input-placeholder {
 .el-icon-delete:hover {color: crimson;}
 .el-icon-refresh-left:hover {color: chartreuse;} */
 
-.el-icon-brush{color:lightseagreen;}
+.el-icon-brush{color:cyan;}
 .el-icon-s-claim{color:chartreuse;}
 .el-icon-edit {color: cyan;}
 .el-icon-star-on {color:gold;}
@@ -925,7 +923,7 @@ input::-webkit-input-placeholder {
   height: 30px;
 }
 
-.task-list-dark {
+.list-dark {
   position: absolute;
   top: 30px;
   bottom: 0px;
@@ -934,15 +932,15 @@ input::-webkit-input-placeholder {
   overflow-x:hidden;
 }
 
-.task-list-dark::-webkit-scrollbar-track-piece{
+.list-dark::-webkit-scrollbar-track-piece{
     background-color:#111;
     border-radius:0;
 }
-.task-list-dark::-webkit-scrollbar{
+.list-dark::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.task-list-dark::-webkit-scrollbar-thumb{
+.list-dark::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#222;
     border-radius:4px;
@@ -950,7 +948,7 @@ input::-webkit-input-placeholder {
     outline-offset:-2px;
 }
 
-.task-list-light {
+.list-light {
   position: absolute;
   top: 30px;
   bottom: 0px;
@@ -959,15 +957,15 @@ input::-webkit-input-placeholder {
   overflow-x:hidden;
 }
 
-.task-list-light::-webkit-scrollbar-track-piece{
+.list-light::-webkit-scrollbar-track-piece{
     background-color:#ddd;
     border-radius:0;
 }
-.task-list-light::-webkit-scrollbar{
+.list-light::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.task-list-light::-webkit-scrollbar-thumb{
+.list-light::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#eee;
     border-radius:4px;
@@ -975,7 +973,7 @@ input::-webkit-input-placeholder {
     outline-offset:-2px;
 }
 
-.task-list-pink {
+.list-pink {
   position: absolute;
   top: 30px;
   bottom: 0px;
@@ -985,15 +983,15 @@ input::-webkit-input-placeholder {
   background-color: #f9daed
 }
 
-.task-list-pink::-webkit-scrollbar-track-piece{
+.list-pink::-webkit-scrollbar-track-piece{
     background-color:#f9daed;
     border-radius:0;
 }
-.task-list-pink::-webkit-scrollbar{
+.list-pink::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.task-list-pink::-webkit-scrollbar-thumb{
+.list-pink::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#f7cfe9;
     border-radius:4px;
@@ -1001,7 +999,7 @@ input::-webkit-input-placeholder {
     outline-offset:-2px;
 }
 
-.task-list-green {
+.list-green {
   position: absolute;
   top: 30px;
   bottom: 0px;
@@ -1010,15 +1008,15 @@ input::-webkit-input-placeholder {
   overflow-x:hidden;
 }
 
-.task-list-green::-webkit-scrollbar-track-piece{
+.list-green::-webkit-scrollbar-track-piece{
     background-color:#00b7aa;
     border-radius:0;
 }
-.task-list-green::-webkit-scrollbar{
+.list-green::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.task-list-green::-webkit-scrollbar-thumb{
+.list-green::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#16ab99;
     border-radius:4px;
@@ -1026,7 +1024,7 @@ input::-webkit-input-placeholder {
     outline-offset:-2px;
 }
 
-.task-list-eyes {
+.list-eyes {
   position: absolute;
   top: 30px;
   bottom: 0px;
@@ -1035,15 +1033,15 @@ input::-webkit-input-placeholder {
   overflow-x:hidden;
 }
 
-.task-list-eyes::-webkit-scrollbar-track-piece{
+.list-eyes::-webkit-scrollbar-track-piece{
     background-color:#c7edcc;
     border-radius:0;
 }
-.task-list-eyes::-webkit-scrollbar{
+.list-eyes::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.task-list-eyes::-webkit-scrollbar-thumb{
+.list-eyes::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#9bee9e;
     border-radius:4px;
@@ -1051,7 +1049,7 @@ input::-webkit-input-placeholder {
     outline-offset:-2px;
 }
 
-.task-list-yellow {
+.list-yellow {
   position: absolute;
   top: 30px;
   bottom: 0px;
@@ -1060,15 +1058,15 @@ input::-webkit-input-placeholder {
   overflow-x:hidden;
 }
 
-.task-list-yellow::-webkit-scrollbar-track-piece{
+.list-yellow::-webkit-scrollbar-track-piece{
     background-color:#f9fad3;
     border-radius:0;
 }
-.task-list-yellow::-webkit-scrollbar{
+.list-yellow::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
-.task-list-yellow::-webkit-scrollbar-thumb{
+.list-yellow::-webkit-scrollbar-thumb{
     height:50px;
     background-color:#f3f264;
     border-radius:4px;
@@ -1131,109 +1129,6 @@ input::-webkit-input-placeholder {
   margin: 1px;
   align-content: center;
   vertical-align: middle;
-}
-
-.tag-list-dark {
-  position: absolute;
-  top: 30px;
-  bottom: 0px;
-  width: 100%;
-  overflow-y:auto;
-  overflow-x:hidden;
-}
-
-.tag-list-dark::-webkit-scrollbar-track-piece{
-    background-color:#111;
-    border-radius:0;
-}
-.tag-list-dark::-webkit-scrollbar{
-    width:8px;
-    height:8px;
-}
-.tag-list-dark::-webkit-scrollbar-thumb{
-    height:50px;
-    background-color:#222;
-    border-radius:4px;
-    outline:2px solid #222;
-    outline-offset:-2px;
-}
-
-.tag-list-light {
-  position: absolute;
-  top: 30px;
-  bottom: 0px;
-  width: 100%;
-  overflow-y:auto;
-  overflow-x:hidden;
-  background-color: #111
-}
-
-.tag-list-light::-webkit-scrollbar-track-piece{
-    background-color:#ddd;
-    border-radius:0;
-}
-.tag-list-light::-webkit-scrollbar{
-    width:8px;
-    height:8px;
-}
-.tag-list-light::-webkit-scrollbar-thumb{
-    height:50px;
-    background-color:#eee;
-    border-radius:4px;
-    outline:2px solid #eee;
-    outline-offset:-2px;
-}
-
-.tag-list-pink {
-  position: absolute;
-  top: 30px;
-  bottom: 0px;
-  width: 100%;
-  overflow-y:auto;
-  overflow-x:hidden;
-  background-color: #111
-}
-
-.tag-list-pink::-webkit-scrollbar-track-piece{
-    background-color:#ffbbf9;
-    border-radius:0;
-}
-.tag-list-pink::-webkit-scrollbar{
-    width:8px;
-    height:8px;
-}
-.tag-list-pink::-webkit-scrollbar-thumb{
-    height:50px;
-    background-color:#f490ed;
-    border-radius:4px;
-    outline:2px solid #f490ed;
-    outline-offset:-2px;
-}
-
-.tag-list-green {
-  position: absolute;
-  top: 30px;
-  bottom: 0px;
-  width: 100%;
-  overflow-y:auto;
-  overflow-x:hidden;
-  background-color: #111
-}
-
-.tag-list-green::-webkit-scrollbar-track-piece{
-    background-color:#40e2c1;
-    border-radius:0;
-}
-.tag-list-green::-webkit-scrollbar{
-    width:8px;
-    height:8px;
-}
-.tag-list-green::-webkit-scrollbar-thumb{
-    height:50px;
-    background-color:#84f7b4;
-    border-radius:4px;
-    outline:2px solid #84f7b4;
-    outline-offset:-2px;
 }
 
 .tag-item {
