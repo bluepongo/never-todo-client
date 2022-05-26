@@ -59,8 +59,30 @@ PC端的设计思路和逻辑编写的大量灵感来自于[xhznl-todo-list](htt
   * [ ] 修改标签调色盘的颜色配置
   * [ ] 可以点击窗口任意空白位置进行拖拽
 
+## 应用安装：
+### Win
+直接下载release中的exe可执行文件，点击进行安装
+### Mac
+直接下载release中的dmg可执行文件，点击进行安装
+### Linux
+下载release中的AppImage可执行文件，随后创建桌面快捷启动方式文件
+```ini
+[DesktopEntry]
+Categories=System;Application;Network;
+Comment=pc client of never-todo
+Encoding=UTF-8
+Exec=<PATH_OF_YOUR_APPIMAGE>
+GenericName=NeverTodo
+Icon=<PATH_OF_LOGO_FILE>
+Name=NeverTodo
+StartupNotify=true
+Terminal=false
+Type=Application
+#X-Deepin-Vendor=user-custom
+```
+将桌面快捷启动方式文件放到*指定*目录下
 
-#### 项目搭建
+## 项目搭建
 
 ``` bash
 # 安装项目依赖
